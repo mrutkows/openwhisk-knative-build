@@ -10,7 +10,7 @@ spec:
         apiVersion: build.knative.dev/v1alpha1
         kind: Build
         spec:
-          serviceAccountName: nodejs-build-bot
+          serviceAccountName: build-bot
           source:
             git:
               url: https://github.com/mrutkows/openwhisk-knative-build.git 
@@ -20,6 +20,8 @@ spec:
             arguments:
               - name: IMAGE
                 value: docker.io/pritidesai/nodejs-10-action:latest
+              - name: DOCKERFILE
+                value: ./runtimes/javascript/Dockerfile
       revisionTemplate:
         spec:
           container:
