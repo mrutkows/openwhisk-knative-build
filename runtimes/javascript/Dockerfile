@@ -30,10 +30,10 @@
 #CMD node --expose-gc app.js
 
 FROM golang:1.10.1
-WORKDIR /go/src/github.com/mchmarny/simple-app/
+WORKDIR /go/src/github.com/mrutkows/openwhisk-knative-build/runtimes/javascript
 COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -v -o app
 
 FROM scratch
-COPY --from=0 /go/src/github.com/mchmarny/simple-app/app .
+COPY --from=0 /go/src/github.com/mrutkows/openwhisk-knative-build/runtimes/javascript/app .
 ENTRYPOINT ["/app"]
