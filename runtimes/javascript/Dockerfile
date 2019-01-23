@@ -23,7 +23,6 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /nodejsAction
 COPY . .
 # COPY the package.json to root container, so we can install npm packages a level up from user's packages, so user's packages take precedence
-RUN ls -R
 COPY ./runtimes/javascript/package.json /
 RUN cd / && npm install --no-package-lock \
     && npm cache clean --force
