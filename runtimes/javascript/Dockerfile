@@ -15,28 +15,29 @@
 # limitations under the License.
 #
 
-#FROM node:10.15.0-stretch
-#RUN apt-get update && apt-get install -y \
-#    imagemagick \
-#    unzip \
-#    && rm -rf /var/lib/apt/lists/*
-#WORKDIR /nodejsAction
-#COPY . .
-## COPY the package.json to root container, so we can install npm packages a level up from user's packages, so user's packages take precedence
+FROM node:10.15.0-stretch
+RUN apt-get update && apt-get install -y \
+    imagemagick \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+WORKDIR /nodejsAction
+COPY . .
+# COPY the package.json to root container, so we can install npm packages a level up from user's packages, so user's packages take precedence
+RUN ls -R
 #COPY ./package.json /
 #RUN cd / && npm install --no-package-lock \
 #    && npm cache clean --force
 #EXPOSE 8080
 #CMD node --expose-gc app.js
 
-FROM golang:1.10.1
-WORKDIR /go/src/github.com/mrutkows/openwhisk-knative-build/runtimes/javascript/
-RUN pwd
-COPY . .
-RUN pwd
-RUN ls -R
-RUN CGO_ENABLED=0 GOOS=linux go build -v -o app
-
-FROM scratch
-COPY --from=0 /go/src/github.com/mrutkows/openwhisk-knative-build/runtimes/javascript/app .
-ENTRYPOINT ["/app"]
+#FROM golang:1.10.1
+#WORKDIR /go/src/github.com/mrutkows/openwhisk-knative-build/runtimes/javascript/
+#RUN pwd
+#COPY . .
+#RUN pwd
+#RUN ls -R
+#RUN CGO_ENABLED=0 GOOS=linux go build -v -o app
+#
+#FROM scratch
+#COPY --from=0 /go/src/github.com/mrutkows/openwhisk-knative-build/runtimes/javascript/app .
+#ENTRYPOINT ["/app"]
