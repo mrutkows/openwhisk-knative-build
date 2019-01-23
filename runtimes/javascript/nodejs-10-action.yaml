@@ -14,7 +14,7 @@ spec:
           source:
             git:
               url: https://github.com/mrutkows/openwhisk-knative-build.git 
-              revision: runtimes 
+              revision: master 
           template:
             name: kaniko
             arguments:
