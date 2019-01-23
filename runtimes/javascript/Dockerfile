@@ -27,7 +27,7 @@ RUN ls -R
 COPY ./runtimes/javascript/package.json /
 RUN cd / && npm install --no-package-lock \
     && npm cache clean --force
-EXPOSE 8080
+EXPOSE 8060
 CMD node --expose-gc ./runtimes/javascript/app.js
 
 #FROM golang:1.10.1
