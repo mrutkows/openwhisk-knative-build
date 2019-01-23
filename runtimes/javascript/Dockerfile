@@ -27,17 +27,5 @@ RUN ls -R
 COPY ./runtimes/javascript/package.json /
 RUN cd / && npm install --no-package-lock \
     && npm cache clean --force
-EXPOSE 8060
+EXPOSE 8080
 CMD node --expose-gc ./runtimes/javascript/app.js
-
-#FROM golang:1.10.1
-#WORKDIR /go/src/github.com/mrutkows/openwhisk-knative-build/runtimes/javascript/
-#RUN pwd
-#COPY . .
-#RUN pwd
-#RUN ls -R
-#RUN CGO_ENABLED=0 GOOS=linux go build -v -o app
-#
-#FROM scratch
-#COPY --from=0 /go/src/github.com/mrutkows/openwhisk-knative-build/runtimes/javascript/app .
-#ENTRYPOINT ["/app"]
