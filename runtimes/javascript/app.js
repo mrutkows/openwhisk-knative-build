@@ -16,7 +16,7 @@
  */
 
 var config = {
-        'port': 8080,
+        'port': 8060,
         'apiHost': process.env.__OW_API_HOST,
         'allowConcurrent': process.env.__OW_ALLOW_CONCURRENT
 };
