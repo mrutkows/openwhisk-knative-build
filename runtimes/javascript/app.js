@@ -26,6 +26,8 @@ var express    = require('express');
 
 var app = express();
 
+console.log("Hello World from NodeJS runtime")
+console.output("Hello World from NodeJS runtime")
 
 /**
  * instantiate an object which handles REST calls from the Invoker
