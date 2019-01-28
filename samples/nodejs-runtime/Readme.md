@@ -387,3 +387,84 @@ status:
 curl -H "Host: nodejs-10-runtime.default.example.com" http://localhost
 curl: (52) Empty reply from server
 ```
+NodeJS 10:
+
+```bash
+kubectl exec nodejs-10-runtime-00001-deployment-5c5bf68cd5-26qhd -c user-container -- curl localhost:8080
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot GET /</pre>
+</body>
+</html>
+100   139  100   139    0     0  19806      0 --:--:-- --:--:-- --:--:-- 23166
+```
+
+```bash
+kubectl exec nodejs-10-runtime-00001-deployment-5c5bf68cd5-26qhd -c user-container -- ls -1
+CHANGELOG.md
+app.js
+package.json
+runner.js
+src
+```
+
+```bash
+kubectl exec nodejs-10-runtime-00001-deployment-5c5bf68cd5-26qhd -c user-container -- ./app.js
+OCI runtime exec failed: exec failed: container_linux.go:344: starting container process caused "exec: \"./app.js\": permission denied": unknown
+command terminated with exit code 126
+```
+
+```bash
+kubectl exec nodejs-10-runtime-00001-deployment-5c5bf68cd5-26qhd -c user-container -- pwd
+/nodejsAction
+```
+
+```bash
+kubectl exec nodejs-10-runtime-00001-deployment-5c5bf68cd5-26qhd -c user-container -- ps -eaf
+UID        PID  PPID  C STIME TTY          TIME CMD
+root         1     0  0 19:51 ?        00:00:00 /bin/sh -c node --expose-gc app.js
+root         7     1  0 19:51 ?        00:00:00 node --expose-gc app.js
+root        49     0  0 19:59 ?        00:00:00 ps -eaf
+```
+
+```bash
+kubectl exec nodejs-10-runtime-00001-deployment-5c5bf68cd5-26qhd -c user-container -- env
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=nodejs-10-runtime-00001-deployment-5c5bf68cd5-26qhd
+PORT=8080
+K_REVISION=nodejs-10-runtime-00001
+K_CONFIGURATION=nodejs-10-runtime
+K_SERVICE=nodejs-10-runtime
+TARGET=Node.js Sample v1
+NODEJS_10_RUNTIME_00001_SERVICE_PORT_9090_TCP=tcp://10.107.253.143:9090
+NODEJS_10_RUNTIME_00001_SERVICE_PORT_9090_TCP_PROTO=tcp
+KUBERNETES_SERVICE_HOST=10.96.0.1
+KUBERNETES_PORT=tcp://10.96.0.1:443
+KUBERNETES_PORT_443_TCP=tcp://10.96.0.1:443
+KUBERNETES_PORT_443_TCP_PROTO=tcp
+NODEJS_10_RUNTIME_00001_SERVICE_SERVICE_HOST=10.107.253.143
+NODEJS_10_RUNTIME_00001_SERVICE_SERVICE_PORT_HTTP=80
+NODEJS_10_RUNTIME_00001_SERVICE_SERVICE_PORT_METRICS=9090
+NODEJS_10_RUNTIME_00001_SERVICE_PORT_80_TCP_ADDR=10.107.253.143
+NODEJS_10_RUNTIME_00001_SERVICE_PORT_9090_TCP_ADDR=10.107.253.143
+KUBERNETES_SERVICE_PORT_HTTPS=443
+NODEJS_10_RUNTIME_00001_SERVICE_SERVICE_PORT=80
+NODEJS_10_RUNTIME_00001_SERVICE_PORT=tcp://10.107.253.143:80
+NODEJS_10_RUNTIME_00001_SERVICE_PORT_80_TCP_PROTO=tcp
+NODEJS_10_RUNTIME_00001_SERVICE_PORT_80_TCP_PORT=80
+KUBERNETES_SERVICE_PORT=443
+KUBERNETES_PORT_443_TCP_ADDR=10.96.0.1
+NODEJS_10_RUNTIME_00001_SERVICE_PORT_80_TCP=tcp://10.107.253.143:80
+NODEJS_10_RUNTIME_00001_SERVICE_PORT_9090_TCP_PORT=9090
+KUBERNETES_PORT_443_TCP_PORT=443
+NODE_VERSION=10.15.0
+YARN_VERSION=1.12.3
+HOME=/root
+```
