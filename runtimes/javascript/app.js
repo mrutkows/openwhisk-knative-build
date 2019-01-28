@@ -44,6 +44,18 @@ app.use(function(err, req, res, next) {
     res.status(500).json({ error: "Bad request." });
   });
 
+app.get("/", (req, res) => {
+  console.log("Hello world received a request.");
+
+  const target = process.env.TARGET || "World";
+  res.send(`Hello ${target}!`);
+});
+
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+  console.log("Hello world listening on port", port);
+});
+
 service.start(app);
 
 /**
@@ -58,6 +70,7 @@ service.start(app);
  * @returns an express endpoint handler
  */
 function wrapEndpoint(ep) {
+    console.log("Hello from wrapEndpoint")
     return function (req, res) {
         try {
             ep(req).then(function (result) {
