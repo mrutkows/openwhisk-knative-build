@@ -38,13 +38,21 @@ $ kubectl get pods helloworld-nodejs-00001-deployment-69f788f64b-gtvrc -o yaml
 ``` 
 
 ```bash
-kubectl logs helloworld-nodejs-00001-deployment-69f788f64b-gtvrc -c user-container
+$ kubectl logs helloworld-nodejs-00001-deployment-69f788f64b-gtvrc --all-containers=true
+```
+
+```bash
+$ kubectl logs helloworld-nodejs-00001-deployment-69f788f64b-gtvrc -c user-container
 
 > knative-serving-helloworld-nodejs@1.0.0 start /usr/src/app
 > node app.js
 
 Hello world listening on port 8080
 Hello world received a request.
+```
+
+```bash
+$ kubectl logs helloworld-nodejs-00001-deployment-69f788f64b-gtvrc -c istio-init
 ```
 
 ```bash
