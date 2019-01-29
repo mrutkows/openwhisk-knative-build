@@ -15,18 +15,24 @@
  * limitations under the License.
  */
 
+console.log("Hello World from NodeJS runtime")
+
 var config = {
         'port': 8080,
         'apiHost': process.env.__OW_API_HOST,
         'allowConcurrent': process.env.__OW_ALLOW_CONCURRENT
 };
 
+console.log("DEBUGGER: Config:")
+console.log(config)
+
 var bodyParser = require('body-parser');
 var express    = require('express');
 
 var app = express();
 
-console.log("Hello World from NodeJS runtime")
+console.log("DEBUGGER: Config:")
+console.log(app)
 
 /**
  * instantiate an object which handles REST calls from the Invoker
@@ -34,10 +40,24 @@ console.log("Hello World from NodeJS runtime")
 var service = require('./src/service').getService(config);
 
 app.set('port', config.port);
+
+console.log("DEBUGGER: Config:")
+console.log(app)
+
 app.use(bodyParser.json({ limit: "48mb" }));
 
+console.log("DEBUGGER: Config:")
+console.log(app)
+
 app.post('/init', wrapEndpoint(service.initCode));
+
+console.log("DEBUGGER: Config:")
+console.log(app)
+
 app.post('/run',  wrapEndpoint(service.runCode));
+
+console.log("DEBUGGER: Config:")
+console.log(app)
 
 app.use(function(err, req, res, next) {
     console.error(err.stack);
