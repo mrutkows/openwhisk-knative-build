@@ -96,6 +96,13 @@ function wrapEndpoint(ep) {
                     res.status(500).json({ error: "Internal error." });
                 }
             });
+            console.log("**************************")
+            console.log("DEBUGGER: req")
+            console.log(req)
+                
+            console.log("**************************")
+            console.log("DEBUGGER: res")
+            console.log(res)
         } catch (e) {
             // This should not happen, as the contract for the endpoints is to
             // never (externally) throw, and wrap failures in the promise instead,
