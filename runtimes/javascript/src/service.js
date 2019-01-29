@@ -132,16 +132,26 @@ function NodeActionService(config) {
      * req.body = { value: Object, meta { activationId : int } }
      */
     this.runCode = function runCode(req) {
+        console.log("**************************")
+        console.log("DEBUGGER: Status is")
+        console.log(status)
         if (status === Status.ready) {
             if (!ignoreRunStatus) {
                 setStatus(Status.running);
             }
 
             return doRun(req).then(function (result) {
+                console.log("**************************")
+                console.log("DEBUGGER: Req is")
+                console.log(req)
                 if (!ignoreRunStatus) {
                     setStatus(Status.ready);
                 }
-
+                
+                console.log("**************************")
+                console.log("DEBUGGER: Result is")
+                console.log(result)
+                
                 if (typeof result !== "object") {
                     return errorMessage(502, "The action did not return a dictionary.");
                 } else {
@@ -152,6 +162,9 @@ function NodeActionService(config) {
                 return Promise.reject(errorMessage(502, "An error has occurred: " + error));
             });
         } else {
+            console.log("**************************")
+            console.log("DEBUGGER: Status is not ready")
+            console.log(status)
             var msg = "System not ready, status is " + status + ".";
             console.error("Internal system error:", msg);
             return Promise.reject(errorMessage(403, msg));
@@ -161,6 +174,9 @@ function NodeActionService(config) {
     function doInit(message) {
         userCodeRunner = new NodeActionRunner();
 
+        console.log("**************************")
+        console.log("DEBUGGER: user code runner")
+        console.log(userCodeRunner)
         return userCodeRunner.init(message).then(function (result) {
             // 'true' has no particular meaning here. The fact that the promise
             // is resolved successfully in itself carries the intended message
@@ -177,6 +193,9 @@ function NodeActionService(config) {
 
     function doRun(req) {
         var msg = req && req.body || {};
+        console.log("**************************")
+        console.log("DEBUGGER: msg from doRun")
+        console.log(msg)
         Object.keys(msg).forEach(
             function (k) {
                 if(typeof msg[k] === 'string' && k !== 'value'){
