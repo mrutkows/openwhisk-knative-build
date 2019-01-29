@@ -37,11 +37,13 @@ cat data-with-simple-hello.json
 ```
 
 ```bash
-kubectl logs nodejs-runtime-00001-deployment-6588cc7dcf-vbgz9 -c user-container
+kubectl logs nodejs-runtime-00001-deployment-66896df589-25cv4 -c user-container
 Hello World from NodeJS runtime
-DEBUGGER: Config:
+**************************
+DEBUGGER: config
 { port: 8080, apiHost: undefined, allowConcurrent: undefined }
-DEBUGGER: Config:
+**************************
+DEBUGGER: app
 { [EventEmitter: app]
   _events: [Object: null prototype] { mount: [Function: onmount] },
   _eventsCount: 1,
@@ -146,9 +148,11 @@ DEBUGGER: Config:
         views: '/nodejsAction/views',
         'jsonp callback name': 'callback' } },
   mountpath: '/' }
+**************************
 DEBUGGER: Starting the server
 [Function: start]
-DEBUGGER: Config:
+**************************
+DEBUGGER: app
 { [EventEmitter: app]
   _events: [Object: null prototype] { mount: [Function: onmount] },
   _eventsCount: 1,
@@ -255,7 +259,8 @@ DEBUGGER: Config:
         'jsonp callback name': 'callback',
         port: 8080 } },
   mountpath: '/' }
-DEBUGGER: Config:
+**************************
+DEBUGGER: app
 { [EventEmitter: app]
   _events: [Object: null prototype] { mount: [Function: onmount] },
   _eventsCount: 1,
@@ -370,7 +375,8 @@ DEBUGGER: Config:
      mergeParams: undefined,
      strict: false,
      stack: [ [Layer], [Layer], [Layer] ] } }
-DEBUGGER: Config:
+**************************
+DEBUGGER: app
 { [EventEmitter: app]
   _events: [Object: null prototype] { mount: [Function: onmount] },
   _eventsCount: 1,
@@ -485,7 +491,8 @@ DEBUGGER: Config:
      mergeParams: undefined,
      strict: false,
      stack: [ [Layer], [Layer], [Layer], [Layer] ] } }
-DEBUGGER: Config:
+**************************
+DEBUGGER: app
 { [EventEmitter: app]
   _events: [Object: null prototype] { mount: [Function: onmount] },
   _eventsCount: 1,
@@ -600,10 +607,17 @@ DEBUGGER: Config:
      mergeParams: undefined,
      strict: false,
      stack: [ [Layer], [Layer], [Layer], [Layer], [Layer] ] } }
+**************************
 DEBUGGER: Status is
 ready
+**************************
 DEBUGGER: Returning 200
+{ name: 'helloNodeJS',
+  main: 'main',
+  binary: false,
+  code: 'function main() {return {payload: \'HI\'};}' }
 ```
+
 
 ```bash
 kubectl logs nodejs-runtime-00001-deployment-6588cc7dcf-vbgz9 -c queue-proxy
