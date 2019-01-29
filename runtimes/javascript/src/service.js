@@ -68,6 +68,7 @@ function NodeActionService(config) {
         server.timeout = 0;
     };
     
+    console.log("**************************")
     console.log("DEBUGGER: Starting the server")
     console.log(this.start)
 
@@ -79,6 +80,7 @@ function NodeActionService(config) {
     this.initCode = function initCode(req) {
         if (status === Status.ready && userCodeRunner === undefined) {
             
+            console.log("**************************")
             console.log("DEBUGGER: Status is")
             console.log(status)
             
@@ -90,21 +92,25 @@ function NodeActionService(config) {
             if (message.main && message.code && typeof message.main === 'string' && typeof message.code === 'string') {
                 return doInit(message).then(function (result) {
                     setStatus(Status.ready);
+                    console.log("**************************")
                     console.log("DEBUGGER: Returning 200")
                     return responseMessage(200, { OK: true });
                 }).catch(function (error) {
                     var errStr = error.stack ? String(error.stack) : error;
                     setStatus(Status.stopped);
+                    console.log("**************************")
                     console.log("DEBUGGER: Returning 502")
                     return Promise.reject(errorMessage(502, "Initialization has failed due to: " + errStr));
                 });
             } else {
                 setStatus(Status.ready);
+                console.log("**************************")
                 console.log("DEBUGGER: Returning 403")
                 return Promise.reject(errorMessage(403, "Missing main/no code to execute."));
             }
         } else if (userCodeRunner !== undefined) {
             console.log("DEBUGGER: userCodeRunner is not undefined")
+            console.log("**************************")
             console.log(userCodeRunner)
             var msg = "Cannot initialize the action more than once.";
             console.error("Internal system error:", msg);
