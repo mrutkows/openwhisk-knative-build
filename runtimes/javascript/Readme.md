@@ -618,6 +618,29 @@ DEBUGGER: Returning 200
   code: 'function main() {return {payload: \'HI\'};}' }
 ```
 
+```bash
+curl -H "Host: nodejs-runtime.default.example.com" -H "Content-Type: application/json" -X POST http://localhost/run -v
+*   Trying ::1...
+* TCP_NODELAY set
+* Connected to localhost (::1) port 80 (#0)
+> POST /run HTTP/1.1
+> Host: nodejs-runtime.default.example.com
+> User-Agent: curl/7.54.0
+> Accept: */*
+> Content-Type: application/json
+>
+< HTTP/1.1 200 OK
+< content-length: 16
+< content-type: application/json; charset=utf-8
+< date: Tue, 29 Jan 2019 21:59:00 GMT
+< etag: W/"10-r4HisfsG2IPqXoE1oxz8LXbAq+I"
+< x-powered-by: Express
+< x-envoy-upstream-service-time: 19
+< server: envoy
+<
+* Connection #0 to host localhost left intact
+{"payload":"HI"}
+```
 
 ```bash
 kubectl logs nodejs-runtime-00001-deployment-6588cc7dcf-vbgz9 -c queue-proxy
