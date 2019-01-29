@@ -23,7 +23,8 @@ var config = {
         'allowConcurrent': process.env.__OW_ALLOW_CONCURRENT
 };
 
-console.log("DEBUGGER: Config:")
+console.log("**************************")
+console.log("DEBUGGER: config")
 console.log(config)
 
 var bodyParser = require('body-parser');
@@ -31,7 +32,8 @@ var express    = require('express');
 
 var app = express();
 
-console.log("DEBUGGER: Config:")
+console.log("**************************")
+console.log("DEBUGGER: app")
 console.log(app)
 
 /**
@@ -41,22 +43,26 @@ var service = require('./src/service').getService(config);
 
 app.set('port', config.port);
 
-console.log("DEBUGGER: Config:")
+console.log("**************************")
+console.log("DEBUGGER: app")
 console.log(app)
 
 app.use(bodyParser.json({ limit: "48mb" }));
 
-console.log("DEBUGGER: Config:")
+console.log("**************************")
+console.log("DEBUGGER: app")
 console.log(app)
 
 app.post('/init', wrapEndpoint(service.initCode));
 
-console.log("DEBUGGER: Config:")
+console.log("**************************")
+console.log("DEBUGGER: app")
 console.log(app)
 
 app.post('/run',  wrapEndpoint(service.runCode));
 
-console.log("DEBUGGER: Config:")
+console.log("**************************")
+console.log("DEBUGGER: app")
 console.log(app)
 
 app.use(function(err, req, res, next) {
