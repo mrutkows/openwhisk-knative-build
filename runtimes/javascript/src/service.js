@@ -94,6 +94,7 @@ function NodeActionService(config) {
                     setStatus(Status.ready);
                     console.log("**************************")
                     console.log("DEBUGGER: Returning 200")
+                    console.log(message)
                     return responseMessage(200, { OK: true });
                 }).catch(function (error) {
                     var errStr = error.stack ? String(error.stack) : error;
