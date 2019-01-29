@@ -67,6 +67,10 @@ function NodeActionService(config) {
         //This is required as http server will auto disconnect in 2 minutes, this to not auto disconnect at all
         server.timeout = 0;
     };
+    
+    console.log("DEBUGGER: Starting the server")
+    console.log(this.start)
+
 
     /** Returns a promise of a response to the /init invocation.
      *
@@ -74,6 +78,10 @@ function NodeActionService(config) {
      */
     this.initCode = function initCode(req) {
         if (status === Status.ready && userCodeRunner === undefined) {
+            
+            console.log("DEBUGGER: Status is")
+            console.log(status)
+            
             setStatus(Status.starting);
 
             var body = req.body || {};
@@ -82,17 +90,22 @@ function NodeActionService(config) {
             if (message.main && message.code && typeof message.main === 'string' && typeof message.code === 'string') {
                 return doInit(message).then(function (result) {
                     setStatus(Status.ready);
+                    console.log("DEBUGGER: Returning 200")
                     return responseMessage(200, { OK: true });
                 }).catch(function (error) {
                     var errStr = error.stack ? String(error.stack) : error;
                     setStatus(Status.stopped);
+                    console.log("DEBUGGER: Returning 502")
                     return Promise.reject(errorMessage(502, "Initialization has failed due to: " + errStr));
                 });
             } else {
                 setStatus(Status.ready);
+                console.log("DEBUGGER: Returning 403")
                 return Promise.reject(errorMessage(403, "Missing main/no code to execute."));
             }
         } else if (userCodeRunner !== undefined) {
+            console.log("DEBUGGER: userCodeRunner is not undefined")
+            console.log(userCodeRunner)
             var msg = "Cannot initialize the action more than once.";
             console.error("Internal system error:", msg);
             return Promise.reject(errorMessage(403, msg));
