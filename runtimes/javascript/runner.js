@@ -42,8 +42,15 @@ function NodeActionRunner() {
         next      : function (result) { return; }
     };
 
+    console.log("**************************")
+    console.log("DEBUGGER: callback")
+    console.log(callback)
+
     this.init = function(message) {
         function assertMainIsFunction() {
+            console.log("**************************")
+            console.log("DEBUGGER: userScriptMain")
+            console.log(thisRunner.userScriptMain)
             if (typeof thisRunner.userScriptMain !== 'function') {
                 throw "Action entrypoint '" + message.main + "' is not a function.";
             }
@@ -77,6 +84,9 @@ function NodeActionRunner() {
             // The code is a plain old JS file.
             try {
                 thisRunner.userScriptMain = eval('(function(){' + message.code + '\nreturn ' + message.main + '})()');
+                console.log("**************************")
+                console.log("DEBUGGER: userScriptMain")
+                console.log(userScriptMain)
                 assertMainIsFunction();
                 // See comment above about 'true'; it has no specific meaning.
                 return Promise.resolve(true);
@@ -96,6 +106,9 @@ function NodeActionRunner() {
 
                 try {
                     var result = thisRunner.userScriptMain(args);
+                    console.log("**************************")
+                    console.log("DEBUGGER: result")
+                    console.log(result)
                 } catch (e) {
                     reject(e);
                 }
@@ -157,6 +170,10 @@ function NodeActionRunner() {
         return new Promise(
             function (resolve, reject) {
                 child_process.exec(cmd, function (error, stdout, stderr) {
+                    console.log("**************************")
+                    console.log("DEBUGGER: exec cmd")
+                    console.log(cmd)
+
                     if (error) {
                         reject(stderr.trim());
                     } else {
