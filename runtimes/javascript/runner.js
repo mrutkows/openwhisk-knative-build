@@ -86,7 +86,7 @@ function NodeActionRunner() {
                 thisRunner.userScriptMain = eval('(function(){' + message.code + '\nreturn ' + message.main + '})()');
                 console.log("**************************")
                 console.log("DEBUGGER: userScriptMain")
-                console.log(userScriptMain)
+                console.log(thisRunner.userScriptMain)
                 assertMainIsFunction();
                 // See comment above about 'true'; it has no specific meaning.
                 return Promise.resolve(true);
