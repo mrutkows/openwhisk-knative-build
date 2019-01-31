@@ -140,10 +140,11 @@ function NodeActionService(config) {
                 setStatus(Status.running);
             }
 
+            console.log("**************************")
+            console.log("DEBUGGER: Req is")
+            console.log(req)
+
             return doRun(req).then(function (result) {
-                console.log("**************************")
-                console.log("DEBUGGER: Req is")
-                console.log(req)
                 if (!ignoreRunStatus) {
                     setStatus(Status.ready);
                 }
