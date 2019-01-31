@@ -199,6 +199,8 @@ function NodeActionService(config) {
         Object.keys(msg).forEach(
             function (k) {
                 if(typeof msg[k] === 'string' && k !== 'value'){
+                    console.log("I am inside foreach, trying to set env. variable")
+                    console.log(k)
                     process.env['__OW_' + k.toUpperCase()] = msg[k];
                 }
             }
