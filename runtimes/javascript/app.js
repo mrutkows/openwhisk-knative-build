@@ -32,26 +32,13 @@ var express    = require('express');
 
 var app = express();
 
-console.log("**************************")
-console.log("DEBUGGER: app")
-console.log(app)
-
 /**
  * instantiate an object which handles REST calls from the Invoker
  */
 var service = require('./src/service').getService(config);
 
 app.set('port', config.port);
-
-console.log("**************************")
-console.log("DEBUGGER: app")
-console.log(app)
-
 app.use(bodyParser.json({ limit: "48mb" }));
-
-console.log("**************************")
-console.log("DEBUGGER: app")
-console.log(app)
 
 app.post('/init', wrapEndpoint(service.initCode));
 
