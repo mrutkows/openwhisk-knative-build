@@ -1,0 +1,8 @@
+{
+    "value": {
+        "name" : "helloNodeJS",
+        "main" : "main",
+        "binary": false,
+        "code" : "function main(params) {\n    var str = params.payload.toString();\n    var words = str.split(\" \");\n    var count = words.length;\n    console.log(\"The message '\"+str+\"' has\", count, 'words');\n    return { count: count };\n}\n"
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "value": {
+        "name" : "helloNodeJSWithParams",
+        "main" : "main",
+        "binary": false,
+        "code" : "function main(params) {\n    msg = \"Hello, \" + params.name + \" from \" + params.place;\n    console.log(msg)\n    return { payload:  msg };\n}\n"
+    }
+}

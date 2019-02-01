@@ -1,0 +1,8 @@
+{
+    "value": {
+        "name" : "helloNodeJS",
+        "main" : "main",
+        "binary": false,
+        "code": "function main() {\n    var now = new Date();\n    console.log('It is now ' + now);\n    return { date: now };\n}\n"
+    }
+}
