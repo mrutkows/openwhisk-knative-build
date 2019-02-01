@@ -72,6 +72,8 @@ service.start(app);
  * @returns an express endpoint handler
  */
 function wrapEndpoint(ep) {
+    console.log("**************************")
+    console.log("DEBUGGER: I am inside wrapEndpoint")
     return function (req, res) {
         try {
             ep(req).then(function (result) {

@@ -136,6 +136,8 @@ function NodeActionService(config) {
      */
     this.runCode = function runCode(req) {
         console.log("**************************")
+        console.log("DEBUGGER: I am inside service.runCode()")
+        console.log("**************************")
         console.log("DEBUGGER: Status is")
         console.log(status)
         if (status === Status.ready) {
@@ -145,7 +147,16 @@ function NodeActionService(config) {
 
             console.log("**************************")
             console.log("DEBUGGER: Req is")
-            // console.log(req)
+            console.log("DEBUGGER: req.body")
+            console.log(req.body)
+            console.log("DEBUGGER: req.url")
+            console.log(req.url)
+            console.log("DEBUGGER: req.method")
+            console.log(req.method)
+            console.log("DEBUGGER: req.params")
+            console.log(req.params)
+            console.log("DEBUGGER: req.query")
+            console.log(req.query)
 
             return doRun(req).then(function (result) {
                 if (!ignoreRunStatus) {
@@ -196,6 +207,8 @@ function NodeActionService(config) {
     }
 
     function doRun(req) {
+        console.log("**************************")
+        console.log("DEBUGGER: I am inside doRun")
         var msg = req && req.body || {};
         console.log("**************************")
         console.log("DEBUGGER: msg from doRun")

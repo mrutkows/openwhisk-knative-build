@@ -49,6 +49,8 @@ function NodeActionRunner() {
     console.log(callback)
 
     this.init = function(message) {
+        console.log("**************************")
+        console.log("DEBUGGER: I am inside NodeActionRunner.init")
         function assertMainIsFunction() {
             console.log("**************************")
             console.log("DEBUGGER: userScriptMain")
@@ -101,12 +103,17 @@ function NodeActionRunner() {
     // Returns a Promise with the result of the user code invocation.
     // The Promise is rejected iff the user code throws.
     this.run = function(args) {
+        console.log("**************************")
+        console.log("DEBUGGER: I am inside NodeActionRunner.run")
         return new Promise(
             function (resolve, reject) {
                 callback.completed = undefined;
                 callback.next = resolve;
 
                 try {
+                    console.log("**************************")
+                    console.log("DEBUGGER: args")
+                    console.log(args)
                     var result = thisRunner.userScriptMain(args);
                     console.log("**************************")
                     console.log("DEBUGGER: result")
