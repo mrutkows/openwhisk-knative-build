@@ -28,6 +28,8 @@ var path = require('path');
 const serializeError = require('serialize-error');
 
 function NodeActionRunner() {
+    console.log("**************************")
+    console.log("DEBUGGER: I am inside NodeActionRunner")
     // Use this ref inside closures etc.
     var thisRunner = this;
 
@@ -85,7 +87,7 @@ function NodeActionRunner() {
             try {
                 thisRunner.userScriptMain = eval('(function(){' + message.code + '\nreturn ' + message.main + '})()');
                 console.log("**************************")
-                console.log("DEBUGGER: userScriptMain")
+                console.log("DEBUGGER: I am inside else condition, evaluating plain JS file, userScriptMain")
                 console.log(thisRunner.userScriptMain)
                 assertMainIsFunction();
                 // See comment above about 'true'; it has no specific meaning.

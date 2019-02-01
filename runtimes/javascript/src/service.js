@@ -70,7 +70,7 @@ function NodeActionService(config) {
     
     console.log("**************************")
     console.log("DEBUGGER: Starting the server")
-    console.log(this.start)
+    // console.log(this.start)
 
 
     /** Returns a promise of a response to the /init invocation.
@@ -78,8 +78,11 @@ function NodeActionService(config) {
      *  req.body = { main: String, code: String, binary: Boolean }
      */
     this.initCode = function initCode(req) {
+        console.log("**************************")
+        console.log("DEBUGGER: I am inside service.initCode()")
+
+
         if (status === Status.ready && userCodeRunner === undefined) {
-            
             console.log("**************************")
             console.log("DEBUGGER: Status is")
             console.log(status)
@@ -142,7 +145,7 @@ function NodeActionService(config) {
 
             console.log("**************************")
             console.log("DEBUGGER: Req is")
-            console.log(req)
+            // console.log(req)
 
             return doRun(req).then(function (result) {
                 if (!ignoreRunStatus) {

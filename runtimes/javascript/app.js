@@ -30,6 +30,10 @@ console.log(config)
 var bodyParser = require('body-parser');
 var express    = require('express');
 
+/**
+ * instantiate app as an instance of Express
+ * i.e. app starts the server
+ */
 var app = express();
 
 /**
@@ -38,19 +42,16 @@ var app = express();
 var service = require('./src/service').getService(config);
 
 app.set('port', config.port);
+
+/**
+ * setup a middleware layer to restrict the request body size
+ * this middlware is called every time a request is sent to the server
+ */
 app.use(bodyParser.json({ limit: "48mb" }));
 
 app.post('/init', wrapEndpoint(service.initCode));
 
-console.log("**************************")
-console.log("DEBUGGER: app")
-console.log(app)
-
 app.post('/run',  wrapEndpoint(service.runCode));
-
-console.log("**************************")
-console.log("DEBUGGER: app")
-console.log(app)
 
 app.use(function(err, req, res, next) {
     console.error(err.stack);
@@ -84,12 +85,20 @@ function wrapEndpoint(ep) {
                 }
             });
             console.log("**************************")
-            console.log("DEBUGGER: req")
-            console.log(req)
-                
+            console.log("DEBUGGER: req.body")
+            console.log(req.body)
+            console.log("DEBUGGER: req.url")
+            console.log(req.url)
+            console.log("DEBUGGER: req.method")
+            console.log(req.method)
+            console.log("DEBUGGER: req.params")
+            console.log(req.params)
+            console.log("DEBUGGER: req.query")
+            console.log(req.query)
+
             console.log("**************************")
             console.log("DEBUGGER: res")
-            console.log(res)
+            console.log(res.status)
         } catch (e) {
             // This should not happen, as the contract for the endpoints is to
             // never (externally) throw, and wrap failures in the promise instead,
