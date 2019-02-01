@@ -219,6 +219,9 @@ function NodeActionService(config) {
                     console.log("I am inside foreach, trying to set env. variable")
                     console.log(k)
                     process.env['__OW_' + k.toUpperCase()] = msg[k];
+                    var envVariable = '__OW_' + k.toUpperCase();
+                    console.log(envVariable)
+                    console.log(process.env);
                 }
             }
         );

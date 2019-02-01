@@ -31,3 +31,11 @@ curl -H "Host: nodejs-10-action.default.example.com" -d "@data-with-date-web.jso
 
 curl -H "Host: nodejs-10-action.default.example.com" -H "Content-Type: application/json" -X POST http://localhost/run
 
+
+curl -d "@data-with-params-hello-env.json" -H "Content-Type: application/json" http://localhost:8080/init
+ 
+curl -H "Content-Type: application/json" -X POST -d '{ "name": "Amy", "place": "Spain" }' http://localhost:8080/run
+
+curl -H "Host: nodejs-10-action.default.example.com" -H "Content-Type: application/json" -X POST -d "@data-with-params-hello-env-service.json" http://localhost/init
+
+
