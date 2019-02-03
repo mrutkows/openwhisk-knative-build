@@ -40,7 +40,7 @@ Specifically, for developement and testing on Mac OS, the following components a
 
 ### Docker Desktop Minimum Configuration
 
-Under "Preferencs"->"Advanced" please set these values to at least these min. values:
+Under the Docker Desktop menu select "**Preferences**"->"**Advanced**" and set these values to at least these minimums:
 - [x] **CPUs: 4**
 - [x] **Memory: 8.0 GiB**
 - [x] **Swap" 1.0 GiB**
