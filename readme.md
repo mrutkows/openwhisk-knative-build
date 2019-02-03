@@ -35,7 +35,7 @@ Specifically, for developement and testing on Mac OS, the following components a
 - [x] [Docker Desktop for Mac Docker Community Edition 2.0.1.0 2019-01-11](https://docs.docker.com/docker-for-mac/edge-release-notes/) which includes:
     - Docker 18.09.1
     - Kubernetes 1.13.0
-- [x] Kubectl (```brew install kubernetes-cli```)
+- [x] [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) (```brew install kubernetes-cli```)
 - [x] [Knative 0.3.0](https://github.com/knative/serving/releases/tag/v0.3.0) (which will install and configure istio-1.0.1 compatible resources)
 
 ### Docker Desktop Minimum Configuration
