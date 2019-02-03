@@ -149,7 +149,7 @@ $ echo -n "${DOCKERHUB_PASSWORD_PLAIN_TEXT}" | base64 -b 0
 t80szzToPshrpDr3sdMn==
 ```
 
-Copy the file **docker-secrets.yaml.tpl** to **docker-secrets.yaml** and replace the **username** and **password** values with the base64 encoded versions of your Docker Hub username and password.
+On your local system, copy the file **docker-secrets.yaml.tmpl** to **docker-secrets.yaml** and replace the **username** and **password** values with the base64 encoded versions of your Docker Hub username and password.
 
 ```
 apiVersion: v1
