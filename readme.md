@@ -28,15 +28,15 @@
 The general pre-requisites are as follows;
 - [x] Kubernetes v1.13.0
 - [x] kubectl
-- [x] Knative 
+- [x] Knative v0.3.0
 
 Specifically, for developement and testing on Mac OS, the following components and versions were used:
 
 - [x] [Docker Desktop for Mac Docker Community Edition 2.0.1.0 2019-01-11](https://docs.docker.com/docker-for-mac/edge-release-notes/) which includes:
     - Docker 18.09.1
     - Kubernetes 1.13.0
-- [x] Kubectl using `brew install kubectl
-- [x] Knative 0.3.0 (which will install and configure istio-1.0.1 compatible resources)
+- [x] Kubectl (```brew install kubernetes-cli```)
+- [x] [Knative 0.3.0](https://github.com/knative/serving/releases/tag/v0.3.0) (which will install and configure istio-1.0.1 compatible resources)
 
 ### Docker Desktop Minimum Configuration
 
@@ -161,10 +161,9 @@ metadata:
 type: kubernetes.io/basic-auth
 data:
     # use `echo -n "username" | base64 -b 0` to generate this string
-    username: ${DOCKERHUB_USERNAME_PLAIN_TEXT}
+    username: ${DOCKERHUB_USERNAME_BASE64_ENCODED}
     # use `echo -n "password" | base64 -b 0` to generate this string
-    password: ${DOCKERHUB_PASSWORD_PLAIN_TEXT}
-
+    password: ${DOCKERHUB_PASSWORD_BASE64_ENCODED}
 ```
 
 Apply this manifest:
