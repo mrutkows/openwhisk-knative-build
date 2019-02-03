@@ -21,7 +21,7 @@
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
-`This repository contains Knative Build Templates along with modified versions of their respective OpenWhisk Action Runtimes that can be used to Build and Serve Knative compatible applications (i.e., OpenWhisk Actions) on Kubernetes.
+This repository contains Knative Build Templates along with modified versions of their respective OpenWhisk Action Runtimes that can be used to Build and Serve Knative compatible applications (i.e., OpenWhisk Actions) on Kubernetes.
 
 ## Pre-requisites
 
