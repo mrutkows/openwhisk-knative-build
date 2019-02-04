@@ -187,7 +187,22 @@ Verify Secret exists:
 $ kubectl get secret
 NAME                    TYPE                                  DATA      AGE
 dockerhub-user-pass     kubernetes.io/basic-auth              2         21s
-...
+```
+
+## Create a Service Account
+
+```bash
+kubectl apply -f service-account.yaml
+```
+
+```
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: openwhisk-runtime-builder
+secrets:
+  - name: dockerhub-user-pass
+```
 
 ## Troubleshooting
 
