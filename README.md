@@ -207,25 +207,12 @@ dockerhub-user-pass     kubernetes.io/basic-auth              2         21s
 
 ## Create Service Account for our Knative Builds
 
-Knative requires a valid ServiceAccount resource that will be used when building and serving OpenWhisk Serverless Actions using the OpenWhisk runtimes.  For convenience, all Knative builds for all runtimes are configured to use the same ServiceAccount.
+Knative requires a valid ServiceAccount resource that will be used when building and serving OpenWhisk Serverless Actions using the OpenWhisk runtimes.  For convenience, all Knative builds for all runtimes are configured to use the same ServiceAccount as defined in [service-account.yaml](service-account.yaml).
 
 ```bash
 $ kubectl apply -f service-account.yaml
 serviceaccount/openwhisk-runtime-builder created
 ```
-
-<details>
-    <summary>service-account.yaml contents</summary>
-    
-```
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: openwhisk-runtime-builder
-secrets:
-  - name: dockerhub-user-pass
-```
-</details>
 
 Verify the Service account has 2 secrets (i.e., username and password):
 
