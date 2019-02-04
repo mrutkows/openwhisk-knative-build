@@ -21,7 +21,7 @@
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
-This direcotry is used to build and test the OpenWhisk NodeJS Action runtime for Knative.
+This directory is used to build and test the OpenWhisk NodeJS Action runtime for Knative.
 
 ```bash
 curl -H "Host: nodejs-runtime.default.example.com" -d "@data-with-simple-hello.json" -H "Content-Type: application/json" http://localhost/init -v
