@@ -133,6 +133,12 @@ spec:
 status:
   phase: Active
 ```
+If you do not see the label, you likely forgot to issue the following command as part of Knative's install of Istio:
+
+```bash
+$ kubectl label namespace default istio-injection=enabled
+namespace "default" labeled
+```
 
 # Building and Serving OpenWhisk Runtime Build Templates
 
@@ -172,4 +178,5 @@ Apply this manifest:
 $ kubectl apply -f docker-secret.yaml
 secret "basic-user-pass" created
 ```
+
 
