@@ -23,8 +23,33 @@
 
 This directory is used to build and test the OpenWhisk NodeJS Action runtime for Knative.
 
+# Tests
+
+# Simple hello, Content-Type: JSON
 ```bash
 curl -H "Host: nodejs-runtime.default.example.com" -d "@data-with-simple-hello.json" -H "Content-Type: application/json" http://localhost/init -v
+```
+
+<details>
+  <summary>Payload</summary>
+    
+```bash
+cat data-with-simple-hello.json
+{
+    "value": {
+        "name" : "helloNodeJS",
+        "main" : "main",
+        "binary": false,
+        "code" : "function main() {return {payload: 'HI'};}"
+    }
+}
+```
+</details>
+
+<details>
+  <summary>Curl details</summary>
+  
+  ### 
 *   Trying ::1...
 * TCP_NODELAY set
 * Connected to localhost (::1) port 80 (#0)
@@ -48,18 +73,8 @@ curl -H "Host: nodejs-runtime.default.example.com" -d "@data-with-simple-hello.j
 * Connection #0 to host localhost left intact
 {"OK":true}
 ```
+</details>
 
-```bash
-cat data-with-simple-hello.json
-{
-    "value": {
-        "name" : "helloNodeJS",
-        "main" : "main",
-        "binary": false,
-        "code" : "function main() {return {payload: 'HI'};}"
-    }
-}
-```
 
 ```bash
 kubectl logs nodejs-runtime-00001-deployment-66896df589-25cv4 -c user-container
