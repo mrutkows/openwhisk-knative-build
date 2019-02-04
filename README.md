@@ -90,7 +90,7 @@ kube-scheduler-docker-desktop            1/1       Running   3          4d22h
 The following instructions where used to install Knative: [Knative Install on a Kubernetes Cluster](https://github.com/knative/docs/blob/master/install/Knative-with-any-k8s.md)
 
 These instructions take you through the installation of
-- [x] [Istio v1.x.y](https://github.com/istio/istio/releases) using resources specifically configured for use with Knative Serving
+- [x] [Istio v1.0.1](https://github.com/istio/istio/releases) using resources specifically configured for use with Knative Serving
 - [x] [Knative v0.3.0](https://github.com/knative/serving/releases/tag/v0.3.0)
 
 ## Verify Knative installation
@@ -128,7 +128,12 @@ Check the `default` namespace has the label **istio-injection** and it is set to
 
 ```bash
 $ kubectl get namespace default -o yaml
+```
 
+<details>
+    <summary>Sample output:</summary>
+    
+```    
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -145,7 +150,8 @@ spec:
 status:
   phase: Active
 ```
-
+</details>
+    
 If you do not see this label, verify you issued the 'kubectl' command to set this label to the default namespace. 
 
 # Building and Serving OpenWhisk Runtime Build Templates
