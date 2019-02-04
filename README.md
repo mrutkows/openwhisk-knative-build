@@ -131,7 +131,7 @@ $ kubectl get namespace default -o yaml
 ```
 
 <details>
-    <summary>Sample output:</summary>
+    <summary>Sample output</summary>
     
 ```    
 apiVersion: v1
@@ -152,7 +152,7 @@ status:
 ```
 </details>
     
-If you do not see this label, verify you issued the 'kubectl' command to set this label to the default namespace. 
+**Note**: If you do not see this label, verify you issued the 'kubectl' command to set this label to the default namespace. See [Troubleshooting](#troubleshooting) section for more information.
 
 # Building and Serving OpenWhisk Runtime Build Templates
 
@@ -243,7 +243,9 @@ namespace "default" labeled
 #### Kubernetes and Istio resources do not all say "created" on "apply"
 
 1. Verify that you have configured Docker Desktop to have the required CPU and Memory values recommended above.
-2. Verify that all resources installed by applying either tha Knative or Istio YAML files show **"created"** during the installation. Below is an example of successful creation of Knative resources:
+2. Verify that all resources installed by applying either tha Knative or Istio YAML files show **"created"** during the installation. - 
+- If any of your resources were NOT **created**, then we recommend uninstalling Knative and Istio and trying again until you get the **created** result for all resources WITHOUT trying to apply a second time.
+- Below is an example of successful creation of Knative resources:
 
 <p>
     <details>
@@ -272,5 +274,3 @@ statefulset "prometheus-system" created
 ```
 </details>
 </p>
-
-  - If any of your resources were NOT **created**, then we recommend uninstalling Knative and Istio and trying again until you get the **created** result for all resources WITHOUT trying to apply a second time.
