@@ -267,4 +267,4 @@ statefulset "prometheus-system" created
 </details>
 </p>
 
-      - If any of your resources were NOT **created**, then we recommend uninstalling Knative and Istio and trying again until you get the **created** result for all resources WITHOUT trying to apply a second time.
+  - If any of your resources were NOT **created**, then we recommend uninstalling Knative and Istio and trying again until you get the **created** result for all resources WITHOUT trying to apply a second time.
