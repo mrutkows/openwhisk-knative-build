@@ -140,6 +140,12 @@ If you do not see this label, verify you issued the 'kubectl' command to set thi
 
 All OpenWhisk Runtime Build Templates require a valid Kubernetes **Service Account** with access to a Kubernetes **Secret** that containst base64 encoded versions of your Docker Hub username and password.  This credential will be used as part of the Knative Build process to "push" your Knative application image containing your OpenWhisk Action to Docker Hub.  
 
+## Clone this repository
+
+```bash
+git clone https://github.com/mrutkows/openwhisk-knative-build.git
+```
+
 ## Register Secrets for Docker Hub
 
 Use the following commands to generate base64 encoded values of your Docker Hub **username** and **password** required to register a new secret in Kubernetes.
