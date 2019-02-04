@@ -1,45 +1,8 @@
-# OpenWhisk NodeJS Runtime using Knative
+# Tests for OpenWhisk NodeJS Runtime using Knative
 
-## Pre-requisite:
-
-- Clone this repo:
-
-```bash
-git clone https://github.com/mrutkows/openwhisk-knative-build.git
-cd runtimes/javascript/
-```
-
-- Create Docker Secret and Service Account:
-
-```bash
-kubectl apply -f docker-secret.yaml
-kubectl apply -f service-account.yaml
-```
-
-## How to run tests?
+## Running the Tests
 
 #### Hello World Action
-
-Replace `{DOCKER_USERNAME}` with your own docker username in `serivce.yaml`. 
-
-```bash
-kubectl apply -f service.yaml
-```
-
-Debugger:
-
-```bash
-Hello World from NodeJS runtime
-**************************
-DEBUGGER: config
-{ port: 8080, apiHost: undefined, allowConcurrent: undefined }
-**************************
-DEBUGGER: Starting the server
-**************************
-DEBUGGER: I am inside wrapEndpoint
-**************************
-DEBUGGER: I am inside wrapEndpoint
-```
 
 Init the action:
 
