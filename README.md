@@ -129,8 +129,8 @@ Check the `default` namespace has the label **istio-injection** and it is set to
 ```bash
 $ kubectl get namespace default -o yaml
 ```
-
-    
+   
+Example output:
 ```    
 apiVersion: v1
 kind: Namespace
@@ -194,7 +194,7 @@ Apply this resource manifest:
 
 ```bash
 $ kubectl apply -f docker-secret.yaml
-secret "dockerhub-user-pass" created
+secret/dockerhub-user-pass created
 ```
 
 Verify Secret exists:
