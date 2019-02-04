@@ -231,7 +231,7 @@ secrets:
 
 ### Knative and Istio Install
 
-#### Kubernetes default namespace does not have "istio-injection: enabled" key-value
+#### PROBLEM: Kubernetes default namespace does not have "istio-injection: enabled" key-value
 
 If the `default` namespace does not have this value under the `metadata` section, you may have forgotton to issue the following command as part of the Knative setup:
 
@@ -240,7 +240,7 @@ $ kubectl label namespace default istio-injection=enabled
 namespace "default" labeled
 ```
 
-#### Kubernetes and Istio resources do not all say "created" on "apply"
+#### PROBLEM: Kubernetes and Istio resources do not all say "created" on "apply"
 
 1. Verify that you have configured Docker Desktop to have the required CPU and Memory values recommended above.
 2. Verify that all resources installed by applying either tha Knative or Istio YAML files show **"created"** during the installation.
