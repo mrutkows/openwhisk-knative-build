@@ -700,13 +700,15 @@ DEBUGGER: Returning 200
 ```
 </details>
 
+---
+
 ### Logs 'queue-proxy'
 
 ```bash
 kubectl logs nodejs-runtime-00001-deployment-6588cc7dcf-vbgz9 -c queue-proxy
 ```
 <details>
-  <summary>Logs 'queue-proxy'</summary> 
+  <summary>Logs 'queue-proxy': Error!!! </summary> 
   
 ```
 {"level":"info","ts":"2019-01-29T20:50:06.041Z","caller":"logging/config.go:96","msg":"Successfully created the logger.","knative.dev/jsonconfig":"{\n  \"level\": \"info\",\n  \"development\": false,\n  \"outputPaths\": [\"stdout\"],\n  \"errorOutputPaths\": [\"stderr\"],\n  \"encoding\": \"json\",\n  \"encoderConfig\": {\n    \"timeKey\": \"ts\",\n    \"levelKey\": \"level\",\n    \"nameKey\": \"logger\",\n    \"callerKey\": \"caller\",\n    \"messageKey\": \"msg\",\n    \"stacktraceKey\": \"stacktrace\",\n    \"lineEnding\": \"\",\n    \"levelEncoder\": \"\",\n    \"timeEncoder\": \"iso8601\",\n    \"durationEncoder\": \"\",\n    \"callerEncoder\": \"\"\n  }\n}\n"}
@@ -730,9 +732,15 @@ kubectl logs nodejs-runtime-00001-deployment-6588cc7dcf-vbgz9 -c queue-proxy
 {"level":"error","ts":"2019-01-29T20:50:08.044Z","logger":"queueproxy","caller":"queue/main.go:114","msg":"Error while sending stat{error 25 0  connection has not yet been established}","commit":"4d198db","knative.dev/key":"default/nodejs-runtime-00001","knative.dev/pod":"nodejs-runtime-00001-deployment-6588cc7dcf-vbgz9","stacktrace":"main.statReporter\n\t/usr/local/google/home/mattmoor/go/src/github.com/knative/serving/cmd/queue/main.go:114"}
 
 ```
+</details>
 
 ```bash
 curl -H "Host: nodejs-runtime.default.example.com" -H "Content-Type: application/json" -X POST http://localhost/run -v
+```
+<details>
+  <summary>Curl: POST: No data</summary> 
+  
+```  
 *   Trying ::1...
 * TCP_NODELAY set
 * Connected to localhost (::1) port 80 (#0)
@@ -754,10 +762,19 @@ curl -H "Host: nodejs-runtime.default.example.com" -H "Content-Type: application
 * Connection #0 to host localhost left intact
 {"error":"System not ready, status is running."}
 ```
+</details>
+
+---
 
 ```bash
 kubectl logs nodejs-runtime-00001-deployment-6588cc7dcf-vk646 -c user-container
 Hello World from NodeJS runtime
+```
+
+<details>
+  <summary>Logs 'queue-proxy'</summary> 
+  
+```
 DEBUGGER: Config:
 { port: 8080, apiHost: undefined, allowConcurrent: undefined }
 DEBUGGER: Config:
@@ -1322,11 +1339,16 @@ DEBUGGER: Config:
 [wrapEndpoint] exception caught Cannot read property 'run' of undefined
 Internal system error: System not ready, status is running.
 ```
-
-----
+</details>
 
 ```bash
 curl -H "Host: nodejs-runtime.default.example.com" -d "@data.json" -H "Content-Type: application/json" http://localhost/init -v
+```
+
+<details>
+  <summary>Curl: @data.json</summary> 
+
+```
 *   Trying ::1...
 * TCP_NODELAY set
 * Connected to localhost (::1) port 80 (#0)
@@ -1350,9 +1372,16 @@ curl -H "Host: nodejs-runtime.default.example.com" -d "@data.json" -H "Content-T
 * Connection #0 to host localhost left intact
 {"error":"Cannot initialize the action more than once."}
 ```
-
+<details>
+  
 ```bash
 curl -H "Host: nodejs-runtime.default.example.com" -H "Content-Type: application/json" -X POST http://localhost/run -v
+```
+  
+<details>
+  <summary>Curl: POST: No data</summary> 
+  
+```  
 *   Trying ::1...
 * TCP_NODELAY set
 * Connected to localhost (::1) port 80 (#0)
@@ -1374,10 +1403,16 @@ curl -H "Host: nodejs-runtime.default.example.com" -H "Content-Type: application
 * Connection #0 to host localhost left intact
 {"error":"System not ready, status is running."}
 ```
+</details>
 
 ```bash
 kubectl get pods nodejs-runtime-00001-deployment-78c4bc59bd-plc6q -o yaml
 apiVersion: v1
+```
+<details>
+  <summary>get pods</summary> 
+
+```
 kind: Pod
 metadata:
   annotations:
@@ -1732,23 +1767,43 @@ status:
   qosClass: Burstable
   startTime: "2019-01-29T20:10:34Z"
 ```
+</details>
 
 ```bash
 kubectl logs nodejs-runtime-00001-deployment-78c4bc59bd-plc6q -c user-container
+```
+
+<details>
+  <summary>Logs 'user-container'</summary> 
+
+```
 Hello World from NodeJS runtime
 [wrapEndpoint] exception caught Cannot read property 'run' of undefined
 Internal system error: System not ready, status is running.
 ```
+</details>
 
 ```bash
 kubectl logs nodejs-runtime-00001-deployment-78c4bc59bd-plc6q -c istio-proxy
+```
+
+<details>
+  <summary>Logs 'istio-proxy'</summary> 
+  
+```
 [2019-01-29 20:10:40.456][18][info][config] external/envoy/source/server/listener_manager_impl.cc:908] all dependencies initialized. starting workers
 [2019-01-29T20:10:41.858Z] "POST /run HTTP/1.1" 500 - 0 39 44 43 "192.168.65.3, 127.0.0.1" "curl/7.54.0" "93c1327e-d205-9bcd-af33-b68b411b63ce" "nodejs-runtime.default.example.com" "127.0.0.1:8012"
 [2019-01-29T20:10:41.935Z] "POST /run HTTP/1.1" 403 - 0 48 18 9 "192.168.65.3, 127.0.0.1" "curl/7.54.0" "93c1327e-d205-9bcd-af33-b68b411b63ce" "nodejs-runtime.default.example.com" "127.0.0.1:8012"
 ```
+</details>
 
 ```bash
 kubectl logs nodejs-runtime-00001-deployment-78c4bc59bd-plc6q -c queue-proxy
+```
+<details>
+  <summary>Logs 'queue-proxy'</summary> 
+
+```
 {"level":"info","ts":"2019-01-29T20:10:38.743Z","caller":"logging/config.go:96","msg":"Successfully created the logger.","knative.dev/jsonconfig":"{\n  \"level\": \"info\",\n  \"development\": false,\n  \"outputPaths\": [\"stdout\"],\n  \"errorOutputPaths\": [\"stderr\"],\n  \"encoding\": \"json\",\n  \"encoderConfig\": {\n    \"timeKey\": \"ts\",\n    \"levelKey\": \"level\",\n    \"nameKey\": \"logger\",\n    \"callerKey\": \"caller\",\n    \"messageKey\": \"msg\",\n    \"stacktraceKey\": \"stacktrace\",\n    \"lineEnding\": \"\",\n    \"levelEncoder\": \"\",\n    \"timeEncoder\": \"iso8601\",\n    \"durationEncoder\": \"\",\n    \"callerEncoder\": \"\"\n  }\n}\n"}
 {"level":"info","ts":"2019-01-29T20:10:38.743Z","caller":"logging/config.go:97","msg":"Logging level set to info"}
 {"level":"info","ts":"2019-01-29T20:10:38.743Z","logger":"queueproxy","caller":"util/env.go:33","msg":"SERVING_POD=nodejs-runtime-00001-deployment-78c4bc59bd-plc6q","commit":"4d198db"}
@@ -1769,7 +1824,4 @@ kubectl logs nodejs-runtime-00001-deployment-78c4bc59bd-plc6q -c queue-proxy
 {"level":"error","ts":"2019-01-29T20:10:39.746Z","logger":"queueproxy","caller":"queue/main.go:114","msg":"Error while sending stat{error 25 0  connection has not yet been established}","commit":"4d198db","knative.dev/key":"default/nodejs-runtime-00001","knative.dev/pod":"nodejs-runtime-00001-deployment-78c4bc59bd-plc6q","stacktrace":"main.statReporter\n\t/usr/local/google/home/mattmoor/go/src/github.com/knative/serving/cmd/queue/main.go:114"}
 {"level":"error","ts":"2019-01-29T20:10:40.746Z","logger":"queueproxy","caller":"queue/main.go:114","msg":"Error while sending stat{error 25 0  connection has not yet been established}","commit":"4d198db","knative.dev/key":"default/nodejs-runtime-00001","knative.dev/pod":"nodejs-runtime-00001-deployment-78c4bc59bd-plc6q","stacktrace":"main.statReporter\n\t/usr/local/google/home/mattmoor/go/src/github.com/knative/serving/cmd/queue/main.go:114"}
 ```
-
-```bash
-
-```
+</details>
