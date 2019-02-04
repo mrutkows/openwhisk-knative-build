@@ -190,7 +190,7 @@ data:
     password: ${DOCKERHUB_PASSWORD_BASE64_ENCODED}
 ```
 
-Apply this resource manifest:
+Apply the Secret resource manifest for Docker Hub:
 
 ```bash
 $ kubectl apply -f docker-secret.yaml
@@ -211,7 +211,7 @@ Knative requires a valid ServiceAccount resource that will be used when building
 
 ```bash
 kubectl apply -f service-account.yaml
-serviceaccount "openwhisk-runtime-builder" created
+serviceaccount/openwhisk-runtime-builder create
 ```
 
 <details>
