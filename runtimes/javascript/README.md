@@ -17,11 +17,38 @@
 #
 -->
 
-# OpenWhisk Runtimes for Knative
+# OpenWhisk NodeJS Runtimes for Knative
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
-This directory is used to build and test the OpenWhisk NodeJS Action runtime for Knative.
+This directory is used to build and test the OpenWhisk NodeJS Action runtimes for Knative.
+
+## Build and Deploy the OpenWhisk Runtime Build Template
+
+### Configure 'service.yaml'
+
+Replace `{DOCKER_USERNAME}` with your own docker username in `service.yaml`. 
+
+```bash
+kubectl apply -f service.yaml
+```
+
+<details>
+    <summary>Debugger Output</summary>
+
+```bash
+Hello World from NodeJS runtime
+**************************
+DEBUGGER: config
+{ port: 8080, apiHost: undefined, allowConcurrent: undefined }
+**************************
+DEBUGGER: Starting the server
+**************************
+DEBUGGER: I am inside wrapEndpoint
+**************************
+DEBUGGER: I am inside wrapEndpoint
+```
+</details>
 
 # Tests
 
