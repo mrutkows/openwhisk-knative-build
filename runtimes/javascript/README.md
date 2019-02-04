@@ -793,12 +793,12 @@ curl -H "Host: nodejs-runtime.default.example.com" -H "Content-Type: application
 
 ```bash
 kubectl logs nodejs-runtime-00001-deployment-6588cc7dcf-vk646 -c user-container
-Hello World from NodeJS runtime
 ```
 <details>
   <summary>Logs 'queue-proxy'</summary> 
   
 ```
+Hello World from NodeJS runtime
 DEBUGGER: Config:
 { port: 8080, apiHost: undefined, allowConcurrent: undefined }
 DEBUGGER: Config:
@@ -1429,12 +1429,12 @@ curl -H "Host: nodejs-runtime.default.example.com" -H "Content-Type: application
 
 ```bash
 kubectl get pods nodejs-runtime-00001-deployment-78c4bc59bd-plc6q -o yaml
-apiVersion: v1
 ```
 <details>
   <summary>get pods</summary> 
 
 ```
+apiVersion: v1
 kind: Pod
 metadata:
   annotations:
