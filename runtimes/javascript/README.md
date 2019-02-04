@@ -25,13 +25,15 @@ This directory is used to build and test the OpenWhisk NodeJS Action runtime for
 
 # Tests
 
-# Simple hello, Content-Type: JSON
+## Simple hello, Content-Type: JSON
+
+### /init
 ```bash
 curl -H "Host: nodejs-runtime.default.example.com" -d "@data-with-simple-hello.json" -H "Content-Type: application/json" http://localhost/init -v
 ```
 
 <details>
-  <summary>Payload</summary>
+  <summary>Init data</summary>
     
 ```bash
 cat data-with-simple-hello.json
@@ -48,8 +50,7 @@ cat data-with-simple-hello.json
 
 <details>
   <summary>Curl details</summary>
-  
-  ### 
+```
 *   Trying ::1...
 * TCP_NODELAY set
 * Connected to localhost (::1) port 80 (#0)
@@ -75,10 +76,16 @@ cat data-with-simple-hello.json
 ```
 </details>
 
+### /run
 
 ```bash
 kubectl logs nodejs-runtime-00001-deployment-66896df589-25cv4 -c user-container
 Hello World from NodeJS runtime
+```
+<details>
+  <summary>Debug (stdout)</summary>
+
+```
 **************************
 DEBUGGER: config
 { port: 8080, apiHost: undefined, allowConcurrent: undefined }
@@ -657,6 +664,7 @@ DEBUGGER: Returning 200
   binary: false,
   code: 'function main() {return {payload: \'HI\'};}' }
 ```
+</details>
 
 ```bash
 curl -H "Host: nodejs-runtime.default.example.com" -H "Content-Type: application/json" -X POST http://localhost/run -v
