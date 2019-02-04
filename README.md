@@ -159,7 +159,7 @@ All OpenWhisk Runtime Build Templates require a valid Kubernetes **Service Accou
 ## Clone this repository
 
 ```bash
-git clone https://github.com/mrutkows/openwhisk-knative-build.git
+$ git clone https://github.com/mrutkows/openwhisk-knative-build.git
 ```
 
 ## Register Secrets for Docker Hub
@@ -210,8 +210,8 @@ dockerhub-user-pass     kubernetes.io/basic-auth              2         21s
 Knative requires a valid ServiceAccount resource that will be used when building and serving OpenWhisk Serverless Actions using the OpenWhisk runtimes.  For convenience, all Knative builds for all runtimes are configured to use the same ServiceAccount.
 
 ```bash
-kubectl apply -f service-account.yaml
-serviceaccount/openwhisk-runtime-builder create
+$ kubectl apply -f service-account.yaml
+serviceaccount/openwhisk-runtime-builder created
 ```
 
 <details>
@@ -226,6 +226,14 @@ secrets:
   - name: dockerhub-user-pass
 ```
 </details>
+
+Verify the Service account has 2 secrets (i.e., username and password):
+
+```
+$ kubectl get serviceaccount/openwhisk-runtime-builder
+NAME                        SECRETS   AGE
+openwhisk-runtime-builder   2         3m46s
+```
 
 ## Troubleshooting
 
