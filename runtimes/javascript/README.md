@@ -49,7 +49,7 @@ cat data-with-simple-hello.json
 </details>
 
 <details>
-  <summary>Curl details</summary>
+  <summary>Curl output</summary>
   
 ```
 *   Trying ::1...
@@ -83,7 +83,7 @@ cat data-with-simple-hello.json
 curl -H "Host: nodejs-runtime.default.example.com" -H "Content-Type: application/json" -X POST http://localhost/run -v
 ```
 <details>
-  <summary>Logs (stdout)</summary> 
+  <summary>Curl output</summary> 
   
 ```
 *   Trying ::1...
