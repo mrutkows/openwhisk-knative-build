@@ -205,8 +205,12 @@ dockerhub-user-pass     kubernetes.io/basic-auth              2         21s
 
 ```bash
 kubectl apply -f service-account.yaml
+serviceaccount "openwhisk-runtime-builder" created
 ```
 
+<details>
+    <summary>service-account.yaml contents</summary>
+    
 ```
 apiVersion: v1
 kind: ServiceAccount
@@ -215,6 +219,10 @@ metadata:
 secrets:
   - name: dockerhub-user-pass
 ```
+</details>
+
+serviceaccount "build-bot" created
+
 
 ## Troubleshooting
 
