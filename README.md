@@ -239,7 +239,7 @@ namespace "default" labeled
 1. Verify that you have configured Docker Desktop to have the required CPU and Memory values recommended above.
 2. Verify that all resources installed by applying either tha Knative or Istio YAML files show **"created"** during the installation. Below is an example of successful creation of Knative resources:
 
-<details>
+- <details>
     <summary>Sample output: Knative resources</summary>    
 
 ```
