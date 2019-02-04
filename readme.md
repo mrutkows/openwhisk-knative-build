@@ -157,7 +157,7 @@ On your local system, copy the file **docker-secrets.yaml.tmpl** to **docker-sec
 apiVersion: v1
 kind: Secret
 metadata:
-    name: basic-user-pass
+    name: docherbasic-user-pass
     annotations:
         build.knative.dev/docker-0: https://index.docker.io/v1/
 type: kubernetes.io/basic-auth
@@ -168,12 +168,20 @@ data:
     password: ${DOCKERHUB_PASSWORD_BASE64_ENCODED}
 ```
 
-Apply this manifest:
+Apply this resource manifest:
 
 ```bash
 $ kubectl apply -f docker-secret.yaml
-secret "basic-user-pass" created
+secret "dockerhub-user-pass" created
 ```
+
+Verify Secret exists:
+
+```bash
+$ kubectl get secret
+NAME                    TYPE                                  DATA      AGE
+dockerhub-user-pass     kubernetes.io/basic-auth              2         21s
+...
 
 ## Troubleshooting
 
