@@ -17,11 +17,11 @@
 #
 -->
 
-# OpenWhisk NodeJS Runtimes for Knative
+# OpenWhisk NodeJS Runtime for Knative
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
-This directory is used to build and test the OpenWhisk NodeJS Action runtimes for Knative.
+This directory is used to build and test the OpenWhisk NodeJS Action runtime for Knative.
 
 ## Build and Deploy the OpenWhisk Runtime Build Template
 
