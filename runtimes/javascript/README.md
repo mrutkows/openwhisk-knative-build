@@ -113,13 +113,13 @@ curl -H "Host: nodejs-runtime.default.example.com" -H "Content-Type: application
 
 ```bash
 kubectl logs nodejs-runtime-00001-deployment-66896df589-25cv4 -c user-container
-Hello World from NodeJS runtime
 ```
 
 <details>
   <summary>Logs 'user-container'</summary> 
 
 ```
+Hello World from NodeJS runtime
 **************************
 DEBUGGER: config
 { port: 8080, apiHost: undefined, allowConcurrent: undefined }
@@ -702,7 +702,7 @@ DEBUGGER: Returning 200
 
 ---
 
-# Failed Tests ?
+# Failed Tests
 
 ```bash
 kubectl logs nodejs-runtime-00001-deployment-6588cc7dcf-vbgz9 -c queue-proxy
@@ -764,13 +764,10 @@ curl -H "Host: nodejs-runtime.default.example.com" -H "Content-Type: application
 ```
 </details>
 
----
-
 ```bash
 kubectl logs nodejs-runtime-00001-deployment-6588cc7dcf-vk646 -c user-container
 Hello World from NodeJS runtime
 ```
-
 <details>
   <summary>Logs 'queue-proxy'</summary> 
   
@@ -1344,7 +1341,6 @@ Internal system error: System not ready, status is running.
 ```bash
 curl -H "Host: nodejs-runtime.default.example.com" -d "@data.json" -H "Content-Type: application/json" http://localhost/init -v
 ```
-
 <details>
   <summary>Curl: @data.json</summary> 
 
@@ -1377,7 +1373,6 @@ curl -H "Host: nodejs-runtime.default.example.com" -d "@data.json" -H "Content-T
 ```bash
 curl -H "Host: nodejs-runtime.default.example.com" -H "Content-Type: application/json" -X POST http://localhost/run -v
 ```
-  
 <details>
   <summary>Curl: POST: No data</summary> 
   
@@ -1772,7 +1767,6 @@ status:
 ```bash
 kubectl logs nodejs-runtime-00001-deployment-78c4bc59bd-plc6q -c user-container
 ```
-
 <details>
   <summary>Logs 'user-container'</summary> 
 
@@ -1786,7 +1780,6 @@ Internal system error: System not ready, status is running.
 ```bash
 kubectl logs nodejs-runtime-00001-deployment-78c4bc59bd-plc6q -c istio-proxy
 ```
-
 <details>
   <summary>Logs 'istio-proxy'</summary> 
   
@@ -1801,7 +1794,7 @@ kubectl logs nodejs-runtime-00001-deployment-78c4bc59bd-plc6q -c istio-proxy
 kubectl logs nodejs-runtime-00001-deployment-78c4bc59bd-plc6q -c queue-proxy
 ```
 <details>
-  <summary>Logs 'queue-proxy'</summary> 
+  <summary>Logs 'queue-proxy': Error!!!</summary> 
 
 ```
 {"level":"info","ts":"2019-01-29T20:10:38.743Z","caller":"logging/config.go:96","msg":"Successfully created the logger.","knative.dev/jsonconfig":"{\n  \"level\": \"info\",\n  \"development\": false,\n  \"outputPaths\": [\"stdout\"],\n  \"errorOutputPaths\": [\"stderr\"],\n  \"encoding\": \"json\",\n  \"encoderConfig\": {\n    \"timeKey\": \"ts\",\n    \"levelKey\": \"level\",\n    \"nameKey\": \"logger\",\n    \"callerKey\": \"caller\",\n    \"messageKey\": \"msg\",\n    \"stacktraceKey\": \"stacktrace\",\n    \"lineEnding\": \"\",\n    \"levelEncoder\": \"\",\n    \"timeEncoder\": \"iso8601\",\n    \"durationEncoder\": \"\",\n    \"callerEncoder\": \"\"\n  }\n}\n"}
