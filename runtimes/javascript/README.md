@@ -23,6 +23,10 @@
 
 This directory is used to build and test the OpenWhisk NodeJS Action runtime for Knative.
 
+## Pre-requisites
+
+Complete the pre-requisites and Knative installation and configuration instructions in the top-level [README](../../) for this repository.
+
 ## Build and Deploy the OpenWhisk Runtime Build Template
 
 ### Configure 'service.yaml'
