@@ -249,7 +249,7 @@ namespace "default" labeled
 
 <p>
     <details>
-    <summary>Sample output: Knative resources</summary>    
+    <summary>Sample output: Successful Knative resources creation</summary>    
 
 ```
 clusterrole "knative-build-admin" created
