@@ -133,12 +133,8 @@ spec:
 status:
   phase: Active
 ```
-If you do not see the label, you likely forgot to issue the following command as part of Knative's install of Istio:
 
-```bash
-$ kubectl label namespace default istio-injection=enabled
-namespace "default" labeled
-```
+If you do not see this label, verify you issued the 'kubectl' command to set this label to the default namespace. 
 
 # Building and Serving OpenWhisk Runtime Build Templates
 
@@ -178,5 +174,48 @@ Apply this manifest:
 $ kubectl apply -f docker-secret.yaml
 secret "basic-user-pass" created
 ```
+
+## Troubleshooting
+
+### Knative and Istio Install
+
+#### Kubernetes default namespace does not have "istio-injection: enabled" key-value
+
+If the `default` namespace does not have this value under the `metadata` section, you may have forgotton to issue the following command as part of the Knative setup:
+
+```bash
+$ kubectl label namespace default istio-injection=enabled
+namespace "default" labeled
+```
+
+#### Kubernetes and Istio resources do not all reach "complete" state
+
+- Verify that you have configured Docker Desktop to have the required CPU and Memory values recommended above.
+- Verify that all resources installed by applying either tha Knative or Istio YAML files show **"created"** during the installation. For example:
+
+```
+clusterrole "knative-build-admin" created
+serviceaccount "build-controller" created
+clusterrolebinding "build-controller-admin" created
+customresourcedefinition "builds.build.knative.dev" created
+customresourcedefinition "buildtemplates.build.knative.dev" created
+customresourcedefinition "clusterbuildtemplates.build.knative.dev" created
+customresourcedefinition "images.caching.internal.knative.dev" created
+service "build-controller" created
+service "build-webhook" created
+image "creds-init" created
+image "git-init" created
+...
+rolebinding "prometheus-system" created
+rolebinding "prometheus-system" created
+rolebinding "prometheus-system" created
+rolebinding "prometheus-system" created
+clusterrolebinding "prometheus-system" created
+service "prometheus-system-np" created
+statefulset "prometheus-system" created
+```
+
+if NOT, then we recommend uninstalling knative and istio and trying again until you get the **created** result for all resources.
+
 
 
