@@ -221,9 +221,6 @@ secrets:
 ```
 </details>
 
-serviceaccount "build-bot" created
-
-
 ## Troubleshooting
 
 ### Knative and Istio Install
@@ -240,7 +237,10 @@ namespace "default" labeled
 #### Kubernetes and Istio resources do not all say "created" on "apply"
 
 - Verify that you have configured Docker Desktop to have the required CPU and Memory values recommended above.
-- Verify that all resources installed by applying either tha Knative or Istio YAML files show **"created"** during the installation. For example:
+- Verify that all resources installed by applying either tha Knative or Istio YAML files show **"created"** during the installation. For 
+
+<details>
+    <summary>Sample output: Knative resources</summary>    
 
 ```
 clusterrole "knative-build-admin" created
@@ -263,8 +263,6 @@ clusterrolebinding "prometheus-system" created
 service "prometheus-system-np" created
 statefulset "prometheus-system" created
 ```
+</details>
 
 If NOT, then we recommend uninstalling Knative and Istio and trying again until you get the **created** result for all resources WITHOUT trying to apply a second time.
-
-
-
