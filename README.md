@@ -179,7 +179,7 @@ On your local system, copy the file **docker-secrets.yaml.tmpl** to **docker-sec
 apiVersion: v1
 kind: Secret
 metadata:
-    name: dockerbasic-user-pass
+    name: dockerhub-user-pass 
     annotations:
         build.knative.dev/docker-0: https://index.docker.io/v1/
 type: kubernetes.io/basic-auth
