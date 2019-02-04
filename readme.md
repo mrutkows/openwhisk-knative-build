@@ -188,7 +188,7 @@ $ kubectl label namespace default istio-injection=enabled
 namespace "default" labeled
 ```
 
-#### Kubernetes and Istio resources do not all reach "complete" state
+#### Kubernetes and Istio resources do not all say "created" on "apply"
 
 - Verify that you have configured Docker Desktop to have the required CPU and Memory values recommended above.
 - Verify that all resources installed by applying either tha Knative or Istio YAML files show **"created"** during the installation. For example:
@@ -215,7 +215,7 @@ service "prometheus-system-np" created
 statefulset "prometheus-system" created
 ```
 
-if NOT, then we recommend uninstalling knative and istio and trying again until you get the **created** result for all resources.
+If NOT, then we recommend uninstalling Knative and Istio and trying again until you get the **created** result for all resources WITHOUT trying to apply a second time.
 
 
 
