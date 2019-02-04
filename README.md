@@ -130,8 +130,6 @@ Check the `default` namespace has the label **istio-injection** and it is set to
 $ kubectl get namespace default -o yaml
 ```
 
-<details>
-    <summary>Sample output</summary>
     
 ```    
 apiVersion: v1
@@ -150,9 +148,9 @@ spec:
 status:
   phase: Active
 ```
-</details>
-    
-**Note**: If you do not see this label, verify you issued the 'kubectl' command to set this label to the default namespace. See [Troubleshooting](#troubleshooting) section for more information.
+
+
+**Note**: If you do not see the **istio-injection** label, verify you issued the 'kubectl' command to set this label to the default namespace. See [Troubleshooting](#troubleshooting) section for more information.
 
 # Building and Serving OpenWhisk Runtime Build Templates
 
