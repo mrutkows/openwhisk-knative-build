@@ -239,7 +239,8 @@ namespace "default" labeled
 1. Verify that you have configured Docker Desktop to have the required CPU and Memory values recommended above.
 2. Verify that all resources installed by applying either tha Knative or Istio YAML files show **"created"** during the installation. Below is an example of successful creation of Knative resources:
 
-- <details>
+<p>
+    <details>
     <summary>Sample output: Knative resources</summary>    
 
 ```
@@ -264,5 +265,6 @@ service "prometheus-system-np" created
 statefulset "prometheus-system" created
 ```
 </details>
+</p>
 
-  - If any of your resources were NOT **created**, then we recommend uninstalling Knative and Istio and trying again until you get the **created** result for all resources WITHOUT trying to apply a second time.
+      - If any of your resources were NOT **created**, then we recommend uninstalling Knative and Istio and trying again until you get the **created** result for all resources WITHOUT trying to apply a second time.
