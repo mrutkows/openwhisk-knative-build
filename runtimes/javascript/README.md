@@ -109,7 +109,7 @@ curl -H "Host: nodejs-runtime.default.example.com" -H "Content-Type: application
 ```
 </details>
 
-### Logs
+### Logs 'user-container'
 
 ```bash
 kubectl logs nodejs-runtime-00001-deployment-66896df589-25cv4 -c user-container
@@ -117,7 +117,7 @@ Hello World from NodeJS runtime
 ```
 
 <details>
-  <summary>Logs (stdout)</summary> 
+  <summary>Logs 'user-container'</summary> 
 
 ```
 **************************
@@ -700,8 +700,15 @@ DEBUGGER: Returning 200
 ```
 </details>
 
+### Logs 'queue-proxy'
+
 ```bash
 kubectl logs nodejs-runtime-00001-deployment-6588cc7dcf-vbgz9 -c queue-proxy
+```
+<details>
+  <summary>Logs 'queue-proxy'</summary> 
+  
+```
 {"level":"info","ts":"2019-01-29T20:50:06.041Z","caller":"logging/config.go:96","msg":"Successfully created the logger.","knative.dev/jsonconfig":"{\n  \"level\": \"info\",\n  \"development\": false,\n  \"outputPaths\": [\"stdout\"],\n  \"errorOutputPaths\": [\"stderr\"],\n  \"encoding\": \"json\",\n  \"encoderConfig\": {\n    \"timeKey\": \"ts\",\n    \"levelKey\": \"level\",\n    \"nameKey\": \"logger\",\n    \"callerKey\": \"caller\",\n    \"messageKey\": \"msg\",\n    \"stacktraceKey\": \"stacktrace\",\n    \"lineEnding\": \"\",\n    \"levelEncoder\": \"\",\n    \"timeEncoder\": \"iso8601\",\n    \"durationEncoder\": \"\",\n    \"callerEncoder\": \"\"\n  }\n}\n"}
 {"level":"info","ts":"2019-01-29T20:50:06.041Z","caller":"logging/config.go:97","msg":"Logging level set to info"}
 {"level":"info","ts":"2019-01-29T20:50:06.042Z","logger":"queueproxy","caller":"util/env.go:33","msg":"SERVING_POD=nodejs-runtime-00001-deployment-6588cc7dcf-vbgz9","commit":"4d198db"}
