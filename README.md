@@ -25,7 +25,7 @@ This repository contains Knative Build Templates along with modified versions of
 
 ## Pre-requisites
 
-The general pre-requisites are as follows;
+The general pre-requisites are as follows:
 - [x] Kubernetes v1.13.0
 - [x] kubectl
 - [x] Knative v0.3.0
