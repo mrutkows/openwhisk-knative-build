@@ -58,7 +58,7 @@ Client Version: version.Info{Major:"1", Minor:"13", GitVersion:"v1.13.2", GitCom
 Server Version: version.Info{Major:"1", Minor:"13", GitVersion:"v1.13.0", GitCommit:"ddf47ac13c1a9483ea035a79cd7c10005ff21a6d", GitTreeState:"clean", BuildDate:"2018-12-03T20:56:12Z", GoVersion:"go1.11.2", Compiler:"gc", Platform:"linux/amd64"}
 ```
 
-Verify you have a Kubernetes v.13.0 node ready:
+Verify you have a Kubernetes v1.13.0 node ready:
 ```
 $ kubectl get nodes
 
@@ -69,7 +69,11 @@ docker-desktop   Ready     master    4d22h     v1.13.0
 Verify the Kubernetes pods are running:
 ```
 $ kubectl get pods --namespace kube-system
-
+```
+<details>
+    <summary>Sample output</summary>
+    
+```    
 NAME                                     READY     STATUS    RESTARTS   AGE
 coredns-86c58d9df4-ms8qs                 1/1       Running   0          4d22h
 coredns-86c58d9df4-x29vt                 1/1       Running   0          4d22h
@@ -79,6 +83,7 @@ kube-controller-manager-docker-desktop   1/1       Running   3          4d22h
 kube-proxy-mltsm                         1/1       Running   0          4d22h
 kube-scheduler-docker-desktop            1/1       Running   3          4d22h
 ```
+</details>
 
 ## Knative Install on a Kubernetes Cluster
 
@@ -91,8 +96,14 @@ These instructions take you through the installation of
 ## Verify Knative installation
 
 #### Verify Istio pods are running
-```
+
+```bash
 $ kubectl get pods --namespace istio-system
+```
+<details>
+    <summary>Sample output</summary>
+    
+```    
 NAME                                       READY     STATUS      RESTARTS   AGE
 cluster-local-gateway-547467ccf6-p8n72     1/1       Running     1          4d21h
 istio-citadel-7d64db8bcf-m7gsj             1/1       Running     0          4d21h
@@ -109,10 +120,11 @@ istio-statsd-prom-bridge-b44b96d7b-kzkzc   1/1       Running     0          4d21
 istio-telemetry-7676df547f-jp952           2/2       Running     1          4d21h
 knative-ingressgateway-75644679c7-c2kxj    1/1       Running     1          4d21h
 ```
+</details>
 
-#### Verify your default namespace has the 
+#### Verify your default namespace uses Istio for all services 
 
-Now, check the `default` namespace has the label **istio-injection** and it is set to **enabled**:
+Check the `default` namespace has the label **istio-injection** and it is set to **enabled**:
 
 ```bash
 $ kubectl get namespace default -o yaml
