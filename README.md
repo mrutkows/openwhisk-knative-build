@@ -205,7 +205,9 @@ NAME                    TYPE                                  DATA      AGE
 dockerhub-user-pass     kubernetes.io/basic-auth              2         21s
 ```
 
-## Create a Service Account
+## Create Service Account for our Knative Builds
+
+Knative requires a valid ServiceAccount resource that will be used when building and serving OpenWhisk Serverless Actions using the OpenWhisk runtimes.  For convenience, all Knative builds for all runtimes are configured to use the same ServiceAccount.
 
 ```bash
 kubectl apply -f service-account.yaml
