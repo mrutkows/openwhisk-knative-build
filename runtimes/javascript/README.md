@@ -50,6 +50,7 @@ cat data-with-simple-hello.json
 
 <details>
   <summary>Curl details</summary>
+  
 ```
 *   Trying ::1...
 * TCP_NODELAY set
