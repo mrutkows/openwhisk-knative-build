@@ -182,6 +182,8 @@ DEBUGGER: Result is
 kubectl delete -f service.yaml
 ```
 
+---
+
 ### Hello World with Parameters in request body
 
 #### Initialize the runtime
@@ -210,6 +212,7 @@ cat tests/data-with-params-hello-env.json
     }
 }
 ```
+</details>
 
 <details>
     <summary>Debug output</summary>
@@ -422,13 +425,15 @@ DEBUGGER: Result is
 kubectl delete -f service.yaml
 ```
 
+---
+
 ### Hello World with Params in Service YAML
 
 #### Initialize the runtime
 
 Note: this test requires a a different Kubernetes Service YAML which you must customize.
 
-Replace `{DOCKER_USERNAME}` with your own docker username in `serivce-with-env.yaml`. 
+- Replace `{DOCKER_USERNAME}` with your own docker username in `serivce-with-env.yaml`. 
 
 ```bash
 kubectl apply -f service-with-env.yaml
