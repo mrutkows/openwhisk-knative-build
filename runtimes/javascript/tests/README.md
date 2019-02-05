@@ -8,26 +8,6 @@
 
 # Running the Tests
 
-<details>
-    <summary>Debug output</summary>
-
-<details>
-    <summary>Sample debug output</summary>
-    
-```bash
-Hello World from NodeJS runtime
-**************************
-DEBUGGER: config
-{ port: 8080, apiHost: undefined, allowConcurrent: undefined }
-**************************
-DEBUGGER: Starting the server
-**************************
-DEBUGGER: I am inside wrapEndpoint
-**************************
-DEBUGGER: I am inside wrapEndpoint
-```
-</details>
-
 ## Runtime creation & deletion
 
 Prior to starting each test, a fresh Runtime container is required since each can only be initialized once (i.e., /init entrypoint called once with a single function source code).  Conversely, the runtime once run with a test needs to be deleted for the next test. Each test indicates which Service YAML you need to "apply" or "delete" to assure a fresh runtime.
@@ -42,6 +22,22 @@ A simple "Hello world" function with no parameters.
 ```bash
 kubectl apply -f service.yaml
 ```
+<details>
+    <summary>Sample /init output</summary>
+    
+```bash
+Hello World from NodeJS runtime
+**************************
+DEBUGGER: config
+{ port: 8080, apiHost: undefined, allowConcurrent: undefined }
+**************************
+DEBUGGER: Starting the server
+**************************
+DEBUGGER: I am inside wrapEndpoint
+**************************
+DEBUGGER: I am inside wrapEndpoint
+```
+</details>
 
 #### /init
 
