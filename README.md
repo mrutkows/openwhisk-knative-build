@@ -58,7 +58,7 @@ Client Version: version.Info{Major:"1", Minor:"13", GitVersion:"v1.13.2", GitCom
 Server Version: version.Info{Major:"1", Minor:"13", GitVersion:"v1.13.0", GitCommit:"ddf47ac13c1a9483ea035a79cd7c10005ff21a6d", GitTreeState:"clean", BuildDate:"2018-12-03T20:56:12Z", GoVersion:"go1.11.2", Compiler:"gc", Platform:"linux/amd64"}
 ```
 
-The ```Server Version``` is the version for the Kubernetes service, the ```Client Version``` is for the Kubernetes CLI (i.e., ```kubectl```).
+The ```Server Version``` is the version for the Kubernetes service; the ```Client Version``` is for the Kubernetes CLI (i.e., ```kubectl```).
 
 #### Verify you have a Kubernetes v1.13.0 node ready
 ```
