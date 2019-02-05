@@ -60,7 +60,7 @@ Server Version: version.Info{Major:"1", Minor:"13", GitVersion:"v1.13.0", GitCom
 
 The "Server Version" is the version for the Kubernetes service, the "Client version" is for the Kubernetes CLI.
 
-Verify you have a Kubernetes v1.13.0 node ready:
+#### Verify you have a Kubernetes v1.13.0 node ready
 ```
 $ kubectl get nodes
 
@@ -68,7 +68,8 @@ NAME             STATUS    ROLES     AGE       VERSION
 docker-desktop   Ready     master    4d22h     v1.13.0
 ```
 
-Verify the Kubernetes pods are running:
+#### Verify all Kubernetes pods are running
+
 ```
 $ kubectl get pods --namespace kube-system
 ```
