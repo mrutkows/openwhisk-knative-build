@@ -111,6 +111,7 @@ DEBUGGER: Returning 200
   binary: false,
   code: 'function main() {return {payload: \'Hello\'};}' }
 ```
+</details>
 
 #### /run
 
