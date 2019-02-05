@@ -1,16 +1,62 @@
 # Tests for OpenWhisk NodeJS Runtime using Knative
 
-## Running the Tests
+## Test summary
 
-#### Hello World Action
+- Hello World no Parameters
+- Hello World with Parameters in requesst body
+- Hello World with Params in Service YAML
 
-Init the action:
+# Running the Tests
+
+```bash
+kubectl apply -f service.yaml
+```
+<details>
+    <summary>Debug output</summary>
+
+<details>
+    <summary>Sample debug output</summary>
+    
+```bash
+Hello World from NodeJS runtime
+**************************
+DEBUGGER: config
+{ port: 8080, apiHost: undefined, allowConcurrent: undefined }
+**************************
+DEBUGGER: Starting the server
+**************************
+DEBUGGER: I am inside wrapEndpoint
+**************************
+DEBUGGER: I am inside wrapEndpoint
+```
+</details>
+
+## Runtime creation & deletion
+
+Prior to starting each test, a fresh Runtime container is required since each can only be initialized once (i.e., /init entrypoint called once with a single function source code).  Conversely, the runtime once run with a test needs to be deleted for the next test. Each test indicates which Service YAML you need to "apply" or "delete" to assure a fresh runtime.
+
+```
+
+## Tests
+
+### Hello World no Parameters
+
+A simple "Hello world" function with no parameters.
+
+#### Initialize the runtime
+```bash
+kubectl apply -f service.yaml
+```
+
+#### /init
 
 ```bash
 curl -H "Host: nodejs-10-action.default.example.com" -d "@tests/data-with-simple-hello.json" -H "Content-Type: application/json" http://localhost/init
 {"OK":true}
 ```
-
+<details>
+    <summary>/init data</summary>
+    
 ```bash
 cat tests/data-with-simple-hello.json
 {
@@ -22,8 +68,10 @@ cat tests/data-with-simple-hello.json
     }
 }
 ```
+</details>
 
-Debugger:
+<details>
+    <summary>Debug output</summary>
 
 ```bash
 **************************
@@ -73,15 +121,16 @@ DEBUGGER: Returning 200
   code: 'function main() {return {payload: \'Hello\'};}' }
 ```
 
-Run:
+#### /run
 
 ```bash
 curl -H "Host: nodejs-10-action.default.example.com" -H "Content-Type: application/json" -X POST http://localhost/run
 {"payload":"Hello"};
 ```
 
-Debugger:
-
+<details>
+    <summary>Debug output</summary>
+    
 ```bash
 **************************
 DEBUGGER: I am inside service.runCode()
@@ -133,43 +182,31 @@ XXX_THE_END_OF_A_WHISK_ACTIVATION_XXX
 DEBUGGER: Result is
 { payload: 'Hello' }
 ```
+</details>
 
-Delete:
+#### Delete the runtime
 
 ```bash
 kubectl delete -f service.yaml
 ```
 
-#### Hello World with Params
+### Hello World with Parameters in request body
 
-Initiate service:
-
+#### Initialize the runtime
 ```bash
 kubectl apply -f service.yaml
 ```
 
-Debugger:
-
-```bash
-Hello World from NodeJS runtime
-**************************
-DEBUGGER: config
-{ port: 8080, apiHost: undefined, allowConcurrent: undefined }
-**************************
-DEBUGGER: Starting the server
-**************************
-DEBUGGER: I am inside wrapEndpoint
-**************************
-DEBUGGER: I am inside wrapEndpoint
-```
-
-Init the action:
+#### /init
 
 ```bash
 curl -H "Host: nodejs-10-action.default.example.com" -d "@tests/data-with-params-hello-env.json" -H "Content-Type: application/json" http://localhost/init
 {"OK":true}
 ```
 
+<details>
+    <summary>/init data</summary>
+    
 ```bash
 cat tests/data-with-params-hello-env.json
 {
@@ -182,7 +219,8 @@ cat tests/data-with-params-hello-env.json
 }
 ```
 
-Debugger:
+<details>
+    <summary>Debug output</summary>
 
 ```bash
 **************************
@@ -231,15 +269,17 @@ DEBUGGER: Returning 200
   binary: false,
   code: 'function main() {\n    msg = "Hello, " + process.env.__OW_NAME + " from " + process.env.__OW_PLACE;\n    console.log(msg)\n    return { payload:  msg };\n}\n' }
 ```
+</details>
 
-Run:
+#### /run
 
 ```bash
 curl -H "Host: nodejs-10-action.default.example.com" -H "Content-Type: application/json" -X POST -d '{ "name": "Amy", "place": "Spain" }'  http://localhost/run
 {"payload":"Hello, Amy from Spain"}
 ```
 
-Debugger:
+<details>
+    <summary>Debug output</summary>
 
 ```bash
 **************************
@@ -382,16 +422,19 @@ XXX_THE_END_OF_A_WHISK_ACTIVATION_XXX
 DEBUGGER: Result is
 { payload: 'Hello, Amy from Spain' }
 ```
+</details>
 
-Delete:
+#### Delete the runtime
 
 ```bash
 kubectl delete -f service.yaml
 ```
 
-#### Hello World with Params in Service YAML
+### Hello World with Params in Service YAML
 
-Initiate service:
+#### Initialize the runtime
+
+Note: this test requires a a different Kubernetes Service YAML which you must customize.
 
 Replace `{DOCKER_USERNAME}` with your own docker username in `serivce-with-env.yaml`. 
 
@@ -399,7 +442,8 @@ Replace `{DOCKER_USERNAME}` with your own docker username in `serivce-with-env.y
 kubectl apply -f service-with-env.yaml
 ```
 
-Debugger:
+<details>
+    <summary>Debug output</summary>
 
 ```bash
 Hello World from NodeJS runtime
@@ -413,14 +457,17 @@ DEBUGGER: I am inside wrapEndpoint
 **************************
 DEBUGGER: I am inside wrapEndpoint
 ```
+</details>
 
-Initiate the action:
+#### /init
 
 ```bash
 curl -H "Host: nodejs-10-action.default.example.com" -d "@tests/data-with-params-hello-env-service.json" -H "Content-Type: application/json" http://localhost/init
 {"OK":true}
 ```
 
+<details>
+    <summary>/init data</summary>
 ```bash
 cat tests/data-with-params-hello-env-service.json
 {
@@ -432,8 +479,10 @@ cat tests/data-with-params-hello-env-service.json
     }
 }
 ```
-
-Debugger:
+    </details>
+    
+<details>
+    <summary>Debug output</summary>
 
 ```bash
 **************************
@@ -482,15 +531,17 @@ DEBUGGER: Returning 200
   binary: false,
   code: 'function main() {\n    msg = "Hello, " + process.env.NAME + " from " + process.env.PLACE;\n    console.log(msg)\n    return { payload:  msg };\n}\n' }
 ```
+</details>
 
-Run:
+#### /run
 
 ```bash
 curl -H "Host: nodejs-10-action.default.example.com" -H "Content-Type: application/json" -X POST http://localhost/run
 {"payload":"Hello, Amy from Spain"}
 ```
 
-Debugger:
+<details>
+    <summary>Debug output</summary>
 
 ```bash
 **************************
@@ -544,8 +595,9 @@ XXX_THE_END_OF_A_WHISK_ACTIVATION_XXX
 DEBUGGER: Result is
 { payload: 'Hello, Amy from Spain' }
 ```
-
-Delete:
+</details>
+    
+#### Delete the runtime
 
 ```bash
 kubectl delete -f service-with-env.yaml
