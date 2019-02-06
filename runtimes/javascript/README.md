@@ -37,13 +37,10 @@ If you wish to run repeated tests you MAY set an environment variable and use ``
 
 ```
 export DOCKER_USERNAME="myusername"
-sed s/DOCKER_USERNAME/"$DOCKER_USERNAME"/' service.yaml.tmpl > service.yaml
-
+sed 's/${DOCKER_USERNAME}/'"$DOCKER_USERNAME"'/' service.yaml.tmpl > service.yaml
 ```
 
 ### Deploy the runtime
-
-
 
 ```bash
 kubectl apply -f service.yaml
