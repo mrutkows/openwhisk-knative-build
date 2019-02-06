@@ -12,6 +12,13 @@ spec:
     description: flag to indicate debug mode should be on/off
     default: "false"
   steps:
+  - name: dockerfile
+    image: "gcr.io/kaniko-project/executor:debug"
+    command:
+    - /busybox/sh
+    args:
+    - -c
+    - echo "ENV __OW_DEBUG ${__OW_DEBUG}" >> ${DOCKERFILE}
   - name: build-and-push
     image: "gcr.io/kaniko-project/executor:v0.6.0"
     args: ["--destination=${IMAGE}", "--dockerfile=${DOCKERFILE}"]

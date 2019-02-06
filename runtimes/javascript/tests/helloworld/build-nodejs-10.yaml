@@ -7,12 +7,13 @@ spec:
   source:
     git:
       url: "https://github.com/mrutkows/openwhisk-knative-build.git"
-      revision: "master"
-#    subPath: "runtimes/javascript/"
+      revision: "workflow"
   template:
     name: openwhisk-nodejs-runtime
     arguments:
       - name: IMAGE
-        value: "docker.io/pritidesai/build-nodejs-10:v2"
+        value: "docker.io/pritidesai/build-nodejs-10:latest"
       - name: DOCKERFILE
         value: "./runtimes/javascript/Dockerfile"
+      - name: __OW_DEBUG
+        value: "true"
