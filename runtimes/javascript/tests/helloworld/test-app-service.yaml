@@ -9,7 +9,4 @@ spec:
       revisionTemplate:
         spec:
           container:
-            image: docker.io/pritidesai/build-nodejs-10
-#            env:
-#              - name: TARGET
-#                value: "Node.js Sample v1"
+            image: docker.io/pritidesai/helloworld-nodejs-10
