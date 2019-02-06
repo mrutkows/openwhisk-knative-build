@@ -33,9 +33,20 @@ Complete the pre-requisites and Knative installation and configuration instructi
 
 Replace `{DOCKER_USERNAME}` with your own docker username in `service.yaml`.
 
+If you wish to run repeated tests you MAY set an environment variable and use ```sed``` to replace the ```${DOCKER_USERNAME}``` within any of the test's Kubernetes Service YAML files as follows:
+
+```
+export DOCKER_USERNAME="myusername"
+sed 's/${DOCKER_USERNAME}/'"$DOCKER_USERNAME"'/' service.yaml.tmpl > service.yaml
+```
+
+### Deploy the runtime
+
 ```bash
 kubectl apply -f service.yaml
 ```
+
+## Setup
 
 <details>
     <summary>Debugger Output</summary>

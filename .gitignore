@@ -21,6 +21,9 @@
 # Kubernetes Secrets
 docker-secret.yaml
 
+# Kubernetes ServiceAccount (customized with username)
+service.yaml
+
 # NodeJS
 node_modules/
 package-lock.json
