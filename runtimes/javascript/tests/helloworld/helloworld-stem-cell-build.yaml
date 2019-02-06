@@ -3,7 +3,7 @@ kind: Build
 metadata:
   name: helloworld-nodejs-10
 spec:
-  serviceAccountName: nodejs-build-bot
+  serviceAccountName: openwhisk-runtime-builder
   source:
     git:
       url: "https://github.com/mrutkows/openwhisk-knative-build.git"
@@ -12,7 +12,7 @@ spec:
     name: openwhisk-nodejs-runtime
     arguments:
       - name: TARGET_IMAGE_NAME
-        value: "docker.io/pritidesai/helloworld-nodejs-10"
+        value: "docker.io/{DOCKER_USERNAME}/helloworld-nodejs-10"
       - name: DOCKERFILE
         value: "./runtimes/javascript/Dockerfile"
       - name: OW_DEBUG
