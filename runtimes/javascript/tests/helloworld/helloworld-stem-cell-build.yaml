@@ -15,9 +15,9 @@ spec:
         value: "docker.io/pritidesai/helloworld-nodejs-10"
       - name: DOCKERFILE
         value: "./runtimes/javascript/Dockerfile"
-      - name: __OW_DEBUG
+      - name: OW_DEBUG
         value: "true"
-      - name: __OW_ACTION_NAME
+      - name: OW_ACTION_NAME
         value: "helloworld"
-      - name: __OW_ACTION_CODE
+      - name: OW_ACTION_CODE
         value: "function main() {return {payload: 'Hello World!'};}"

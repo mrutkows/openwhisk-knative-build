@@ -11,17 +11,17 @@ spec:
     default: "latest"
   - name: DOCKERFILE
     description: name of the dockerfile
-  - name: __OW_DEBUG
+  - name: OW_DEBUG
     description: flag to indicate debug mode should be on/off
     default: "false"
-  - name: __OW_ACTION_NAME
+  - name: OW_ACTION_NAME
     description: name of the action
-  - name: __OW_ACTION_CODE
+  - name: OW_ACTION_CODE
     description: JavaScript source code to be evaluated
-  - name: __OW_ACTION_MAIN
+  - name: OW_ACTION_MAIN
     description: name of the function in the "__OW_ACTION_CODE" to call as the action handler
     default: "main"
-  - name: __OW_ACTION_BINARY
+  - name: OW_ACTION_BINARY
     description: flag to indicate zip function, for zip actions, "__OW_ACTION_CODE" must be base64 encoded string
     default: "false"
   steps:
@@ -33,11 +33,11 @@ spec:
     - -c
     - |
       cat <<EOF >> ${DOCKERFILE}
-        ENV __OW_DEBUG "${__OW_DEBUG}"
-        ENV __OW_ACTION_NAME "${__OW_ACTION_NAME}"
-        ENV __OW_ACTION_CODE "${__OW_ACTION_CODE}"
-        ENV __OW_ACTION_MAIN "${__OW_ACTION_MAIN}"
-        ENV __OW_ACTION_BINARY "${__OW_ACTION_BINARY}"
+        ENV __OW_DEBUG "${OW_DEBUG}"
+        ENV __OW_ACTION_NAME "${OW_ACTION_NAME}"
+        ENV __OW_ACTION_CODE "${OW_ACTION_CODE}"
+        ENV __OW_ACTION_MAIN "${OW_ACTION_MAIN}"
+        ENV __OW_ACTION_BINARY "${OW_ACTION_BINARY}"
       EOF
   - name: build-openwhisk-nodejs-runtime
     image: "gcr.io/kaniko-project/executor:latest"
