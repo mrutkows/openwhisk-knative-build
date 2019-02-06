@@ -1,0 +1,23 @@
+apiVersion: build.knative.dev/v1alpha1
+kind: Build
+metadata:
+  name: helloworld-nodejs-10
+spec:
+  serviceAccountName: openwhisk-runtime-builder
+  source:
+    git:
+      url: "https://github.com/mrutkows/openwhisk-knative-build.git"
+      revision: "workflow"
+  template:
+    name: openwhisk-nodejs-runtime
+    arguments:
+      - name: TARGET_IMAGE_NAME
+        value: "docker.io/{DOCKER_USERNAME}/helloworld-nodejs-10"
+      - name: DOCKERFILE
+        value: "./runtimes/javascript/Dockerfile"
+      - name: OW_DEBUG
+        value: "true"
+      - name: OW_ACTION_NAME
+        value: "helloworld"
+      - name: OW_ACTION_CODE
+        value: "function main() {return {payload: 'Hello World!'};}"
