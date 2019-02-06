@@ -1,0 +1,18 @@
+apiVersion: build.knative.dev/v1alpha1
+kind: Build
+metadata:
+  name: build-nodejs-10
+spec:
+  serviceAccountName: nodejs-build-bot
+  source:
+    git:
+      url: "https://github.com/mrutkows/openwhisk-knative-build.git"
+      revision: "master"
+#    subPath: "runtimes/javascript/"
+  template:
+    name: openwhisk-nodejs-runtime
+    arguments:
+      - name: IMAGE
+        value: "docker.io/pritidesai/build-nodejs-10:v2"
+      - name: DOCKERFILE
+        value: "./runtimes/javascript/Dockerfile"
