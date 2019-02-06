@@ -16,6 +16,7 @@
  */
 
 console.log("Hello World from NodeJS runtime")
+console.log(process.env)
 
 var config = {
         'port': 8080,
