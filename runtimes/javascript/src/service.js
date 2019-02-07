@@ -19,6 +19,7 @@ var NodeActionRunner = require('../runner');
 var fs = require('fs');
 
 function NodeActionService(config) {
+
     var Status = {
         ready: 'ready',
         starting: 'starting',
@@ -91,6 +92,9 @@ function NodeActionService(config) {
 
             var body = req.body || {};
             var message = body.value || {};
+
+            console.log(body)
+            console.log(message)
 
             if (message.main && message.code && typeof message.main === 'string' && typeof message.code === 'string') {
                 return doInit(message).then(function (result) {
