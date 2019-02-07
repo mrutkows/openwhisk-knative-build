@@ -93,33 +93,45 @@ TBD
   <tbody>
     <tr>
       <th width="180">Name</th>
+      <th width="180">Knative Build</th>
+      <th width="180">Knative Service</th>
+      <th width="300">Description</th>
       <th width="300">Parameters</th>
-      <th width="3000">Description</th>
     </tr>
     <tr align="left">
-      <td><a href="">incubator-openwhisk</a></td>
+      <td><a href="">helloworld</a></td>
+      <td><a href="tests/helloworld/build-helloworld.yaml">build-helloworld.yaml</a></td>
+      <td><a href="tests/helloworld/service-helloworld.yaml">service-helloworld.yaml</a></td>
       <td></td>
-      <td></td>
+      <td></td>        
     </tr>
     <tr align="left">
-      <td><a href="">incubator-openwhisk</a></td>
+      <td><a href="">TBD</a></td>
       <td></td>
       <td></td>
+      <td></td>
+      <td></td>        
     </tr>
     <tr align="left">
-      <td><a href="">incubator-openwhisk</a></td>
+      <td><a href="">TBD</a></td>
       <td></td>
       <td></td>
+      <td></td>
+      <td></td>        
     </tr>
     <tr align="left">
-      <td><a href="">incubator-openwhisk</a></td>
+      <td><a href="">TBD</a></td>
       <td></td>
       <td></td>
+      <td></td>
+      <td></td>        
     </tr>
     <tr align="left">
-      <td><a href="">incubator-openwhisk</a></td>
+      <td><a href="">TBD</a></td>
       <td></td>
       <td></td>
+      <td></td>
+      <td></td>        
     </tr>
   </tbody>
 </table>
