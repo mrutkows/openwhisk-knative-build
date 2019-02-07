@@ -89,6 +89,7 @@ TBD
 
 ### Testcase structure
 
+<sub>
 <font size="8" face="Courier New">
 <table cellpadding="8">
   <tbody>
@@ -137,6 +138,7 @@ TBD
   </tbody>
 </table>
 </font>    
+</sub>
 
 ### Configure 'service.yaml'
 
