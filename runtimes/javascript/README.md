@@ -96,6 +96,72 @@ $ kubectl get buildtemplate -o yaml
 
 <details>
     <summary>Sample output</summary>
+    
+```
+apiVersion: v1
+items:
+- apiVersion: build.knative.dev/v1alpha1
+  kind: BuildTemplate
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration {}
+    creationTimestamp: "2019-02-07T16:10:46Z"
+    generation: 1
+    name: openwhisk-nodejs-runtime
+    namespace: default
+    resourceVersion: "278166"
+    selfLink: /apis/build.knative.dev/v1alpha1/namespaces/default/buildtemplates/openwhisk-nodejs-runtime
+    uid: ed5bb6e0-2af2-11e9-a25d-025000000001
+  spec:
+    generation: 1
+    parameters:
+    - description: name of the image to be tagged and pushed
+      name: TARGET_IMAGE_NAME
+    - default: latest
+      description: tag the image before pushing
+      name: TARGET_IMAGE_TAG
+    - description: name of the dockerfile
+      name: DOCKERFILE
+    - default: "false"
+      description: flag to indicate debug mode should be on/off
+      name: OW_DEBUG
+    - description: name of the action
+      name: OW_ACTION_NAME
+    - description: JavaScript source code to be evaluated
+      name: OW_ACTION_CODE
+    - default: main
+      description: name of the function in the "__OW_ACTION_CODE" to call as the action
+        handler
+      name: OW_ACTION_MAIN
+    - default: "false"
+      description: flag to indicate zip function, for zip actions, "__OW_ACTION_CODE"
+        must be base64 encoded string
+      name: OW_ACTION_BINARY
+    steps:
+    - args:
+      - -c
+      - |
+        cat <<EOF >> ${DOCKERFILE}
+          ENV __OW_DEBUG "${OW_DEBUG}"
+          ENV __OW_ACTION_NAME "${OW_ACTION_NAME}"
+          ENV __OW_ACTION_CODE "${OW_ACTION_CODE}"
+          ENV __OW_ACTION_MAIN "${OW_ACTION_MAIN}"
+          ENV __OW_ACTION_BINARY "${OW_ACTION_BINARY}"
+        EOF
+      command:
+      - /busybox/sh
+      image: gcr.io/kaniko-project/executor:debug
+      name: add-ow-env-to-dockerfile
+    - args:
+      - --destination=${TARGET_IMAGE_NAME}:${TARGET_IMAGE_TAG}
+      - --dockerfile=${DOCKERFILE}
+      image: gcr.io/kaniko-project/executor:latest
+      name: build-openwhisk-nodejs-runtime
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
+```
 </details>
     
 ## Building a Knative service using the NodeJS BuildTemplate
