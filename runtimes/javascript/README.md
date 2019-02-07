@@ -101,8 +101,8 @@ TBD
     </tr>
     <tr align="left">
       <td><a href="">helloworld</a></td>
-      <td><a href="tests/helloworld/build-helloworld.yaml">build-helloworld.yaml</a></td>
-      <td><a href="tests/helloworld/service-helloworld.yaml">service-helloworld.yaml</a></td>
+        <td><sub><a href="tests/helloworld/build-helloworld.yaml">build-helloworld.yaml</a></sub></td>
+        <td><sub><a href="tests/helloworld/service-helloworld.yaml">service-helloworld.yaml</a></sub></td>
       <td>Simple Hello World message</td>
       <td><i>None</i></td>        
     </tr>
