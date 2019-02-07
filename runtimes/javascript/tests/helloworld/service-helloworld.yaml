@@ -9,4 +9,4 @@ spec:
       revisionTemplate:
         spec:
           container:
-            image: docker.io/{DOCKER_USERNAME}/helloworld-nodejs-10
+            image: docker.io/{DOCKER_USERNAME}/nodejs-10-helloworld
