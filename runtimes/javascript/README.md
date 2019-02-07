@@ -102,7 +102,7 @@ TBD
       <td><sub><a href="">helloworld</a></sub></td>
       <td><sub><a href="tests/helloworld/build-helloworld.yaml">build-helloworld.yaml</a></sub></td>
       <td><sub><a href="tests/helloworld/service-helloworld.yaml">service-helloworld.yaml</a></sub></td>
-      <td><sub>Simple Hello World message</sub></td>
+      <td><sub>A simple "Hello world" function with no parameters.</sub></td>
       <td><sub><i>None</i></sub></td>        
     </tr>
     <tr align="left">
