@@ -27,6 +27,53 @@ This directory is used to build and test the OpenWhisk NodeJS Action runtime for
 
 Complete the pre-requisites and Knative installation and configuration instructions in the top-level [README](../../README.md) for this repository.
 
+### Verify your Kubernetes & Knative pods are running
+
+Verify **kube-system**, **istio-system**, and **knative-xxx** pods are all **Running**
+```
+$ kubectl get pods --all-namespaces 
+```
+<details>
+    <summary>Sample output</summary>
+    
+```
+$ kubectl get pods --all-namespaces 
+NAMESPACE          NAME                                            READY   STATUS      RESTARTS   AGE
+istio-system       cluster-local-gateway-547467ccf6-p8n72          1/1     Running     1          8d
+istio-system       istio-citadel-7d64db8bcf-m7gsj                  1/1     Running     0          8d
+istio-system       istio-cleanup-secrets-8lzj4                     0/1     Completed   0          8d
+istio-system       istio-egressgateway-6ddf4c8bd6-2dxhc            1/1     Running     1          8d
+istio-system       istio-galley-7dd996474-pdd6h                    1/1     Running     1          8d
+istio-system       istio-ingressgateway-84b89d647f-cxrwx           1/1     Running     1          8d
+istio-system       istio-pilot-86bb4fcbbd-5ns5q                    2/2     Running     0          8d
+istio-system       istio-pilot-86bb4fcbbd-vd2xr                    2/2     Running     0          8d
+istio-system       istio-pilot-86bb4fcbbd-zstrw                    2/2     Running     0          8d
+istio-system       istio-policy-5c4d9ff96b-559db                   2/2     Running     1          8d
+istio-system       istio-sidecar-injector-6977b5cf5b-94hj5         1/1     Running     0          8d
+istio-system       istio-statsd-prom-bridge-b44b96d7b-kzkzc        1/1     Running     0          8d
+istio-system       istio-telemetry-7676df547f-jp952                2/2     Running     1          8d
+istio-system       knative-ingressgateway-75644679c7-c2kxj         1/1     Running     1          8d
+knative-build      build-controller-658d64d9bd-6qp2c               1/1     Running     0          8d
+knative-build      build-webhook-6bb747665f-v8nk2                  1/1     Running     1          8d
+knative-eventing   eventing-controller-cfbb757bd-czx99             1/1     Running     0          8d
+knative-eventing   in-memory-channel-controller-75d6cc4b77-6c8st   1/1     Running     1          8d
+knative-eventing   in-memory-channel-dispatcher-c89db8bb8-phlxw    2/2     Running     7          8d
+knative-eventing   webhook-5fbb8dbcc7-nhwp5                        1/1     Running     0          8d
+knative-serving    activator-69b8474d6b-58hh2                      2/2     Running     1          8d
+knative-serving    autoscaler-6579b57774-cvvzj                     2/2     Running     1          8d
+knative-serving    controller-66cd7d99df-hgswh                     1/1     Running     0          8d
+knative-serving    webhook-6d9568d-czt8m                           1/1     Running     0          8d
+knative-sources    controller-manager-0                            1/1     Running     1          8d
+kube-system        coredns-86c58d9df4-ms8qs                        1/1     Running     0          8d
+kube-system        coredns-86c58d9df4-x29vt                        1/1     Running     0          8d
+kube-system        etcd-docker-desktop                             1/1     Running     3          8d
+kube-system        kube-apiserver-docker-desktop                   1/1     Running     3          8d
+kube-system        kube-controller-manager-docker-desktop          1/1     Running     5          8d
+kube-system        kube-proxy-mltsm                                1/1     Running     0          8d
+kube-system        kube-scheduler-docker-desktop                   1/1     Running     5          8d
+```
+</details>
+
 ## Build and Deploy the OpenWhisk Runtime Build Template
 
 ### Configure 'service.yaml'
