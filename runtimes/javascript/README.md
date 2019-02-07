@@ -171,10 +171,29 @@ We will use the simple "helloworld" test case to demonstrate how to use Knative 
 The testcase resides within this repo. at:
 - [/runtimes/javascript/tests/helloworld/](/runtimes/javascript/tests/helloworld/)
 
-### 
+## Configure
 
-####  build-helloworld.yaml
+Replace `${DOCKER_USERNAME}` with your own docker username in `service.yaml`.
 
+If you wish to run repeated tests you MAY set an environment variable and use ```sed``` to replace the ```${DOCKER_USERNAME}``` within any of the test's Kubernetes Service YAML files as follows:
+
+```
+export DOCKER_USERNAME="myusername"
+sed 's/${DOCKER_USERNAME}/'"$DOCKER_USERNAME"'/' service.yaml.tmpl > service.yaml
+```
+
+## Configure build-helloworld.yaml
+
+Replace `${DOCKER_USERNAME}` with your own docker username in `service.yaml`.
+
+If you wish to run repeated tests you MAY set an environment variable and use ```sed``` to replace the ```${DOCKER_USERNAME}``` within any of the test's Kubernetes Service YAML files as follows:
+
+```
+export DOCKER_USERNAME="myusername"
+sed 's/${DOCKER_USERNAME}/'"$DOCKER_USERNAME"'/' service.yaml.tmpl > service.yaml
+```
+
+#### build-helloworld.yaml
 ```
 apiVersion: build.knative.dev/v1alpha1
 kind: Build
@@ -190,7 +209,7 @@ spec:
     name: openwhisk-nodejs-runtime
     arguments:
       - name: TARGET_IMAGE_NAME
-        value: "docker.io/{DOCKER_USERNAME}/nodejs-10-helloworld"
+        value: "docker.io/${DOCKER_USERNAME}/nodejs-10-helloworld"
       - name: DOCKERFILE
         value: "./runtimes/javascript/Dockerfile"
       - name: OW_DEBUG
@@ -201,7 +220,7 @@ spec:
         value: "function main() {return {payload: 'Hello World!'};}"
 ```
 
-#### 
+#### service-helloworld.yaml
 
 ```
 apiVersion: serving.knative.dev/v1alpha1
