@@ -89,7 +89,40 @@ TBD
 
 ### Testcase structure
 
-TBD
+<table cellpadding="8">
+  <tbody>
+    <tr>
+      <th width="180">Name</th>
+      <th width="300">Parameters</th>
+      <th width="3000">Description</th>
+    </tr>
+    <tr align="left">
+      <td><a href="">incubator-openwhisk</a></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr align="left">
+      <td><a href="">incubator-openwhisk</a></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr align="left">
+      <td><a href="">incubator-openwhisk</a></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr align="left">
+      <td><a href="">incubator-openwhisk</a></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr align="left">
+      <td><a href="">incubator-openwhisk</a></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
 
 ### Configure 'service.yaml'
 
