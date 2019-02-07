@@ -91,7 +91,7 @@ TBD
 
 <table cellpadding="8">
   <tbody>
-    <tr align="left">
+    <tr valign="top" align="left">
       <th width="180">Name</th>
       <th width="180">Knative Build</th>
       <th width="180">Knative Service</th>
