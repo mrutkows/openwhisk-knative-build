@@ -166,7 +166,57 @@ metadata:
     
 ## Building a Knative service using the NodeJS BuildTemplate
 
-TBD
+We will use the simple "helloworld" test case to demonstrate how to use Knative to Build your function into container image and then deploy it as a Service.
+
+The testcase resides within this repo. at:
+- [/runtimes/javascript/tests/helloworld/](/runtimes/javascript/tests/helloworld/)
+
+### 
+
+####  build-helloworld.yaml
+
+```
+apiVersion: build.knative.dev/v1alpha1
+kind: Build
+metadata:
+  name: nodejs-10-helloworld
+spec:
+  serviceAccountName: openwhisk-runtime-builder
+  source:
+    git:
+      url: "https://github.com/mrutkows/openwhisk-knative-build.git"
+      revision: "master"
+  template:
+    name: openwhisk-nodejs-runtime
+    arguments:
+      - name: TARGET_IMAGE_NAME
+        value: "docker.io/{DOCKER_USERNAME}/nodejs-10-helloworld"
+      - name: DOCKERFILE
+        value: "./runtimes/javascript/Dockerfile"
+      - name: OW_DEBUG
+        value: "true"
+      - name: OW_ACTION_NAME
+        value: "nodejs-helloworld"
+      - name: OW_ACTION_CODE
+        value: "function main() {return {payload: 'Hello World!'};}"
+```
+
+#### 
+
+```
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: helloworld-nodejs
+  namespace: default
+spec:
+  runLatest:
+    configuration:
+      revisionTemplate:
+        spec:
+          container:
+            image: docker.io/{DOCKER_USERNAME}/nodejs-10-helloworld
+```
 
 ## Running the test cases
 
