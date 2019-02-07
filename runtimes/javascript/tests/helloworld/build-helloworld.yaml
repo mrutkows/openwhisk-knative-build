@@ -12,12 +12,12 @@ spec:
     name: openwhisk-nodejs-runtime
     arguments:
       - name: TARGET_IMAGE_NAME
-        value: "docker.io/{DOCKER_USERNAME}/helloworld-nodejs-10"
+        value: "docker.io/{DOCKER_USERNAME}/nodejs-10-helloworld"
       - name: DOCKERFILE
         value: "./runtimes/javascript/Dockerfile"
       - name: OW_DEBUG
         value: "true"
       - name: OW_ACTION_NAME
-        value: "NodeJS-helloworld"
+        value: "nodejs-helloworld"
       - name: OW_ACTION_CODE
         value: "function main() {return {payload: 'Hello World!'};}"
