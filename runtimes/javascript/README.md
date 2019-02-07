@@ -90,10 +90,9 @@ TBD
 ### Testcase structure
 
 <sub>
-<font size="8" face="Courier New">
 <table cellpadding="8">
   <tbody>
-    <tr>
+    <tr align="left">
       <th width="180">Name</th>
       <th width="180">Knative Build</th>
       <th width="180">Knative Service</th>
@@ -136,8 +135,7 @@ TBD
       <td></td>        
     </tr>
   </tbody>
-</table>
-</font>    
+</table>   
 </sub>
 
 ### Configure 'service.yaml'
