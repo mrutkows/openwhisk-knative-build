@@ -109,28 +109,28 @@ TBD
       <td><sub><a href="">TBD</a></sub></td>
       <td><sub><a href="tests/helloworld/">build-x.yaml</a></sub></td>
       <td><sub><a href="tests/helloworld/">service-x.yaml</a></sub></td>
-      <td><sub>TBD/sub></td>
+      <td><sub>TBD</sub></td>
       <td><sub>TBD</sub></td>      
     </tr>
     <tr align="left">
       <td><sub><a href="">TBD</a></sub></td>
       <td><sub><a href="tests/helloworld/">build-x.yaml</a></sub></td>
       <td><sub><a href="tests/helloworld/">service-x.yaml</a></sub></td>
-      <td><sub>TBD/sub></td>
+      <td><sub>TBD</sub></td>
       <td><sub>TBD</sub></td>        
     </tr>
     <tr align="left">
       <td><sub><a href="">TBD</a></sub></td>
       <td><sub><a href="tests/helloworld/">build-x.yaml</a></sub></td>
       <td><sub><a href="tests/helloworld/">service-x.yaml</a></sub></td>
-      <td><sub>TBD/sub></td>
+      <td><sub>TBD</sub></td>
       <td><sub>TBD</sub></td>        
     </tr>
     <tr align="left">
       <td><sub><a href="">TBD</a></sub></td>
       <td><sub><a href="tests/helloworld/">build-x.yaml</a></sub></td>
       <td><sub><a href="tests/helloworld/">service-x.yaml</a></sub></td>
-      <td><sub>TBD/sub></td>
+      <td><sub>TBD</sub></td>
       <td><sub>TBD</sub></td>       
     </tr>
   </tbody>
