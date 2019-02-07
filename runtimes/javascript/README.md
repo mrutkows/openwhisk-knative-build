@@ -98,35 +98,35 @@ TBD
       <th width="300">Description</th>
       <th width="300">Parameters</th>
     </tr>
-    <tr align="left" valign="top" >
+    <tr align="left" valign="top">
       <td><sub><a href="">helloworld</a></sub></td>
       <td><sub><a href="tests/helloworld/build-helloworld.yaml">build-helloworld.yaml</a></sub></td>
       <td><sub><a href="tests/helloworld/service-helloworld.yaml">service-helloworld.yaml</a></sub></td>
       <td><sub>A simple "Hello world" function with no parameters.</sub></td>
       <td><sub><i>None</i></sub></td>        
     </tr>
-    <tr align="left">
+    <tr align="left" valign="top">
       <td><sub><a href="">TBD</a></sub></td>
       <td><sub><a href="tests/helloworld/">build-x.yaml</a></sub></td>
       <td><sub><a href="tests/helloworld/">service-x.yaml</a></sub></td>
       <td><sub>TBD</sub></td>
       <td><sub>TBD</sub></td>      
     </tr>
-    <tr align="left">
+    <tr align="left" valign="top">
       <td><sub><a href="">TBD</a></sub></td>
       <td><sub><a href="tests/helloworld/">build-x.yaml</a></sub></td>
       <td><sub><a href="tests/helloworld/">service-x.yaml</a></sub></td>
       <td><sub>TBD</sub></td>
       <td><sub>TBD</sub></td>        
     </tr>
-    <tr align="left">
+    <tr align="left" valign="top">
       <td><sub><a href="">TBD</a></sub></td>
       <td><sub><a href="tests/helloworld/">build-x.yaml</a></sub></td>
       <td><sub><a href="tests/helloworld/">service-x.yaml</a></sub></td>
       <td><sub>TBD</sub></td>
       <td><sub>TBD</sub></td>        
     </tr>
-    <tr align="left">
+    <tr align="left" valign="top">
       <td><sub><a href="">TBD</a></sub></td>
       <td><sub><a href="tests/helloworld/">build-x.yaml</a></sub></td>
       <td><sub><a href="tests/helloworld/">service-x.yaml</a></sub></td>
