@@ -74,7 +74,22 @@ kube-system        kube-scheduler-docker-desktop                   1/1     Runni
 ```
 </details>
 
-## Build and Deploy the OpenWhisk Runtime Build Template
+## Intall the BuildTemplate for the NodeJS runtime
+
+```
+$ kubectl apply --filename buildtemplate.yaml 
+buildtemplate.build.knative.dev/openwhisk-nodejs-runtime created
+```
+
+## Building a Knative service using the NodeJS BuildTemplate
+
+TBD
+
+## Running the test cases
+
+### Testcase structure
+
+TBD
 
 ### Configure 'service.yaml'
 
