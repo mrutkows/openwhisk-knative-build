@@ -89,7 +89,6 @@ TBD
 
 ### Testcase structure
 
-<sub>
 <table cellpadding="8">
   <tbody>
     <tr align="left">
@@ -99,6 +98,7 @@ TBD
       <th width="300">Description</th>
       <th width="300">Parameters</th>
     </tr>
+    <sub>  
     <tr align="left">
       <td><a href="">helloworld</a></td>
         <td><sub><a href="tests/helloworld/build-helloworld.yaml">build-helloworld.yaml</a></sub></td>
@@ -106,6 +106,7 @@ TBD
       <td>Simple Hello World message</td>
       <td><i>None</i></td>        
     </tr>
+    </sub>
     <tr align="left">
       <td><a href="">TBD</a></td>
       <td></td>
@@ -136,7 +137,6 @@ TBD
     </tr>
   </tbody>
 </table>   
-</sub>
 
 ### Configure 'service.yaml'
 
