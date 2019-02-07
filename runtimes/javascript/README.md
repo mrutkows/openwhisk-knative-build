@@ -81,6 +81,23 @@ $ kubectl apply --filename buildtemplate.yaml
 buildtemplate.build.knative.dev/openwhisk-nodejs-runtime created
 ```
 
+#### Verify BuildTemplate
+
+```
+$ kubectl get buildtemplate -o yaml
+NAME                       AGE
+openwhisk-nodejs-runtime   2h
+```
+
+or to see the full resource:
+```
+$ kubectl get buildtemplate -o yaml
+```
+
+<details>
+    <summary>Sample output</summary>
+</details>
+    
 ## Building a Knative service using the NodeJS BuildTemplate
 
 TBD
