@@ -89,7 +89,7 @@ TBD
 
 ### Testcase structure
 
-<font size="9" face="Courier New">
+<font size="8" face="Courier New">
 <table cellpadding="8">
   <tbody>
     <tr>
@@ -103,8 +103,8 @@ TBD
       <td><a href="">helloworld</a></td>
       <td><a href="tests/helloworld/build-helloworld.yaml">build-helloworld.yaml</a></td>
       <td><a href="tests/helloworld/service-helloworld.yaml">service-helloworld.yaml</a></td>
-      <td></td>
-      <td></td>        
+      <td>Simple Hello World message</td>
+      <td><i>None</i></td>        
     </tr>
     <tr align="left">
       <td><a href="">TBD</a></td>
