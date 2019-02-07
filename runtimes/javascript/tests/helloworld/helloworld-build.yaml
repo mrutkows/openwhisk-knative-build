@@ -7,7 +7,7 @@ spec:
   source:
     git:
       url: "https://github.com/mrutkows/openwhisk-knative-build.git"
-      revision: "workflow"
+      revision: "master"
   template:
     name: openwhisk-nodejs-runtime
     arguments:
