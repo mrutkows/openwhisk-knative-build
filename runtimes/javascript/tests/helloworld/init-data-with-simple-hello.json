@@ -3,6 +3,6 @@
         "name" : "helloNodeJS",
         "main" : "main", 
         "binary": false, 
-        "code" : "function main() {return {payload: 'Hello'};}"
+        "code" : "function main() {return {payload: 'Hello World!'};}"
     }
 }
