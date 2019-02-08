@@ -72,6 +72,7 @@ if (process.env.__OW_RUNTIME_PLATFORM === runtime_platform.openwhisk) {
             var main = process.env.__OW_ACTION_MAIN;
             var code = process.env.__OW_ACTION_CODE;
             var binary = process.env.__OW_ACTION_BINARY;
+            var name = process.env.__OW_ACTION_NAME;
 
             if (req.query.value) {
                 if (req.query.value.main && typeof req.query.value.main === 'string') {
@@ -80,15 +81,19 @@ if (process.env.__OW_RUNTIME_PLATFORM === runtime_platform.openwhisk) {
                 if (req.query.value.code && typeof req.query.value.code === 'string') {
                     code = req.query.value.code
                 }
-                if (req.query.value.binary && typeof req.query.value.binary === 'string') {
+                if (req.query.value.binary && typeof req.query.value.binary === "boolean") {
                     main = req.query.value.binary
+                }
+                if (req.query.value.name && typeof req.query.value.name === "string") {
+                    name = req.query.value.name
                 }
             }
 
             req.body.value = {
                 main: main,
                 code: code,
-                binary: binary
+                binary: binary,
+                name: name
             };
 
             service.initCode(req).then(function () {
