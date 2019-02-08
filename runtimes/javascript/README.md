@@ -171,29 +171,27 @@ We will use the simple "helloworld" test case to demonstrate how to use Knative 
 The testcase resides within this repo. at:
 - [/runtimes/javascript/tests/helloworld/](/runtimes/javascript/tests/helloworld/)
 
-## Configure
+For a complete listing of testcases, please view the [README](tests/README.md) in the tests subdirectory.
 
-Replace `${DOCKER_USERNAME}` with your own docker username in `service.yaml`.
+### Build HelloWorld 
 
-If you wish to run repeated tests you MAY set an environment variable and use ```sed``` to replace the ```${DOCKER_USERNAME}``` within any of the test's Kubernetes Service YAML files as follows:
+#### Configure build.yaml
 
-```
-export DOCKER_USERNAME="myusername"
-sed 's/${DOCKER_USERNAME}/'"$DOCKER_USERNAME"'/' service.yaml.tmpl > service.yaml
-```
+You will need to configure the build template to point to the Docker Hub repo. you wish the image to be "pushed" to once built.
 
-## Configure build-helloworld.yaml
+To do this, 
+- Copy [build.yaml.tmpl.yaml](tests/helloworld/build.yaml.tmpl) to `build.yaml`.
+- Replace ```${DOCKER_USERNAME}``` with your own Docker username in `build.yaml`.
 
-Replace `${DOCKER_USERNAME}` with your own docker username in `service.yaml`.
-
-If you wish to run repeated tests you MAY set an environment variable and use ```sed``` to replace the ```${DOCKER_USERNAME}``` within any of the test's Kubernetes Service YAML files as follows:
+If you wish to run repeated tests you MAY set an environment variable and use ```sed``` to replace the ```${DOCKER_USERNAME}``` within any of the test's Kubernetes Build YAML files as follows:
 
 ```
 export DOCKER_USERNAME="myusername"
-sed 's/${DOCKER_USERNAME}/'"$DOCKER_USERNAME"'/' service.yaml.tmpl > service.yaml
+sed 's/${DOCKER_USERNAME}/'"$DOCKER_USERNAME"'/' build.yaml.tmpl > build.yaml
 ```
 
-#### build-helloworld.yaml
+<details>
+    <summary>build.yaml.tmpl contents</summary>
 ```
 apiVersion: build.knative.dev/v1alpha1
 kind: Build
@@ -219,14 +217,41 @@ spec:
       - name: OW_ACTION_CODE
         value: "function main() {return {payload: 'Hello World!'};}"
 ```
+</details>
 
-#### service-helloworld.yaml
+### Deploy the runtime
+
+```bash
+kubectl apply -f build.yaml
+```
+
+### Run HelloWorld
+
+#### Configure service.yaml
+
+Now that you have built the OpenWhisk NodeJS runtime image with the `helloworld` function "baked" into it, you can can deploy the image as a Knative Service.  
+
+You will need to configure the Service template to point to the Docker Hub repo. where your Knative OpenWhisk runtime (with the Hello World function) will be "pulled" from.
+
+To do this, 
+- Copy [service.yaml.tmpl.yaml](tests/helloworld/service.yaml.tmpl) to `service.yaml`.
+- Replace ```${DOCKER_USERNAME}``` with your own Docker username in `service.yaml`.
+
+As described for 'build.yaml.tmpl', you MAY set an environment variable and use ```sed``` to replace the ```${DOCKER_USERNAME}``` within any of the test's Kubernetes Build YAML files as follows:
+
+```
+export DOCKER_USERNAME="myusername"
+sed 's/${DOCKER_USERNAME}/'"$DOCKER_USERNAME"'/' service.yaml.tmpl > service.yaml
+```
+
+<details>
+    <summary>service.yaml.tmpl contents</summary>
 
 ```
 apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
-  name: helloworld-nodejs
+  name: nodejs-helloworld
   namespace: default
 spec:
   runLatest:
@@ -234,70 +259,9 @@ spec:
       revisionTemplate:
         spec:
           container:
-            image: docker.io/{DOCKER_USERNAME}/nodejs-10-helloworld
+            image: docker.io/${DOCKER_USERNAME}/nodejs-10-helloworld
 ```
-
-## Running the test cases
-
-### Testcase structure
-
-<table cellpadding="8">
-  <tbody>
-    <tr valign="top" align="left">
-      <th width="180">Name</th>
-      <th width="180">Knative Build</th>
-      <th width="180">Knative Service</th>
-      <th width="300">Description</th>
-      <th width="300">Parameters</th>
-    </tr>
-    <tr align="left" valign="top">
-      <td><sub><a href="">helloworld</a></sub></td>
-      <td><sub><a href="tests/helloworld/build-helloworld.yaml">build-helloworld.yaml</a></sub></td>
-      <td><sub><a href="tests/helloworld/service-helloworld.yaml">service-helloworld.yaml</a></sub></td>
-      <td><sub>A simple "Hello world" function with no parameters.</sub></td>
-      <td><sub><i>None</i></sub></td>        
-    </tr>
-    <tr align="left" valign="top">
-      <td><sub><a href="">TBD</a></sub></td>
-      <td><sub><a href="tests/helloworld/">build-x.yaml</a></sub></td>
-      <td><sub><a href="tests/helloworld/">service-x.yaml</a></sub></td>
-      <td><sub>TBD</sub></td>
-      <td><sub>TBD</sub></td>      
-    </tr>
-    <tr align="left" valign="top">
-      <td><sub><a href="">TBD</a></sub></td>
-      <td><sub><a href="tests/helloworld/">build-x.yaml</a></sub></td>
-      <td><sub><a href="tests/helloworld/">service-x.yaml</a></sub></td>
-      <td><sub>TBD</sub></td>
-      <td><sub>TBD</sub></td>        
-    </tr>
-    <tr align="left" valign="top">
-      <td><sub><a href="">TBD</a></sub></td>
-      <td><sub><a href="tests/helloworld/">build-x.yaml</a></sub></td>
-      <td><sub><a href="tests/helloworld/">service-x.yaml</a></sub></td>
-      <td><sub>TBD</sub></td>
-      <td><sub>TBD</sub></td>        
-    </tr>
-    <tr align="left" valign="top">
-      <td><sub><a href="">TBD</a></sub></td>
-      <td><sub><a href="tests/helloworld/">build-x.yaml</a></sub></td>
-      <td><sub><a href="tests/helloworld/">service-x.yaml</a></sub></td>
-      <td><sub>TBD</sub></td>
-      <td><sub>TBD</sub></td>       
-    </tr>
-  </tbody>
-</table>   
-
-### Configure 'service.yaml'
-
-Replace `{DOCKER_USERNAME}` with your own docker username in `service.yaml`.
-
-If you wish to run repeated tests you MAY set an environment variable and use ```sed``` to replace the ```${DOCKER_USERNAME}``` within any of the test's Kubernetes Service YAML files as follows:
-
-```
-export DOCKER_USERNAME="myusername"
-sed 's/${DOCKER_USERNAME}/'"$DOCKER_USERNAME"'/' service.yaml.tmpl > service.yaml
-```
+</details>
 
 ### Deploy the runtime
 
@@ -305,6 +269,4 @@ sed 's/${DOCKER_USERNAME}/'"$DOCKER_USERNAME"'/' service.yaml.tmpl > service.yam
 kubectl apply -f service.yaml
 ```
 
-## Setup
-
-TBD
+## 
