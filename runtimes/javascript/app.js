@@ -68,40 +68,44 @@ if (process.env.__OW_RUNTIME_PLATFORM === runtime_platform.openwhisk) {
 
 } else if (process.env.__OW_RUNTIME_PLATFORM === runtime_platform.knative) {
     app.post('/', function (req, res) {
-        console.log("Input data is")
-        console.log(req.body)
-        console.log(req.query)
-
-        var main = process.env.__OW_ACTION_MAIN;
-        var code = process.env.__OW_ACTION_CODE;
-        var binary = process.env.__OW_ACTION_BINARY;
-
-        if (req.query.value) {
-            if (req.query.value.main && typeof req.query.value.main === 'string') {
-                main = req.query.value.main
-            }
-            if (req.query.value.code && typeof req.query.value.code === 'string') {
-                code = req.query.value.code
-            }
-            if (req.query.value.binary && typeof req.query.value.binary === 'string') {
-                main = req.query.value.binary
-            }
-        }
-
-        req.body.value = {
-            main: main,
-            code: code,
-            binary: binary
-        };
-
         try {
+            var main = process.env.__OW_ACTION_MAIN;
+            var code = process.env.__OW_ACTION_CODE;
+            var binary = process.env.__OW_ACTION_BINARY;
+
+            if (req.query.value) {
+                if (req.query.value.main && typeof req.query.value.main === 'string') {
+                    main = req.query.value.main
+                }
+                if (req.query.value.code && typeof req.query.value.code === 'string') {
+                    code = req.query.value.code
+                }
+                if (req.query.value.binary && typeof req.query.value.binary === 'string') {
+                    main = req.query.value.binary
+                }
+            }
+
+            req.body.value = {
+                main: main,
+                code: code,
+                binary: binary
+            };
+
             service.initCode(req).then(function () {
                 service.runCode(req).then(function (result) {
                     res.status(result.code).json(result.response)
-                })
+                });
             }).catch(function (error) {
                 console.error(error)
-                res.status(error.code).json(error.response)
+                if (typeof error.code === 'number' && typeof error.response !== undefined) {
+                    if (error.code === 403) {
+                        service.runCode(req).then(function (result) {
+                            res.status(result.code).json(result.response)
+                        });
+                    } else {
+                        res.status(error.code).json(error.response)
+                    }
+                }
             });
         } catch (e) {
             res.status(500).json({error: "internal error"})
