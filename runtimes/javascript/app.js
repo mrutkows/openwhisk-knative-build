@@ -71,7 +71,7 @@ if (process.env.__OW_RUNTIME_PLATFORM === runtime_platform.openwhisk) {
         try {
             var main = process.env.__OW_ACTION_MAIN;
             var code = process.env.__OW_ACTION_CODE;
-            var binary = process.env.__OW_ACTION_BINARY;
+            var binary = JSON.parse(process.env.__OW_ACTION_BINARY);
             var name = process.env.__OW_ACTION_NAME;
 
             if (req.query.value) {
