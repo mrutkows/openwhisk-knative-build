@@ -36,7 +36,8 @@ spec:
     - -c
     - |
       cat <<EOF >> ${DOCKERFILE}
-        ENV __OW_DEBUG "${OW_DEBUG}"
+        ENV __OW_RUNTIME_DEBUG "${OW_RUNTIME_DEBUG}"
+        ENV __OW_RUNTIME_PLATFORM "${OW_RUNTIME_PLATFORM}"
         ENV __OW_ACTION_NAME "${OW_ACTION_NAME}"
         ENV __OW_ACTION_CODE "${OW_ACTION_CODE}"
         ENV __OW_ACTION_MAIN "${OW_ACTION_MAIN}"
