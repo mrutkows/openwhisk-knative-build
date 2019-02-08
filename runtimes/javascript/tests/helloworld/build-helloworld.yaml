@@ -12,7 +12,7 @@ spec:
     name: openwhisk-nodejs-runtime
     arguments:
       - name: TARGET_IMAGE_NAME
-        value: "docker.io/{DOCKER_USERNAME}/nodejs-10-helloworld"
+        value: "docker.io/${DOCKER_USERNAME}/nodejs-10-helloworld"
       - name: DOCKERFILE
         value: "./runtimes/javascript/Dockerfile"
       - name: OW_DEBUG
