@@ -1,0 +1,8 @@
+{ 
+    "value": { 
+        "name" : "nodejs-helloworld-with-params",
+        "main" : "main", 
+        "binary": false, 
+        "code" : "function main() {return {payload: 'Hello ' + process.env.NAME + ' from ' + process.env.PLACE +  '!'};}"
+    }
+}
