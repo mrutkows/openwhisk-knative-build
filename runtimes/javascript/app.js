@@ -24,6 +24,11 @@ var config = {
         'allowConcurrent': process.env.__OW_ALLOW_CONCURRENT
 };
 
+var runtime_platform = {
+    openwhisk: 'openwhisk',
+    knative: 'knative',
+};
+
 console.log("**************************")
 console.log("DEBUGGER: config")
 console.log(config)
@@ -50,14 +55,68 @@ app.set('port', config.port);
  */
 app.use(bodyParser.json({ limit: "48mb" }));
 
-app.post('/init', wrapEndpoint(service.initCode));
+if (process.env.__OW_RUNTIME_PLATFORM === runtime_platform.openwhisk) {
 
-app.post('/run',  wrapEndpoint(service.runCode));
+    app.post('/init', wrapEndpoint(service.initCode));
 
-app.use(function(err, req, res, next) {
-    console.error(err.stack);
-    res.status(500).json({ error: "Bad request." });
-  });
+    app.post('/run', wrapEndpoint(service.runCode));
+
+    app.use(function (err, req, res, next) {
+        console.error(err.stack);
+        res.status(500).json({error: "Bad request."});
+    });
+
+} else if (process.env.__OW_RUNTIME_PLATFORM === runtime_platform.knative) {
+    app.post('/', function (req, res) {
+        try {
+            var main = process.env.__OW_ACTION_MAIN;
+            var code = process.env.__OW_ACTION_CODE;
+            var binary = JSON.parse(process.env.__OW_ACTION_BINARY);
+            var name = process.env.__OW_ACTION_NAME;
+
+            if (req.query.value) {
+                if (req.query.value.main && typeof req.query.value.main === 'string') {
+                    main = req.query.value.main
+                }
+                if (req.query.value.code && typeof req.query.value.code === 'string') {
+                    code = req.query.value.code
+                }
+                if (req.query.value.binary && typeof req.query.value.binary === "boolean") {
+                    main = req.query.value.binary
+                }
+                if (req.query.value.name && typeof req.query.value.name === "string") {
+                    name = req.query.value.name
+                }
+            }
+
+            req.body.value = {
+                main: main,
+                code: code,
+                binary: binary,
+                name: name
+            };
+
+            service.initCode(req).then(function () {
+                service.runCode(req).then(function (result) {
+                    res.status(result.code).json(result.response)
+                });
+            }).catch(function (error) {
+                console.error(error)
+                if (typeof error.code === 'number' && typeof error.response !== undefined) {
+                    if (error.code === 403) {
+                        service.runCode(req).then(function (result) {
+                            res.status(result.code).json(result.response)
+                        });
+                    } else {
+                        res.status(error.code).json(error.response)
+                    }
+                }
+            });
+        } catch (e) {
+            res.status(500).json({error: "internal error"})
+        }
+    });
+}
 
 service.start(app);
 
@@ -87,27 +146,11 @@ function wrapEndpoint(ep) {
                     res.status(500).json({ error: "Internal error." });
                 }
             });
-            console.log("**************************")
-            console.log("DEBUGGER: req.body")
-            console.log(req.body)
-            console.log("DEBUGGER: req.url")
-            console.log(req.url)
-            console.log("DEBUGGER: req.method")
-            console.log(req.method)
-            console.log("DEBUGGER: req.params")
-            console.log(req.params)
-            console.log("DEBUGGER: req.query")
-            console.log(req.query)
-
-            console.log("**************************")
-            console.log("DEBUGGER: res")
-            console.log(res.status)
         } catch (e) {
             // This should not happen, as the contract for the endpoints is to
             // never (externally) throw, and wrap failures in the promise instead,
             // but, as they say, better safe than sorry.
             console.error("[wrapEndpoint]", "exception caught", e.message);
-
             res.status(500).json({ error: "Internal error (exception)." });
         }
     }

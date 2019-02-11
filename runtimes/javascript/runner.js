@@ -61,6 +61,9 @@ function NodeActionRunner() {
         }
 
         // Loading the user code.
+        console.log("Type of message:")
+        console.log(message.binary)
+        console.log(typeof message.binary)
         if (message.binary) {
             // The code is a base64-encoded zip file.
             return unzipInTmpDir(message.code).then(function (moduleDir) {

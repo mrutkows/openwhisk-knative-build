@@ -11,9 +11,12 @@ spec:
     default: "latest"
   - name: DOCKERFILE
     description: name of the dockerfile
-  - name: OW_DEBUG
+  - name: OW_RUNTIME_DEBUG
     description: flag to indicate debug mode should be on/off
     default: "false"
+  - name: OW_RUNTIME_PLATFORM
+    description: flag to indicate the platform, one of ["openwhisk", "knative", ... ]
+    default: "knative"
   - name: OW_ACTION_NAME
     description: name of the action
   - name: OW_ACTION_CODE
@@ -33,7 +36,8 @@ spec:
     - -c
     - |
       cat <<EOF >> ${DOCKERFILE}
-        ENV __OW_DEBUG "${OW_DEBUG}"
+        ENV __OW_RUNTIME_DEBUG "${OW_RUNTIME_DEBUG}"
+        ENV __OW_RUNTIME_PLATFORM "${OW_RUNTIME_PLATFORM}"
         ENV __OW_ACTION_NAME "${OW_ACTION_NAME}"
         ENV __OW_ACTION_CODE "${OW_ACTION_CODE}"
         ENV __OW_ACTION_MAIN "${OW_ACTION_MAIN}"
