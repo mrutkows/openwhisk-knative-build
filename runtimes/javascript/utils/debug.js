@@ -16,6 +16,7 @@
  */
 
 function debug(msg){
+  console.log(msg);
 }
 
 module.exports.DEBUG = debug;
