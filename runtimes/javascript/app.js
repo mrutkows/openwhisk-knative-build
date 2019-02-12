@@ -15,8 +15,9 @@
  * limitations under the License.
  */
 
-console.log("Hello World from NodeJS runtime")
-console.log(process.env)
+var DEBUG = require('./utils/debug')();
+DEBUG.startModule("Hello World from NodeJS runtime");
+DEBUG.dumpObject(process.env, "process.env");
 
 var config = {
         'port': 8080,
@@ -29,12 +30,9 @@ var runtime_platform = {
     knative: 'knative',
 };
 
-console.log("**************************")
-console.log("DEBUGGER: config")
-console.log(config)
-
 var bodyParser = require('body-parser');
 var express    = require('express');
+
 
 /**
  * instantiate app as an instance of Express
@@ -116,6 +114,8 @@ if (process.env.__OW_RUNTIME_PLATFORM === runtime_platform.openwhisk) {
             res.status(500).json({error: "internal error"})
         }
     });
+} else {
+    console.error("__OW_RUNTIME_PLATFORM is undefined!");
 }
 
 service.start(app);
@@ -132,8 +132,7 @@ service.start(app);
  * @returns an express endpoint handler
  */
 function wrapEndpoint(ep) {
-    console.log("**************************")
-    console.log("DEBUGGER: I am inside wrapEndpoint")
+    DEBUG.startFunction(ep.name);
     return function (req, res) {
         try {
             ep(req).then(function (result) {
