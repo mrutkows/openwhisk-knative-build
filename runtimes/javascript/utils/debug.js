@@ -14,9 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+var path = require('path');
 
 function debug(msg){
-  console.log(msg);
+  var scriptName = path.basename(__filename, '.js');
+  console.log(scriptName + ': ' + msg);
 }
 
 module.exports.DEBUG = debug;
