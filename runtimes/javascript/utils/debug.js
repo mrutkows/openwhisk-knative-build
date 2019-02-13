@@ -104,7 +104,7 @@ module.exports = function() {
     console.info(formattedMessage);
   };
 
-  this.endFunction = function(msg) {
+  this.endFunction = function(optionalMessage) {
     let msg = "";
     if(optionalMessage !== 'undefined'){
       msg = optionalMessage;
