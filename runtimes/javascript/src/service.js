@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-var DEBUG = require('../utils/debug')();
+var DEBUG = require('../utils/debug')(module);
 
 var NodeActionRunner = require('../runner');
-var fs = require('fs');
+//var fs = require('fs');
 
 function NodeActionService(config) {
 
@@ -37,12 +37,12 @@ function NodeActionService(config) {
     DEBUG.trace("ignoreRunStatus=" + ignoreRunStatus);
 
     function setStatus(newStatus) {
-        DEBUG.startFunction(newStatus);
+        DEBUG.functionStart();
         if (status !== Status.stopped) {
             DEBUG.trace("status=" + status + "; newStatus=" + newStatus);
             status = newStatus;
         }
-        DEBUG.endFunction(status);
+        DEBUG.functionEnd(status);
     }
 
     /**
@@ -67,7 +67,7 @@ function NodeActionService(config) {
      * @param app express app
      */
     this.start = function start(app) {
-        DEBUG.startFunction();
+        DEBUG.functionStart();
         var self = this;
         server = app.listen(app.get('port'), function() {
             var host = server.address().address;
@@ -76,7 +76,7 @@ function NodeActionService(config) {
         //This is required as http server will auto disconnect in 2 minutes, this to not auto disconnect at all
         server.timeout = 0;
         DEBUG.dumpObject(server, "server");
-        DEBUG.endFunction();
+        DEBUG.functionEnd();
     };
 
     /** Returns a promise of a response to the /init invocation.
@@ -84,7 +84,7 @@ function NodeActionService(config) {
      *  req.body = { main: String, code: String, binary: Boolean }
      */
     this.initCode = function initCode(req) {
-        DEBUG.startFunction("status=" + status);
+        DEBUG.functionStart("status=" + status, "initCode");
 
         if (status === Status.ready && userCodeRunner === undefined) {
             
@@ -93,34 +93,34 @@ function NodeActionService(config) {
             var body = req.body || {};
             var message = body.value || {};
 
-            DEBUG.dumpObject(body,"body");
-            DEBUG.dumpObject(message,"message");
+            DEBUG.dumpObject(body,"body", "initCode");
+            DEBUG.dumpObject(message,"message", "initCode");
 
             if (message.main && message.code && typeof message.main === 'string' && typeof message.code === 'string') {
                 return doInit(message).then(function (result) {
                     setStatus(Status.ready);
-                    DEBUG.endFunction("[200]: { OK: true }");
+                    DEBUG.functionEnd("[200] { OK: true }", "initCode");
                     return responseMessage(200, { OK: true });
                 }).catch(function (error) {
                     var errStr = error.stack ? String(error.stack) : error;
                     setStatus(Status.stopped);
-                    DEBUG.endFunction("[502]: Initialization has failed due to: " + errStr);
+                    DEBUG.functionEnd("[502] Initialization has failed due to: " + errStr,"initCode");
                     return Promise.reject(errorMessage(502, "Initialization has failed due to: " + errStr));
                 });
             } else {
                 setStatus(Status.ready);
-                DEBUG.endFunction("[403]: Missing main/no code to execute.");
+                DEBUG.functionEnd("[403] Missing main/no code to execute.","initCode");
                 return Promise.reject(errorMessage(403, "Missing main/no code to execute."));
             }
         } else if (userCodeRunner !== undefined) {
             var msg = "Cannot initialize the action more than once.";
             console.error("Internal system error:", msg);
-            DEBUG.endFunction("[403]: " + msg);
+            DEBUG.functionEnd("[403] " + msg, "initCode");
             return Promise.reject(errorMessage(403, msg));
         } else {
             var msg = "System not ready, status is " + status + ".";
             console.error("Internal system error:", msg);
-            DEBUG.endFunction("[403]: ", msg);
+            DEBUG.functionEnd("[403] " + msg,"initCode");
             return Promise.reject(errorMessage(403, msg));
         }
     };
@@ -134,38 +134,38 @@ function NodeActionService(config) {
      * req.body = { value: Object, meta { activationId : int } }
      */
     this.runCode = function runCode(req) {
-        DEBUG.startFunction("status=" + status);
+        DEBUG.functionStart("status=" + status, "runCode");
 
         if (status === Status.ready) {
             if (!ignoreRunStatus) {
                 setStatus(Status.running);
             }
 
-            DEBUG.dumpObject(req, "request");
+            DEBUG.dumpObject(req, "request", "runCode");
 
             return doRun(req).then(function (result) {
                 if (!ignoreRunStatus) {
                     setStatus(Status.ready);
                 }
 
-                DEBUG.dumpObject(result, "result");
+                DEBUG.dumpObject(result, "result", "runCode");
                 
                 if (typeof result !== "object") {
-                    DEBUG.endFunction("[502]: The action did not return a dictionary.");
+                    DEBUG.functionEnd("[502] The action did not return a dictionary.","runCode");
                     return errorMessage(502, "The action did not return a dictionary.");
                 } else {
-                    DEBUG.endFunction("[200]: result: " + result);
+                    DEBUG.functionEnd("[200] result: " + result, "runCode");
                     return responseMessage(200, result);
                 }
             }).catch(function (error) {
                 setStatus(Status.stopped);
-                DEBUG.endFunction("[502]: An error has occurred: " + error);
+                DEBUG.functionEnd("[502]: An error has occurred: " + error, "runCode");
                 return Promise.reject(errorMessage(502, "An error has occurred: " + error));
             });
         } else {
             var msg = "System not ready, status is " + status + ".";
             console.error("Internal system error:", msg);
-            DEBUG.endFunction("[403]: " + msg);
+            DEBUG.functionEnd("[403] " + msg, "runCode");
             return Promise.reject(errorMessage(403, msg));
         }
     };
@@ -173,36 +173,36 @@ function NodeActionService(config) {
     function doInit(message) {
         userCodeRunner = new NodeActionRunner();
 
-        DEBUG.startFunction();
+        DEBUG.functionStart();
         DEBUG.dumpObject(message,"message")
         return userCodeRunner.init(message).then(function (result) {
             // 'true' has no particular meaning here. The fact that the promise
             // is resolved successfully in itself carries the intended message
             // that initialization succeeded.
-            DEBUG.endFunction("return true;");
+            DEBUG.functionEnd("return true;", "doInit");
             return true;
         }).catch(function (error) {
             // emit error to activation log then flush the logs as this
             // is the end of the activation
             console.error('Error during initialization:', error);
             writeMarkers();
-            DEBUG.endFunction("Error: " + error);
+            DEBUG.functionEnd("Error: " + error, "doInit");
             return Promise.reject(error);
         });
     }
 
     function doRun(req) {
-        DEBUG.startFunction();
-        DBEUG.dumpObject(req,"request");
+        DEBUG.functionStart();
+        DEBUG.dumpObject(req,"request");
         var msg = req && req.body || {};
         DEBUG.dumpObject(msg,"msg");
         Object.keys(msg).forEach(
             function (k) {
                 if(typeof msg[k] === 'string' && k !== 'value'){
-                    DEBUG.trace(msg,"Setting process environment variables.");
+                    DEBUG.trace(msg,"Setting process environment variables.", "doRun");
                     process.env['__OW_' + k.toUpperCase()] = msg[k];
                     var envVariable = '__OW_' + k.toUpperCase();
-                    DEBUG.dumpObject(envVariable,"envVariable");
+                    DEBUG.dumpObject(envVariable,"envVariable", "doRun");
                 }
             }
         );
@@ -212,21 +212,21 @@ function NodeActionService(config) {
                 console.error('Result must be of type object but has type "' + typeof result + '":', result);
             }
             writeMarkers();
-            DEBUG.endFunction("Result" + result);
+            DEBUG.functionEnd("Result" + result, "doRun");
             return result;
         }).catch(function (error) {
             console.error(error);
             writeMarkers();
-            DEBUG.endFunction("Error:" + error)
+            DEBUG.functionEnd("Error:" + error, "doRun")
             return Promise.reject(error);
         });
     }
 
     function writeMarkers() {
-        DEBUG.startFunction();
+        DEBUG.functionStart();
         console.log('XXX_THE_END_OF_A_WHISK_ACTIVATION_XXX');
         console.error('XXX_THE_END_OF_A_WHISK_ACTIVATION_XXX');
-        DEBUG.endFunction();
+        DEBUG.functionEnd();
     }
 }
 

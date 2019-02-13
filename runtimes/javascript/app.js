@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-var DEBUG = require('./utils/debug')();
+var DEBUG = require('./utils/debug')(module);
 DEBUG.startModule("Hello World from NodeJS runtime");
 DEBUG.dumpObject(process.env, "process.env");
 
@@ -132,7 +132,7 @@ service.start(app);
  * @returns an express endpoint handler
  */
 function wrapEndpoint(ep) {
-    DEBUG.startFunction(ep.name);
+    DEBUG.functionStart(ep.name);
     return function (req, res) {
         try {
             ep(req).then(function (result) {
@@ -142,7 +142,7 @@ function wrapEndpoint(ep) {
                     res.status(error.code).json(error.response);
                 } else {
                     console.error("[wrapEndpoint]", "invalid errored promise", JSON.stringify(error));
-                    DEBUG.endFunction("invalid errored promise", JSON.stringify(error));
+                    DEBUG.functionEnd("invalid errored promise", JSON.stringify(error));
                     res.status(500).json({ error: "Internal error." });
                 }
             });
@@ -151,9 +151,9 @@ function wrapEndpoint(ep) {
             // never (externally) throw, and wrap failures in the promise instead,
             // but, as they say, better safe than sorry.
             console.error("[wrapEndpoint]", "exception caught", e.message);
-            DEBUG.endFunction("exception caught", e.message);
+            DEBUG.functionEnd("ERROR", e.message);
             res.status(500).json({ error: "Internal error (exception)." });
         }
-        DEBUG.endFunction("response", res);
+        DEBUG.functionEnd("", "wrapEndpoint");
     }
 }

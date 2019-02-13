@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 
+var DEBUG = require('./utils/debug')(module);
+
 /**
  * Object which encapsulates a first-class function, the user code for
  * an action.
@@ -28,8 +30,7 @@ var path = require('path');
 const serializeError = require('serialize-error');
 
 function NodeActionRunner() {
-    console.log("**************************")
-    console.log("DEBUGGER: I am inside NodeActionRunner")
+    DEBUG.functionStart();
     // Use this ref inside closures etc.
     var thisRunner = this;
 
@@ -44,31 +45,27 @@ function NodeActionRunner() {
         next      : function (result) { return; }
     };
 
-    console.log("**************************")
-    console.log("DEBUGGER: callback")
-    console.log(callback)
+    DEBUG.dumpObject(callback,"callback");
 
     this.init = function(message) {
-        console.log("**************************")
-        console.log("DEBUGGER: I am inside NodeActionRunner.init")
+        DEBUG.functionStart("NodeActionRunner", "init");
         function assertMainIsFunction() {
-            console.log("**************************")
-            console.log("DEBUGGER: userScriptMain")
-            console.log(thisRunner.userScriptMain)
+            DEBUG.dumpObject(thisRunner.userScriptMain,"this.Runner.userScriptMain", "init");
             if (typeof thisRunner.userScriptMain !== 'function') {
+                DEBUG.functionEnd("ERROR: Action entrypoint '\" + message.main + \"' is not a function.", "init");
                 throw "Action entrypoint '" + message.main + "' is not a function.";
             }
+            DEBUG.functionEnd();
         }
 
         // Loading the user code.
-        console.log("Type of message:")
-        console.log(message.binary)
-        console.log(typeof message.binary)
+        DEBUG.dumpObject(message.binary, "message.binary", "init");
         if (message.binary) {
             // The code is a base64-encoded zip file.
             return unzipInTmpDir(message.code).then(function (moduleDir) {
                 if(!fs.existsSync(path.join(moduleDir, 'package.json')) &&
                     !fs.existsSync(path.join(moduleDir, 'index.js'))) {
+                    DEBUG.functionEnd("ERROR: Zipped actions must contain either package.json or index.js at the root.", "init");
                     return Promise.reject('Zipped actions must contain either package.json or index.js at the root.')
                 }
 
@@ -80,24 +77,27 @@ function NodeActionRunner() {
                     // The value 'true' has no special meaning here;
                     // the successful state is fully reflected in the
                     // successful resolution of the promise.
+                    DEBUG.functionEnd("return true;", "init");
                     return true;
                 } catch (e) {
+                    DEBUG.functionEnd("ERROR: " + e.message, "init");
                     return Promise.reject(e);
                 }
             }).catch(function (error) {
+                DEBUG.functionEnd("ERROR: " + e.message, "init");
                 return Promise.reject(error);
             });
         } else {
             // The code is a plain old JS file.
             try {
                 thisRunner.userScriptMain = eval('(function(){' + message.code + '\nreturn ' + message.main + '})()');
-                console.log("**************************")
-                console.log("DEBUGGER: I am inside else condition, evaluating plain JS file, userScriptMain")
-                console.log(thisRunner.userScriptMain)
+                DEBUG.dumpObject(thisRunner.userScriptMain,"thisRunner.userScriptMain", "init");
                 assertMainIsFunction();
                 // See comment above about 'true'; it has no specific meaning.
+                DEBUG.functionEnd("Promise.resolve(true)", "init");
                 return Promise.resolve(true);
             } catch (e) {
+                DEBUG.functionEnd("ERROR: " + e.message, "init");
                 return Promise.reject(e);
             }
         }
@@ -106,22 +106,18 @@ function NodeActionRunner() {
     // Returns a Promise with the result of the user code invocation.
     // The Promise is rejected iff the user code throws.
     this.run = function(args) {
-        console.log("**************************")
-        console.log("DEBUGGER: I am inside NodeActionRunner.run")
+        DEBUG.functionStart("NodeActionRunner", "run");
         return new Promise(
             function (resolve, reject) {
                 callback.completed = undefined;
                 callback.next = resolve;
 
                 try {
-                    console.log("**************************")
-                    console.log("DEBUGGER: args")
-                    console.log(args)
+                    DEBUG.dumpObject(args, "Calling: thisRunner.userScriptMain(args): args", "run");
                     var result = thisRunner.userScriptMain(args);
-                    console.log("**************************")
-                    console.log("DEBUGGER: result")
-                    console.log(result)
+                    DEBUG.dumpObject(result,"Returned: thisRunner.userScriptMain(args): result", "run");
                 } catch (e) {
+                    DEBUG.functionEnd("ERROR: " + e.message, "run");
                     reject(e);
                 }
 
@@ -131,6 +127,7 @@ function NodeActionRunner() {
                     if (typeof resolvedResult === "undefined") {
                         resolvedResult = {};
                     }
+                    DEBUG.functionEnd("resolvedResult: " + resolvedResult, "run");
                     resolve(resolvedResult);
                 }).catch(function (error) {
                     // A rejected Promise from the user code maps into a
@@ -138,8 +135,10 @@ function NodeActionRunner() {
 
                     // Special case if the user just called `reject()`.
                     if (!error) {
+                        DEBUG.functionEnd("ERROR: reject()", "run");
                         resolve({ error: {}});
                     } else {
+                        DEBUG.functionEnd("ERROR: " + error.message, "run");
                         resolve({ error: serializeError(error) });
                     }
                 });
@@ -153,6 +152,7 @@ function NodeActionRunner() {
     //   1) Node 0.12 doesn't have many of the useful fs functions.
     //   2) We know in which environment we're running.
     function unzipInTmpDir(base64) {
+        DEBUG.functionStart();
         var mkTempCmd = "mktemp -d XXXXXXXX";
         return exec(mkTempCmd).then(function (tmpDir1) {
             return new Promise(
@@ -160,8 +160,10 @@ function NodeActionRunner() {
                     var zipFile = path.join(tmpDir1, "action.zip");
                     fs.writeFile(zipFile, base64, "base64", function (err) {
                         if (err) {
+                            DEBUG.functionEnd("ERROR: " + err.message);
                             reject("There was an error reading the action archive.");
                         }
+                        DEBUG.functionEnd("RESOLVE zipFile=" + zipFile);
                         resolve(zipFile);
                     });
                 }
@@ -169,9 +171,11 @@ function NodeActionRunner() {
         }).then(function (zipFile) {
             return exec(mkTempCmd).then(function (tmpDir2) {
                 return exec("unzip -qq " + zipFile + " -d " + tmpDir2).then(function (res) {
-                   return path.resolve(tmpDir2);
+                    DEBUG.functionEnd("RESOLVE tmpDir2=" + tmpDir2);
+                    return path.resolve(tmpDir2);
                 }).catch(function (error) {
-                   return Promise.reject("There was an error uncompressing the action archive.");
+                    DEBUG.functionEnd("ERROR: " + error.message);
+                    return Promise.reject("There was an error uncompressing the action archive.");
                 });
             });
         });
@@ -179,16 +183,16 @@ function NodeActionRunner() {
 
     // Helper function to run shell commands.
     function exec(cmd) {
+        DEBUG.functionStart();
         return new Promise(
             function (resolve, reject) {
                 child_process.exec(cmd, function (error, stdout, stderr) {
-                    console.log("**************************")
-                    console.log("DEBUGGER: exec cmd")
-                    console.log(cmd)
-
+                    DEBUG.dumpObject(cmd,"cmd");
                     if (error) {
+                        DEBUG.functionEnd("ERROR: " + error.message);
                         reject(stderr.trim());
                     } else {
+                        DEBUG.functionEnd("RESOLVE");
                         resolve(stdout.trim());
                     }
                 });
