@@ -142,6 +142,7 @@ function wrapEndpoint(ep) {
                     res.status(error.code).json(error.response);
                 } else {
                     console.error("[wrapEndpoint]", "invalid errored promise", JSON.stringify(error));
+                    DEBUG.endFunction("invalid errored promise", JSON.stringify(error));
                     res.status(500).json({ error: "Internal error." });
                 }
             });
@@ -150,7 +151,9 @@ function wrapEndpoint(ep) {
             // never (externally) throw, and wrap failures in the promise instead,
             // but, as they say, better safe than sorry.
             console.error("[wrapEndpoint]", "exception caught", e.message);
+            DEBUG.endFunction("exception caught", e.message);
             res.status(500).json({ error: "Internal error (exception)." });
         }
+        DEBUG.endFunction("response", res);
     }
 }

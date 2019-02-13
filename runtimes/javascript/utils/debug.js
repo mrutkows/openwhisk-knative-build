@@ -100,7 +100,7 @@ module.exports = function() {
     if(optionalMessage !== 'undefined'){
       msg = optionalMessage;
     }
-    let formattedMessage = formatMessage( arguments.callee.caller.name + ":"+ msg );
+    let formattedMessage = formatMessage( "START: " + arguments.callee.caller.name + "(): "+ msg );
     console.info(formattedMessage);
   };
 
@@ -109,7 +109,7 @@ module.exports = function() {
     if(optionalMessage !== 'undefined'){
       msg = optionalMessage;
     }
-    let formattedMessage = formatMessage( arguments.callee.caller.name + ":"+ msg );
+    let formattedMessage = formatMessage( "END: " + arguments.callee.caller.name + "(): "+ msg );
     console.info(formattedMessage);
   };
 
