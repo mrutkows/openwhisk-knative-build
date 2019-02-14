@@ -53,10 +53,14 @@ app.set('port', config.port);
  */
 app.use(bodyParser.json({ limit: "48mb" }));
 
-if (process.env.__OW_RUNTIME_PLATFORM === runtime_platform.openwhisk) {
+// default to "openwhisk" behavior if not defined
+console.error("__OW_RUNTIME_PLATFORM is undefined; defaulting to 'openwhisk' ...");
+var targetPlatform = process.env.__OW_RUNTIME_PLATFORM || runtime_platform.openwhisk;
+
+// Register different endpoint handlers depending on target PLATFORM and its expected behavior
+if (targetPlatform === runtime_platform.openwhisk ) {
 
     app.post('/init', wrapEndpoint(service.initCode));
-
     app.post('/run', wrapEndpoint(service.runCode));
 
     app.use(function (err, req, res, next) {
@@ -64,7 +68,7 @@ if (process.env.__OW_RUNTIME_PLATFORM === runtime_platform.openwhisk) {
         res.status(500).json({error: "Bad request."});
     });
 
-} else if (process.env.__OW_RUNTIME_PLATFORM === runtime_platform.knative) {
+} else if (targetPlatform === runtime_platform.knative) {
     app.post('/', function (req, res) {
         try {
             var main = process.env.__OW_ACTION_MAIN;
@@ -115,7 +119,7 @@ if (process.env.__OW_RUNTIME_PLATFORM === runtime_platform.openwhisk) {
         }
     });
 } else {
-    console.error("__OW_RUNTIME_PLATFORM is undefined!");
+    console.error("Environment variable '__OW_RUNTIME_PLATFORM' has an unrecognized value ("+targetPlatform+").");
 }
 
 service.start(app);

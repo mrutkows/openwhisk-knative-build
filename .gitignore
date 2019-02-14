@@ -4,6 +4,7 @@
 .project
 .settings
 .vscode
+*.code-workspace
 
 # Go Binaries for programs and plugins
 *.exe
