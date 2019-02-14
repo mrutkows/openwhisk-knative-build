@@ -35,14 +35,14 @@
       <td><sub><a href="helloworld/build.yaml.tmpl">build.yaml.tmpl</a></sub></td>
       <td><sub><a href="helloworld/service.yaml.tmpl">service-helloworld.yaml</a></sub></td>
       <td><sub><a href="helloworld/init-data-helloworld.json">init-data-helloworld.json</a></sub></td>
-      <td><sub>A simple "Hello world" function with no parameters.</sub></td>>        
+      <td><sub>A simple "Hello world" function with no parameters.</sub></td>
     </tr>
     <tr align="left" valign="top">
       <td><sub><a href="helloworldwithparams">helloworldwithparams</a></sub></td>
       <td><sub><a href="helloworldwithparams/build.yaml.tmpl">build.yaml.tmpl</a></sub></td>
       <td><sub><a href="helloworldwithparams/service.yaml.tmpl">service-helloworld.yaml</a></sub></td>
       <td><sub><a href="helloworldwithparams/init-data-helloworld.json">init-data-helloworld.json</a></sub></td>
-      <td><sub>A simple "Hello world" function with NAME and PLACE parameters.</sub></td>>        
+      <td><sub>A simple "Hello world" function with NAME and PLACE parameters.</sub></td>
     </tr>
     <tr align="left" valign="top">
       <td><sub><a href="">TBD</a></sub></td>
