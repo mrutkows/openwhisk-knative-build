@@ -18,7 +18,6 @@
 var DEBUG = require('../utils/debug')(module);
 
 var NodeActionRunner = require('../runner');
-//var fs = require('fs');
 
 function NodeActionService(config) {
 
@@ -72,6 +71,8 @@ function NodeActionService(config) {
         server = app.listen(app.get('port'), function() {
             var host = server.address().address;
             var port = server.address().port;
+            DEBUG.trace("host: " + host);
+            DEBUG.trace("port: " + port);
         });
         //This is required as http server will auto disconnect in 2 minutes, this to not auto disconnect at all
         server.timeout = 0;
