@@ -219,21 +219,42 @@ module.exports = function(requiringModule) {
    */
   this.dumpObject = function(obj, label, functionName){
 
-    try{
+    if( obj && typeof obj !== "undefined") {
+
+      let otype = typeof(obj)
 
       let fxName = arguments.callee.caller.name;
       if(functionName !== undefined){
         fxName = functionName;
       }
 
-      let jsonFormatted = JSON.stringify(obj,null,4);
-      let otype = typeof(obj)
-      let formattedMessage = formatMessage("[" + label + " (" + otype + ")] = "+ jsonFormatted, fxName);
-      console.info(formattedMessage);
-    } catch (e) {
-      let otype = typeof(obj)
-      console.error("[debug] dumpObject(): ERROR: " + "[" + label + " (" + otype + ")] : " + e.message);
+      try{
+        let jsonFormatted = JSON.stringify(obj,null,4);
+        let formattedMessage = formatMessage("[" + label + " (" + otype + ")] = "+ jsonFormatted, fxName);
+        console.info(formattedMessage);
+      } catch (e) {
+
+        // try manually dumping a shallow (string-friendly) copy of the Object
+        try {
+          console.log("{");
+          Object.keys(obj).forEach(
+              function (key) {
+                if(typeof obj[key] === 'string' && typeof(obj[key].toString()) !== "undefined"){
+                  console.log("    \"" + key + "\": \"" + obj[key].toString() +"\"" );
+                }
+              }
+          );
+          console.log("}");
+
+        } catch(e2) {
+          console.error("[debug] dumpObject(): ERROR: " + "[" + label + " (" + otype + ")] : " + e.message);
+        }
+      }
+
+    } else {
+      console.error("[debug] dumpObject(): ERROR: " + "Invalid object. (" + label + ")" );
     }
+
   };
 
   return this;
