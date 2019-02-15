@@ -197,11 +197,11 @@ function NodeActionService(config) {
         DEBUG.dumpObject(req,"request");
         var msg = req && req.body || {};
         DEBUG.dumpObject(msg,"msg");
+        DEBUG.trace(msg,"Setting process environment variables.", "doRun");
         Object.keys(msg).forEach(
             function (k) {
                 if(typeof msg[k] === 'string' && k !== 'value'){
-                    DEBUG.trace(msg,"Setting process environment variables.", "doRun");
-                    process.env['__OW_' + k.toUpperCase()] = msg[k];
+                    process.env['Adding: __OW_' + k.toUpperCase()] = msg[k];
                     var envVariable = '__OW_' + k.toUpperCase();
                     DEBUG.dumpObject(envVariable,"envVariable", "doRun");
                 }
