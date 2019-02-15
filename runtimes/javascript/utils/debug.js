@@ -16,21 +16,20 @@
  */
 var path = require('path');
 
-const FG_RED     = "\x1b[31m";
-const FG_GREEN   = "\x1b[32m";
+//const FG_RED     = "\x1b[31m";
+//const FG_GREEN   = "\x1b[32m";
 const FG_YELLOW  = "\x1b[33m";
-const FG_BLUE    = "\x1b[34m";
+//const FG_BLUE    = "\x1b[34m";
 const FG_MAGENTA = "\x1b[35m";
 const FG_CYAN    = "\x1b[36m";
 const FG_LTGRAY  = "\x1b[37m";
-const FG_ORANGE  = "\x1b[37m";
-const FG_WHITE   = "\x1b[97m";
+//const FG_WHITE   = "\x1b[97m";
 
-const RESET      = "\e[0m";
-const FG_INFO    = FG_CYAN;
-const FG_WARN    = FG_YELLOW;
-const FG_ERROR   = FG_RED;
-const FG_LOG     = FG_LTGRAY;
+//const RESET      = "\e[0m";
+//const FG_INFO    = FG_CYAN;
+//const FG_WARN    = FG_YELLOW;
+//const FG_ERROR   = FG_RED;
+//const FG_LOG     = FG_LTGRAY;
 
 let config = {
   prefixFGColor: FG_CYAN,
@@ -124,23 +123,18 @@ function _formatMessage(msg, functionName){
 
 function _updateCallingModuleName(callerModule){
 
-  if( callerModule &&
-      typeof(callerModule) !== 'undefined' &&
-      typeof(callerModule) === 'object' &&
-      typeof(callerModule.filename) !== 'undefined') {
+    if( callerModule &&
+        typeof(callerModule) !== 'undefined' &&
+        typeof(callerModule) === 'object' &&
+        typeof(callerModule.filename) !== 'undefined') {
 
-    // EXPLICIT approach (Module object provided)
-    this.moduleName = path.basename(callerModule.filename, '.js');
+      // EXPLICIT approach (Module object provided)
+      this.moduleName = path.basename(callerModule.filename, '.js');
 
-  } else {
-    // IMPLICIT approach (derive from callee frame)
-    this.moduleName = path.basename(module.parent.filename, '.js');
-  }
-
-  // NOTE: After we read the module.filename, we MUST force the module loader to remove the
-  // module object from its cache to force it to update "module.parent" on next "require".
-  //delete require.cache[__filename];
-
+    } else {
+      // IMPLICIT approach (derive from callee frame)
+      this.moduleName = path.basename(module.parent.filename, '.js');
+    }
 }
 
 function _updateCallingFunctionName(callee, functionLabel){
@@ -176,7 +170,12 @@ function _updateContext(callee, callerModule, callerFunctionLabel){
 
 module.exports = function(requiringModule) {
 
+  // This module is being require'd from a module, record its info. in our context
   _updateContext(arguments.callee, requiringModule);
+
+  // TODO: NOTE: After we read the module.filename, we MUST force the module loader to remove the
+  // module object from its cache to force it to update "module.parent" on next "require".
+  //delete require.cache[__filename];
 
   /**
    * moduleStart
@@ -290,7 +289,7 @@ module.exports = function(requiringModule) {
       }
 
     } else {
-      let formattedMessage = _formatMessage("[" + label + " (" + otype + ")] is undefined.");
+      let formattedMessage = _formatMessage( FG_YELLOW + "[" + label + " (" + otype + ")] is undefined." + FG_LTGRAY);
       console.info(formattedMessage);
     }
 
