@@ -16,7 +16,7 @@
  */
 
 var DEBUG = require('./utils/debug')(module);
-DEBUG.startModule("Hello World from NodeJS runtime");
+DEBUG.moduleStart("Hello World from NodeJS runtime");
 DEBUG.dumpObject(process.env, "process.env");
 
 var config = {

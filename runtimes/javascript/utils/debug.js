@@ -16,24 +16,26 @@
  */
 var path = require('path');
 
-const FG_RED     = "\x1b[31m";
+//const FG_RED     = "\x1b[31m";
+//const FG_GREEN   = "\x1b[32m";
 const FG_YELLOW  = "\x1b[33m";
+//const FG_BLUE    = "\x1b[34m";
 const FG_MAGENTA = "\x1b[35m";
 const FG_CYAN    = "\x1b[36m";
-const FG_WHITE   = "\x1b[37m";
-const FG_BLUE    = "\x1b[34m";
-const FG_GREEN   = "\x1b[32m";
+const FG_LTGRAY  = "\x1b[37m";
+//const FG_WHITE   = "\x1b[97m";
 
-const FG_INFO    = FG_CYAN;
-const FG_WARN    = FG_YELLOW;
-const FG_ERROR   = FG_RED;
-const FG_LOG     = FG_WHITE;
+//const RESET      = "\e[0m";
+//const FG_INFO    = FG_CYAN;
+//const FG_WARN    = FG_YELLOW;
+//const FG_ERROR   = FG_RED;
+//const FG_LOG     = FG_LTGRAY;
 
 let config = {
   prefixFGColor: FG_CYAN,
   postfixFGColor: FG_MAGENTA,
-  bodyFGColor: FG_WHITE,
-  defaultFGColor: FG_WHITE,
+  bodyFGColor: FG_LTGRAY,
+  defaultFGColor: FG_LTGRAY,
   functionStartMarker: ">>> START: ",
   functionEndMarker: "<<< END: ",
 };
@@ -41,7 +43,7 @@ let config = {
 /**
  * Formats Hours, Minutes, Seconds and Milliseconds as HH:MM:SS:mm
  */
-function getTimeFormatted(){
+function _getTimeFormatted(){
   let date = new Date();
   let ftime =
       date.getHours() + ":" +
@@ -55,7 +57,7 @@ function getTimeFormatted(){
  * Formats and colorizes the prefix of the message consisting of the:
  *   [moduleName] [functionName]()
  */
-function formatMessagePrefix(functionName, color){
+function _formatMessagePrefix(functionName, color){
 
   let prefixColor = config.prefixFGColor;
 
@@ -82,7 +84,7 @@ function formatMessagePrefix(functionName, color){
  * Formats and colorizes the postfix of the message consisting of the:
  *   [(formattedTime)]
  */
-function formatMessagePostfix(color){
+function _formatMessagePostfix(color){
 
   let postfixColor = config.postfixFGColor;
 
@@ -91,14 +93,14 @@ function formatMessagePostfix(color){
   if( color !== undefined) {
     postfixColor = color;
   }
-  let postfix = postfixColor + " (" + getTimeFormatted() + ")";
+  let postfix = postfixColor + " (" + _getTimeFormatted() + ")";
   return postfix;
 }
 
 /**
  * Formats and colorizes the body of the message.
  */
-function formatBody(msg, color){
+function _formatBody(msg, color){
 
   let bodyColor = config.bodyFGColor;
 
@@ -113,31 +115,78 @@ function formatBody(msg, color){
 /**
  * Formats the entirety of the message comprised of the message prefix + body + postfix.
  */
-function formatMessage(msg, functionName){
+function _formatMessage(msg, functionName){
   // Reset to default color at end of formatted message
-  let message = formatMessagePrefix(functionName) + formatBody(msg) + formatMessagePostfix() + config.defaultFGColor;
+  let message = _formatMessagePrefix(functionName) + _formatBody(msg) + _formatMessagePostfix() + config.defaultFGColor;
   return message;
+}
+
+function _updateCallingModuleName(callerModule){
+
+    if( callerModule &&
+        typeof(callerModule) !== 'undefined' &&
+        typeof(callerModule) === 'object' &&
+        typeof(callerModule.filename) !== 'undefined') {
+
+      // EXPLICIT approach (Module object provided)
+      this.moduleName = path.basename(callerModule.filename, '.js');
+
+    } else {
+      // IMPLICIT approach (derive from callee frame)
+      this.moduleName = path.basename(module.parent.filename, '.js');
+    }
+}
+
+function _updateCallingFunctionName(callee, functionLabel){
+
+  // if explicit label provided, use it...
+  let fxName = functionLabel;
+
+  if(typeof(fxName) == 'undefined'){
+
+    if( typeof(callee) !== 'undefined' &&
+        typeof(callee.caller) !== 'undefined' ) {
+      fxName = callee.caller.name;
+    } else {
+      fxName = 'unknown';
+    }
+  }
+
+  this.functionName = fxName;
+}
+
+/*
+ * Initialize the debug context including:
+ *
+ * - Calling module
+ * - Calling module function (if anonymous, identify by signature)
+ */
+function _updateContext(callee, callerModule, callerFunctionLabel){
+
+  // Update: functionName
+  _updateCallingFunctionName(callee,callerFunctionLabel);
+  _updateCallingModuleName(callerModule);
 }
 
 module.exports = function(requiringModule) {
 
-  // identify module name of module that 'required' us to display as part of console trace prefix
-  if(requiringModule && requiringModule!=='undefined' &&
-      typeof (requiringModule) === 'object' &&
-      requiringModule.filename !== 'undefined') {
-      this.moduleName = path.basename(requiringModule.filename, '.js');
-  } else {
-    console.error("Invalid argument: parent Module not provided; using parent Module name.");
-    this.moduleName = path.basename(module.parent.filename, '.js');
-  }
+  // This module is being require'd from a module, record its info. in our context
+  _updateContext(arguments.callee, requiringModule);
+
+  // TODO: NOTE: After we read the module.filename, we MUST force the module loader to remove the
+  // module object from its cache to force it to update "module.parent" on next "require".
+  //delete require.cache[__filename];
 
   /**
-   * startModule
+   * moduleStart
    *
    * @param msg optional message to display with module start information
    */
-  this.startModule = function(msg) {
-    let formattedMessage = formatMessage(msg);
+  this.moduleStart = function(msg) {
+
+    _updateContext(arguments.callee);
+
+    let formattedMessage = _formatMessage(msg);
     console.info(formattedMessage);
   };
 
@@ -148,17 +197,14 @@ module.exports = function(requiringModule) {
    */
   this.functionStart = function(message, functionName) {
 
+    _updateContext(arguments.callee, null, functionName);
+
     let msg = "";
     if(message !== undefined){
       msg = message;
     }
 
-    let fxName = arguments.callee.caller.name;
-    if(functionName !== undefined){
-      fxName = functionName;
-    }
-
-    let formattedMessage = formatMessage( config.functionStartMarker + msg, fxName );
+    let formattedMessage = _formatMessage( config.functionStartMarker + msg, this.functionName );
     console.info(formattedMessage);
   };
 
@@ -169,17 +215,14 @@ module.exports = function(requiringModule) {
    */
   this.functionEnd = function(message, functionName) {
 
+    _updateContext(arguments.callee, null, functionName);
+
     let msg = "";
     if(message !== undefined){
       msg = message;
     }
 
-    let fxName = arguments.callee.caller.name;
-    if(functionName !== undefined){
-      fxName = functionName;
-    }
-
-    let formattedMessage = formatMessage( config.functionEndMarker + msg, fxName );
+    let formattedMessage = _formatMessage( config.functionEndMarker + msg, this.functionName  );
     console.info(formattedMessage);
   };
 
@@ -189,10 +232,6 @@ module.exports = function(requiringModule) {
    * @param optionalMessage optional message to display with function end marker
    */
   // this.functionEndError = function(optionalMessage, error, functionName) {
-  //   let fxName = arguments.callee.caller.name;
-  //   if(functionName !== undefined){
-  //     fxName = functionName;
-  //   }
   // };
 
   /**
@@ -202,12 +241,9 @@ module.exports = function(requiringModule) {
    */
   this.trace = function(msg, functionName) {
 
-    let fxName = arguments.callee.caller.name;
-    if(functionName !== undefined){
-      fxName = functionName;
-    }
+    _updateContext(arguments.callee, null, functionName);
 
-    let formattedMessage = formatMessage(msg, fxName);
+    let formattedMessage = _formatMessage(msg, this.functionName);
     console.info(formattedMessage);
   };
 
@@ -219,18 +255,16 @@ module.exports = function(requiringModule) {
    */
   this.dumpObject = function(obj, label, functionName){
 
-    if( obj && typeof obj !== "undefined") {
+    _updateContext(arguments.callee, null, functionName);
 
-      let otype = typeof(obj)
+    let otype = typeof(obj)
 
-      let fxName = arguments.callee.caller.name;
-      if(functionName !== undefined){
-        fxName = functionName;
-      }
+    if( otype !== "undefined") {
 
       try{
         let jsonFormatted = JSON.stringify(obj,null,4);
-        let formattedMessage = formatMessage("[" + label + " (" + otype + ")] = "+ jsonFormatted, fxName);
+        let formattedMessage = _formatMessage("[" + label + " (" + otype + ")] = "+ jsonFormatted,
+            this.functionName);
         console.info(formattedMessage);
       } catch (e) {
 
@@ -240,19 +274,23 @@ module.exports = function(requiringModule) {
           Object.keys(obj).forEach(
               function (key) {
                 if(typeof obj[key] === 'string' && typeof(obj[key].toString()) !== "undefined"){
-                  console.log("    \"" + key + "\": \"" + obj[key].toString() +"\"" );
+                  console.info("    \"" + key + "\": \"" + obj[key].toString() +"\"" );
                 }
               }
           );
           console.log("}");
 
         } catch(e2) {
-          console.error("[debug] dumpObject(): ERROR: " + "[" + label + " (" + otype + ")] : " + e.message);
+          console.error("[" + label + " (" + otype + ")] : " + e.message);
+          let formattedMessage = _formatMessage(_ + "[" + label + " (" + otype + ")] : " +
+              e.message);
+          console.error(formattedMessage);
         }
       }
 
     } else {
-      console.error("[debug] dumpObject(): ERROR: " + "Invalid object. (" + label + ")" );
+      let formattedMessage = _formatMessage( FG_YELLOW + "[" + label + " (" + otype + ")] is undefined." + FG_LTGRAY);
+      console.info(formattedMessage);
     }
 
   };
