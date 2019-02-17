@@ -133,7 +133,7 @@ function _updateCallingFunctionName(functionLabel){
       let entryInfo = rawFunctionInfo.split("at ")[1];
       let fm = entryInfo.split(" (");
       this.functionName = fm[0];
-      this.fullModuleInfo = fm[1].substring(fm[1].lastIndexOf("/",fm[1].indexOf(":")));
+      this.fullModuleInfo = fm[1].substring(fm[1].lastIndexOf("/") +1,fm[1].indexOf(":"));
       this.moduleName = this.fullModuleInfo.substring(
           this.fullModuleInfo.lastIndexOf("/",
           this.fullModuleInfo.indexOf(":")));
@@ -145,7 +145,11 @@ function _updateCallingFunctionName(functionLabel){
 
 /*
  * Initialize the debug context including:
- *
+ *message = ReferenceError: message is not defined
+    at eval (eval at _updateCallingFunctionName (/Users/Matt/knative/openwhisk-knative-build/runtimes/javascript/utils/debug.js:144:1), <anonymous>:1:1)
+    at _updateCallingFunctionName (/Users/Matt/knative/openwhisk-knative-build/runtimes/javascript/utils/debug.js:144:1)
+    at _updateContext (/Users/Matt/knative/openwhisk-knative-build/runtimes/javascript/utils/debug.js:153:3)
+    at DEBUG.dumpObject (/Users/Matt/knative/openwhisk-knative-build/runtimes/javascript/utils/debug.js:219:5)
  * - Calling module
  * - Calling function (if anonymous, identify by signature)
  */
