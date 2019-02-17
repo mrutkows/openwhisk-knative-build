@@ -15,8 +15,10 @@
  * limitations under the License.
  */
 
-var DEBUG = require('./utils/debug')(module);
-DEBUG.moduleStart("Hello World from NodeJS runtime");
+var dbg = require('./utils/debug');
+var DEBUG = new dbg();
+
+DEBUG.trace("Hello World from NodeJS runtime");
 DEBUG.dumpObject(process.env, "process.env");
 
 var config = {

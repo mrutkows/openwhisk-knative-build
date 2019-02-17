@@ -57,7 +57,7 @@ function _getTimeFormatted(){
  * Formats and colorizes the prefix of the message consisting of the:
  *   [moduleName] [functionName]()
  */
-function _formatMessagePrefix(functionName, color){
+function _formatMessagePrefix(color){
 
   let prefixColor = config.prefixFGColor;
 
@@ -67,15 +67,8 @@ function _formatMessagePrefix(functionName, color){
     prefixColor = color;
   }
 
-  let prefix = prefixColor + "[" + this.moduleName + "] ";
+  let prefix = prefixColor + "[" + this.moduleName + "] ["+this.functionName+"] ";
 
-  if(functionName !== undefined) {
-    prefix += functionName + "(): ";
-  }
-  else {
-    let tmpFxName = "anonymous";
-    prefix += tmpFxName + "(): ";
-  }
   return prefix;
 
 }
@@ -121,90 +114,66 @@ function _formatMessage(msg, functionName){
   return message;
 }
 
-function _updateCallingModuleName(callerModule){
-
-    if( callerModule &&
-        typeof(callerModule) !== 'undefined' &&
-        typeof(callerModule) === 'object' &&
-        typeof(callerModule.filename) !== 'undefined') {
-
-      // EXPLICIT approach (Module object provided)
-      this.moduleName = path.basename(callerModule.filename, '.js');
-
-    } else {
-      // IMPLICIT approach (derive from callee frame)
-      this.moduleName = path.basename(module.parent.filename, '.js');
-    }
-}
-
-function _updateCallingFunctionName(callee, functionLabel){
+function _updateCallingFunctionName(functionLabel){
 
   // if explicit label provided, use it...
   let fxName = functionLabel;
 
   if(typeof(fxName) == 'undefined'){
 
-    if( typeof(callee) !== 'undefined' &&
-        typeof(callee.caller) !== 'undefined' ) {
-      fxName = callee.caller.name;
-    } else {
-      fxName = 'unknown';
+    let obj = {};
+
+    try{
+      Error.stackTraceLimit = 4;
+      Error.captureStackTrace(obj, _updateCallingFunctionName);
+
+      let fullStackInfo = obj.stack.split(")\n");
+      let rawFunctionInfo = fullStackInfo[2];
+      //
+      let entryInfo = rawFunctionInfo.split("at ")[1];
+      let fm = entryInfo.split(" (");
+      this.functionName = fm[0];
+      this.fullModuleInfo = fm[1].substring(fm[1].lastIndexOf("/",fm[1].indexOf(":")));
+      this.moduleName = this.fullModuleInfo.substring(
+          this.fullModuleInfo.lastIndexOf("/",
+          this.fullModuleInfo.indexOf(":")));
+    } catch(e){
+      console.error("Unable to get stack trace: " + e.message)
     }
   }
-
-  this.functionName = fxName;
 }
 
 /*
  * Initialize the debug context including:
  *
  * - Calling module
- * - Calling module function (if anonymous, identify by signature)
+ * - Calling function (if anonymous, identify by signature)
  */
-function _updateContext(callee, callerModule, callerFunctionLabel){
-
-  // Update: functionName
-  _updateCallingFunctionName(callee,callerFunctionLabel);
-  _updateCallingModuleName(callerModule);
+function _updateContext(callerModule, callerFunctionLabel){
+  _updateCallingFunctionName(callerFunctionLabel);
 }
 
-module.exports = function(requiringModule) {
 
-  // This module is being require'd from a module, record its info. in our context
-  _updateContext(arguments.callee, requiringModule);
+module.exports = class DEBUG {
 
-  // TODO: NOTE: After we read the module.filename, we MUST force the module loader to remove the
-  // module object from its cache to force it to update "module.parent" on next "require".
-  //delete require.cache[__filename];
-
-  /**
-   * moduleStart
-   *
-   * @param msg optional message to display with module start information
-   */
-  this.moduleStart = function(msg) {
-
-    _updateContext(arguments.callee);
-
-    let formattedMessage = _formatMessage(msg);
-    console.info(formattedMessage);
-  };
+  constructor() {
+  }
 
   /**
    * functionStart
    *
    * @param message optional message to display with function start marker
    */
-  this.functionStart = function(message, functionName) {
+  functionStart(message, functionName) {
 
-    _updateContext(arguments.callee, null, functionName);
+    _updateContext(null, functionName);
 
     let msg = "";
     if(message !== undefined){
       msg = message;
     }
 
-    let formattedMessage = _formatMessage( config.functionStartMarker + msg, this.functionName );
+    let formattedMessage = _formatMessage( config.functionStartMarker + msg );
     console.info(formattedMessage);
   };
 
@@ -213,37 +182,29 @@ module.exports = function(requiringModule) {
    *
    * @param message optional message to display with function end marker
    */
-  this.functionEnd = function(message, functionName) {
+  functionEnd(message, functionName) {
 
-    _updateContext(arguments.callee, null, functionName);
+    _updateContext(null, functionName);
 
     let msg = "";
     if(message !== undefined){
       msg = message;
     }
 
-    let formattedMessage = _formatMessage( config.functionEndMarker + msg, this.functionName  );
+    let formattedMessage = _formatMessage( config.functionEndMarker + msg );
     console.info(formattedMessage);
   };
-
-  /**
-   * functionEndError
-   *
-   * @param optionalMessage optional message to display with function end marker
-   */
-  // this.functionEndError = function(optionalMessage, error, functionName) {
-  // };
 
   /**
    * trace
    *
    * @param msg message to display to console as trace information
    */
-  this.trace = function(msg, functionName) {
+  trace(msg, functionName) {
 
-    _updateContext(arguments.callee, null, functionName);
+    _updateContext(null, functionName);
 
-    let formattedMessage = _formatMessage(msg, this.functionName);
+    let formattedMessage = _formatMessage(msg);
     console.info(formattedMessage);
   };
 
@@ -253,9 +214,9 @@ module.exports = function(requiringModule) {
    * @param obj object to dump to console
    * @param label optional string label to display with object dump
    */
-  this.dumpObject = function(obj, label, functionName){
+  dumpObject(obj, label, functionName){
 
-    _updateContext(arguments.callee, null, functionName);
+    _updateContext(null, functionName);
 
     let otype = typeof(obj)
 
@@ -263,8 +224,7 @@ module.exports = function(requiringModule) {
 
       try{
         let jsonFormatted = JSON.stringify(obj,null,4);
-        let formattedMessage = _formatMessage("[" + label + " (" + otype + ")] = "+ jsonFormatted,
-            this.functionName);
+        let formattedMessage = _formatMessage("[" + label + " (" + otype + ")] = "+ jsonFormatted);
         console.info(formattedMessage);
       } catch (e) {
 
@@ -295,5 +255,4 @@ module.exports = function(requiringModule) {
 
   };
 
-  return this;
 };

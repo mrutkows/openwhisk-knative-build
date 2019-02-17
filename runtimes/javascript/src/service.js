@@ -15,7 +15,8 @@
  * limitations under the License.
  */
 
-var DEBUG = require('../utils/debug')(module);
+var dbg = require('../utils/debug');
+var DEBUG = new dbg();
 
 var NodeActionRunner = require('../runner');
 
@@ -36,12 +37,12 @@ function NodeActionService(config) {
     DEBUG.trace("ignoreRunStatus=" + ignoreRunStatus);
 
     function setStatus(newStatus) {
-        DEBUG.functionStart();
+        //DEBUG.functionStart();
         if (status !== Status.stopped) {
-            DEBUG.trace("status=" + status + "; newStatus=" + newStatus);
+            //DEBUG.trace("status=" + status + "; newStatus=" + newStatus);
             status = newStatus;
         }
-        DEBUG.functionEnd(status);
+        //DEBUG.functionEnd(status);
     }
 
     /**
@@ -71,8 +72,8 @@ function NodeActionService(config) {
         server = app.listen(app.get('port'), function() {
             var host = server.address().address;
             var port = server.address().port;
-            DEBUG.trace("host: " + host);
-            DEBUG.trace("port: " + port);
+            //DEBUG.trace("host: " + host);
+            //DEBUG.trace("port: " + port);
         });
         //This is required as http server will auto disconnect in 2 minutes, this to not auto disconnect at all
         server.timeout = 0;
@@ -148,9 +149,7 @@ function NodeActionService(config) {
                 if (!ignoreRunStatus) {
                     setStatus(Status.ready);
                 }
-
                 DEBUG.dumpObject(result, "result", "runCode");
-                
                 if (typeof result !== "object") {
                     DEBUG.functionEnd("[502] The action did not return a dictionary.","runCode");
                     return errorMessage(502, "The action did not return a dictionary.");
@@ -224,10 +223,8 @@ function NodeActionService(config) {
     }
 
     function writeMarkers() {
-        DEBUG.functionStart();
         console.log('XXX_THE_END_OF_A_WHISK_ACTIVATION_XXX');
         console.error('XXX_THE_END_OF_A_WHISK_ACTIVATION_XXX');
-        DEBUG.functionEnd();
     }
 }
 
