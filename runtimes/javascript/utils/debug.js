@@ -15,8 +15,6 @@
  * limitations under the License.
  */
 
-//var path = require('path');
-
 //const FG_RED     = "\x1b[31m";
 //const FG_GREEN   = "\x1b[32m";
 const FG_YELLOW  = "\x1b[33m";
