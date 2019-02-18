@@ -26,11 +26,9 @@ const FG_CYAN    = "\x1b[36m";
 const FG_LTGRAY  = "\x1b[37m";
 //const FG_WHITE   = "\x1b[97m";
 
-//const RESET      = "\e[0m";
-//const FG_INFO    = FG_CYAN;
+//const FG_INFO    = FG_LTGRAY;;
 //const FG_WARN    = FG_YELLOW;
 //const FG_ERROR   = FG_RED;
-//const FG_LOG     = FG_LTGRAY;
 
 let config = {
   prefixFGColor: FG_CYAN,
@@ -57,6 +55,8 @@ function _getTimeFormatted(){
 /**
  * Formats and colorizes the prefix of the message consisting of the:
  *   [moduleName] [functionName]()
+ *
+ * @param color optional (non-default) color for the prefix string
  */
 function _formatMessagePrefix(color){
 
@@ -77,6 +77,8 @@ function _formatMessagePrefix(color){
 /**
  * Formats and colorizes the postfix of the message consisting of the:
  *   [(formattedTime)]
+ *
+ * @param color optional (non-default) color for the prefix string
  */
 function _formatMessagePostfix(color){
 
@@ -93,8 +95,11 @@ function _formatMessagePostfix(color){
 
 /**
  * Formats and colorizes the body of the message.
+ *
+ * @param message that comprises the body of the output
+ * @param color optional (non-default) color for the prefix string
  */
-function _formatBody(msg, color){
+function _formatBody(message, color){
 
   let bodyColor = config.bodyFGColor;
 
@@ -103,31 +108,33 @@ function _formatBody(msg, color){
   if(color !== undefined)
     bodyColor = color;
 
-  return bodyColor + msg;
+  return bodyColor + message;
 }
 
 /**
  * Formats the entirety of the message comprised of the message prefix + body + postfix.
+ *
+ * @param message that comprises the body of the formatted output
+ * @param functionName (optional) name of the function; typically used to better
+ * identify anon. functions.
  */
-function _formatMessage(msg, functionName){
+function _formatMessage(message, functionName){
   // Reset to default color at end of formatted message
-  let message = _formatMessagePrefix(functionName) + _formatBody(msg) + _formatMessagePostfix() + config.defaultFGColor;
-  return message;
+  let fmsg =
+      _formatMessagePrefix(functionName) +
+      _formatBody(message) +
+      _formatMessagePostfix() + config.defaultFGColor;
+  return fmsg;
 }
 
-function _updateCallingFunctionName(functionLabel){
-
-}
-
-/*
+/**
  * Initialize the debug context including:
- *message = ReferenceError: message is not defined
-    at eval (eval at _updateCallingFunctionName (/Users/Matt/knative/openwhisk-knative-build/runtimes/javascript/utils/debug.js:144:1), <anonymous>:1:1)
-    at _updateCallingFunctionName (/Users/Matt/knative/openwhisk-knative-build/runtimes/javascript/utils/debug.js:144:1)
-    at _updateContext (/Users/Matt/knative/openwhisk-knative-build/runtimes/javascript/utils/debug.js:153:3)
-    at DEBUG.dumpObject (/Users/Matt/knative/openwhisk-knative-build/runtimes/javascript/utils/debug.js:219:5)
  * - Calling module
  * - Calling function (if anonymous, identify by signature)
+ *
+ * @param callerFunctionLabel (optional) label for the function (or block) to use
+ *  instead of pulling from the call stack.  Typically used to identify anon. functions
+ *  or blocks
  */
 function _updateContext(callerFunctionLabel){
 
@@ -163,9 +170,11 @@ module.exports = class DEBUG {
   }
 
   /**
-   * functionStart
+   * Used to mark the start of a function block (i.e., via console.info())
    *
-   * @param message optional message to display with function start marker
+   * @param message (optional) message displayed with function start marker
+   * @param functionName (optional) name of the function; typically used to better
+   * identify anon. functions.
    */
   functionStart(message, functionName) {
 
@@ -181,9 +190,11 @@ module.exports = class DEBUG {
   };
 
   /**
-   * functionEnd
+   * Used to mark the end of a function block (i.e., console.info())
    *
-   * @param message optional message to display with function end marker
+   * @param message (optional) message displayed with function end marker
+   * @param functionName (optional) name of the function; typically used to better
+   * identify anon. functions.
    */
    functionEnd(message, functionName) {
 
@@ -199,9 +210,11 @@ module.exports = class DEBUG {
   };
 
   /**
-   * trace
+   * Used to output informational message strings (i.e., console.info())
    *
    * @param msg message to display to console as trace information
+   * @param functionName (optional) name of the function; typically used to better
+   * identify anon. functions.
    */
    trace(msg, functionName) {
 
@@ -212,16 +225,19 @@ module.exports = class DEBUG {
   };
 
   /**
-   * dumpObject
+   * Used to output the type and contents of Javascript types and Objects
+   * This method attempts to display Objects as JSON strings where cyclical references
+   * do not occur; otherwise, it attempts to display a 1st level (shallow) contents
+   * of the Object.
    *
-   * @param obj object to dump to console
+   * @param obj Javascript Object (or type) to dump its information to console.info()
    * @param label optional string label to display with object dump
    */
    dumpObject(obj, label, functionName){
 
     _updateContext(functionName);
 
-    let otype = typeof(obj)
+    let otype = typeof(obj);
 
     if( otype !== "undefined") {
 
