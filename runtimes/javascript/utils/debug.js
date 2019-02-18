@@ -14,7 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-var path = require('path');
+
+//var path = require('path');
 
 //const FG_RED     = "\x1b[31m";
 //const FG_GREEN   = "\x1b[32m";
@@ -67,7 +68,7 @@ function _formatMessagePrefix(color){
     prefixColor = color;
   }
 
-  let prefix = prefixColor + "[" + this.moduleName + "] ["+this.functionName+"] ";
+  let prefix = prefixColor + "[" + this.moduleInfo + "]["+this.functionName+"()] ";
 
   return prefix;
 
@@ -116,31 +117,6 @@ function _formatMessage(msg, functionName){
 
 function _updateCallingFunctionName(functionLabel){
 
-  // if explicit label provided, use it...
-  let fxName = functionLabel;
-
-  if(typeof(fxName) == 'undefined'){
-
-    let obj = {};
-
-    try{
-      Error.stackTraceLimit = 4;
-      Error.captureStackTrace(obj, _updateCallingFunctionName);
-
-      let fullStackInfo = obj.stack.split(")\n");
-      let rawFunctionInfo = fullStackInfo[2];
-      //
-      let entryInfo = rawFunctionInfo.split("at ")[1];
-      let fm = entryInfo.split(" (");
-      this.functionName = fm[0];
-      this.fullModuleInfo = fm[1].substring(fm[1].lastIndexOf("/") +1,fm[1].indexOf(":"));
-      this.moduleName = this.fullModuleInfo.substring(
-          this.fullModuleInfo.lastIndexOf("/",
-          this.fullModuleInfo.indexOf(":")));
-    } catch(e){
-      console.error("Unable to get stack trace: " + e.message)
-    }
-  }
 }
 
 /*
@@ -153,14 +129,37 @@ function _updateCallingFunctionName(functionLabel){
  * - Calling module
  * - Calling function (if anonymous, identify by signature)
  */
-function _updateContext(callerModule, callerFunctionLabel){
-  _updateCallingFunctionName(callerFunctionLabel);
-}
+function _updateContext(callerFunctionLabel){
 
+  // if explicit label provided, use it...
+  this.functionName = callerFunctionLabel;
+
+  if(typeof(this.functionName) == 'undefined'){
+
+    try{
+      let obj = {};
+
+      Error.stackTraceLimit = 2;
+      Error.captureStackTrace(obj, _updateContext);
+
+      let fullStackInfo = obj.stack.split(")\n");
+      let rawFunctionInfo = fullStackInfo[1];
+      let entryInfo = rawFunctionInfo.split("at ")[1];
+      let fm = entryInfo.split(" (");
+      this.functionName = fm[0];
+      this.fullModuleInfo = fm[1];
+      this.moduleInfo =  this.fullModuleInfo.substring( this.fullModuleInfo.lastIndexOf("/") +1);
+
+    } catch(e){
+      console.error("Unable to get stack trace: " + e.message);
+    }
+  }
+}
 
 module.exports = class DEBUG {
 
   constructor() {
+    // Empty constructor
   }
 
   /**
@@ -170,7 +169,7 @@ module.exports = class DEBUG {
    */
   functionStart(message, functionName) {
 
-    _updateContext(null, functionName);
+    _updateContext(functionName);
 
     let msg = "";
     if(message !== undefined){
@@ -186,9 +185,9 @@ module.exports = class DEBUG {
    *
    * @param message optional message to display with function end marker
    */
-  functionEnd(message, functionName) {
+   functionEnd(message, functionName) {
 
-    _updateContext(null, functionName);
+    _updateContext(functionName);
 
     let msg = "";
     if(message !== undefined){
@@ -204,9 +203,9 @@ module.exports = class DEBUG {
    *
    * @param msg message to display to console as trace information
    */
-  trace(msg, functionName) {
+   trace(msg, functionName) {
 
-    _updateContext(null, functionName);
+    _updateContext(functionName);
 
     let formattedMessage = _formatMessage(msg);
     console.info(formattedMessage);
@@ -218,9 +217,9 @@ module.exports = class DEBUG {
    * @param obj object to dump to console
    * @param label optional string label to display with object dump
    */
-  dumpObject(obj, label, functionName){
+   dumpObject(obj, label, functionName){
 
-    _updateContext(null, functionName);
+    _updateContext(functionName);
 
     let otype = typeof(obj)
 
