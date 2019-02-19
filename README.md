@@ -170,27 +170,20 @@ $ git clone https://github.com/mrutkows/openwhisk-knative-build.git
 Use the following commands to generate base64 encoded values of your Docker Hub **username** and **password** required to register a new secret in Kubernetes.
 
 ```
+$ export DOCKERHUB_USERNAME_PLAIN_TEXT=<your docker hub username>
+$ export DOCKERHUB_PASSWORD_PLAIN_TEXT=<your docker hub password>
+
 $ export DOCKERHUB_USERNAME_BASE64_ENCODED=`echo -n "${DOCKERHUB_USERNAME_PLAIN_TEXT}" | base64 -b 0`
 # make sure that DOCKERHUB_USERNAME_BASE64_ENCODEDE is set to something similar to abcqWeRTy2gZApB==
+
 $ export DOCKERHUB_PASSWORD_BASE64_ENCODED=`echo -n "${DOCKERHUB_PASSWORD_PLAIN_TEXT}" | base64 -b 0`
 # make sure that DOCKERHUB_PASSWORD_BASE64_ENCODED is set to something similar to t80szzToPshrpDr3sdMn==
 ```
 
-On your local system, copy the file **docker-secrets.yaml.tmpl** to **docker-secrets.yaml** and replace the **username** and **password** values with the base64 encoded versions of your Docker Hub username and password.
+On your local system, copy the file [docker-secret.yaml.tmpl](docker-secret.yaml.tmpl) to `docker-secrets.yaml` and replace the **username** and **password** values with the base64 encoded versions of your Docker Hub username and password using following `sed` command:
 
 ```
-apiVersion: v1
-kind: Secret
-metadata:
-    name: dockerhub-user-pass 
-    annotations:
-        build.knative.dev/docker-0: https://index.docker.io/v1/
-type: kubernetes.io/basic-auth
-data:
-    # use `echo -n "username" | base64 -b 0` to generate this string
-    username: ${DOCKERHUB_USERNAME_BASE64_ENCODED}
-    # use `echo -n "password" | base64 -b 0` to generate this string
-    password: ${DOCKERHUB_PASSWORD_BASE64_ENCODED}
+sed -e 's/${DOCKERHUB_USERNAME_BASE64_ENCODED}/'"$DOCKERHUB_USERNAME_BASE64_ENCODED"'/' -e 's/${DOCKERHUB_PASSWORD_BASE64_ENCODED}/'"$DOCKERHUB_PASSWORD_BASE64_ENCODED"'/' docker-secret.yaml.tmpl > docker-secret.yaml
 ```
 
 Apply the Secret resource manifest for Docker Hub:
