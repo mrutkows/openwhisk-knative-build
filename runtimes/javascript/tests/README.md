@@ -42,14 +42,14 @@
       <td><sub><a href="helloworldwithparams/build.yaml.tmpl">build.yaml.tmpl</a></sub></td>
       <td><sub><a href="helloworldwithparams/service.yaml.tmpl">service-helloworld.yaml</a></sub></td>
       <td><sub><a href="helloworldwithparams/init-data-helloworld.json">init-data-helloworld.json</a></sub></td>
-      <td><sub>A simple "Hello world" function with NAME and PLACE parameters.</sub></td>
+      <td><sub>A simple "Hello world" function with NAME and PLACE parameters passed via params JSON object.</sub></td>
     </tr>
     <tr align="left" valign="top">
-      <td><sub><a href="">TBD</a></sub></td>
-      <td><sub><a href="XXX/build.yaml.tmpl">build.yaml.tmpl</a></sub></td>
-      <td><sub><a href="XXX/service.yaml.tmpl">service.yaml.tmpl</a></sub></td>
-      <td><sub><a href="XXX/init-data-YYY.jsao">init-data-x.yaml</a></sub></td>
-      <td><sub>TBD</sub></td>      
+      <td><sub><a href="helloworldwithparamsfromenv">helloworldwithparamsfromenv</a></sub></td>
+      <td><sub><a href="helloworldwithparamsfromenv/build.yaml.tmpl">build.yaml.tmpl</a></sub></td>
+      <td><sub><a href="helloworldwithparamsfromenv/service.yaml.tmpl">service-helloworld.yaml</a></sub></td>
+      <td><sub><a href="helloworldwithparamsfromenv/init-data-helloworld.json">init-data-helloworld.json</a></sub></td>
+      <td><sub>A simple "Hello world" function with NAME and PLACE parameters avail. from NodeJS as process environment variables.  </sub></td>
     </tr>
   </tbody>
 </table>   
