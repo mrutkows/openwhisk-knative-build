@@ -234,7 +234,7 @@ Now that you have built the OpenWhisk NodeJS runtime image with the `helloworld`
 You will need to configure the Service template to point to the Docker Hub repo. where your Knative OpenWhisk runtime (with the Hello World function) will be "pulled" from.
 
 To do this, 
-- Copy [service.yaml.tmpl.yaml](tests/helloworld/service.yaml.tmpl) to `service.yaml`.
+- Copy [service.yaml.tmpl](tests/helloworld/service.yaml.tmpl) to `service.yaml`.
 - Replace ```${DOCKER_USERNAME}``` with your own Docker username in `service.yaml`.
 
 As described for 'build.yaml.tmpl', you MAY set an environment variable and use ```sed``` to replace the ```${DOCKER_USERNAME}``` within any of the test's Kubernetes Build YAML files as follows:
