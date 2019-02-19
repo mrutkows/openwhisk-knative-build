@@ -45,7 +45,7 @@ Under the Docker Desktop menu select "**Preferences**"->"**Advanced**" and set t
 - [x] **Memory: 8.0 GiB**
 - [x] **Swap: 1.0 GiB**
 
-Under the Docker Desktop **Kubernetes** tab, please assure that Kubernetes is **enabled** and running.`
+Under the Docker Desktop **Kubernetes** tab, please assure that Kubernetes is **enabled** and running.
 
 ### Verify Kubernetes Installation
 
