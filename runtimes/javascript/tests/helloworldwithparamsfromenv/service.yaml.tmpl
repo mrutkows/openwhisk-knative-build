@@ -10,3 +10,8 @@ spec:
         spec:
           container:
             image: docker.io/${DOCKER_USERNAME}/nodejs-10-helloworld-with-params
+            env:
+            - name: NAME
+              value: Bob
+            - name: PLACE
+              value: Italy

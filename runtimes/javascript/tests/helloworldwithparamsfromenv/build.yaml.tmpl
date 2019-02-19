@@ -20,4 +20,4 @@ spec:
       - name: OW_ACTION_NAME
         value: "nodejs-helloworld-with-params"
       - name: OW_ACTION_CODE
-        value: "function main() {return {payload: 'Hello ' + params.name + ' from ' + params.place + '!'};}"
+        value: "function main() {return {payload: 'Hello ' + process.env.NAME + ' from ' + process.env.PLACE + '!'};}"

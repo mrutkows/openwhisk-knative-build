@@ -76,29 +76,22 @@ if (targetPlatform === runtime_platform.openwhisk ) {
             var main = process.env.__OW_ACTION_MAIN;
             var code = process.env.__OW_ACTION_CODE;
             var binary = JSON.parse(process.env.__OW_ACTION_BINARY);
-            var name = process.env.__OW_ACTION_NAME;
 
-            if (req.query.value) {
-                if (req.query.value.main && typeof req.query.value.main === 'string') {
-                    main = req.query.value.main
+            if (req.body.value) {
+                if (req.body.value.main && typeof req.body.value.main === 'string') {
+                    main = req.body.value.main
                 }
-                if (req.query.value.code && typeof req.query.value.code === 'string') {
-                    code = req.query.value.code
+                if (req.body.value.code && typeof req.body.value.code === 'string') {
+                    code = req.body.value.code
                 }
-                if (req.query.value.binary && typeof req.query.value.binary === "boolean") {
-                    main = req.query.value.binary
-                }
-                if (req.query.value.name && typeof req.query.value.name === "string") {
-                    name = req.query.value.name
+                if (req.body.value.binary && typeof req.body.value.binary === "boolean") {
+                    main = req.body.value.binary
                 }
             }
 
-            req.body.value = {
-                main: main,
-                code: code,
-                binary: binary,
-                name: name
-            };
+            req.body.value.main = main;
+            req.body.value.code = code;
+            req.body.value.binary = binary;
 
             service.initCode(req).then(function () {
                 service.runCode(req).then(function (result) {
