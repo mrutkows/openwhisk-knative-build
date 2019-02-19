@@ -84,7 +84,7 @@ buildtemplate.build.knative.dev/openwhisk-nodejs-runtime created
 #### Verify BuildTemplate
 
 ```
-$ kubectl get buildtemplate -o yaml
+$ kubectl get buildtemplate
 NAME                       AGE
 openwhisk-nodejs-runtime   2h
 ```
