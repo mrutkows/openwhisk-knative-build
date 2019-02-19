@@ -180,7 +180,7 @@ For a complete listing of testcases, please view the [README](tests/README.md) i
 You will need to configure the build template to point to the Docker Hub repo. you wish the image to be "pushed" to once built.
 
 To do this, 
-- Copy [build.yaml.tmpl.yaml](tests/helloworld/build.yaml.tmpl) to `build.yaml`.
+- Copy [build.yaml.tmpl](tests/helloworld/build.yaml.tmpl) to `build.yaml`.
 - Replace ```${DOCKER_USERNAME}``` with your own Docker username in `build.yaml`.
 
 If you wish to run repeated tests you MAY set an environment variable and use ```sed``` to replace the ```${DOCKER_USERNAME}``` within any of the test's Kubernetes Build YAML files as follows:
@@ -268,5 +268,3 @@ spec:
 ```bash
 kubectl apply -f service.yaml
 ```
-
-## 
