@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-var path = require('path');
 
 //const FG_RED     = "\x1b[31m";
 //const FG_GREEN   = "\x1b[32m";
@@ -25,11 +24,9 @@ const FG_CYAN    = "\x1b[36m";
 const FG_LTGRAY  = "\x1b[37m";
 //const FG_WHITE   = "\x1b[97m";
 
-//const RESET      = "\e[0m";
-//const FG_INFO    = FG_CYAN;
+//const FG_INFO    = FG_LTGRAY;;
 //const FG_WARN    = FG_YELLOW;
 //const FG_ERROR   = FG_RED;
-//const FG_LOG     = FG_LTGRAY;
 
 let config = {
   prefixFGColor: FG_CYAN,
@@ -56,8 +53,10 @@ function _getTimeFormatted(){
 /**
  * Formats and colorizes the prefix of the message consisting of the:
  *   [moduleName] [functionName]()
+ *
+ * @param color optional (non-default) color for the prefix string
  */
-function _formatMessagePrefix(functionName, color){
+function _formatMessagePrefix(color){
 
   let prefixColor = config.prefixFGColor;
 
@@ -67,15 +66,8 @@ function _formatMessagePrefix(functionName, color){
     prefixColor = color;
   }
 
-  let prefix = prefixColor + "[" + this.moduleName + "] ";
+  let prefix = prefixColor + "[" + this.moduleInfo + "]["+this.functionName+"()] ";
 
-  if(functionName !== undefined) {
-    prefix += functionName + "(): ";
-  }
-  else {
-    let tmpFxName = "anonymous";
-    prefix += tmpFxName + "(): ";
-  }
   return prefix;
 
 }
@@ -83,6 +75,8 @@ function _formatMessagePrefix(functionName, color){
 /**
  * Formats and colorizes the postfix of the message consisting of the:
  *   [(formattedTime)]
+ *
+ * @param color optional (non-default) color for the prefix string
  */
 function _formatMessagePostfix(color){
 
@@ -99,8 +93,11 @@ function _formatMessagePostfix(color){
 
 /**
  * Formats and colorizes the body of the message.
+ *
+ * @param message that comprises the body of the output
+ * @param color optional (non-default) color for the prefix string
  */
-function _formatBody(msg, color){
+function _formatBody(message, color){
 
   let bodyColor = config.bodyFGColor;
 
@@ -109,162 +106,142 @@ function _formatBody(msg, color){
   if(color !== undefined)
     bodyColor = color;
 
-  return bodyColor + msg;
+  return bodyColor + message;
 }
 
 /**
  * Formats the entirety of the message comprised of the message prefix + body + postfix.
+ *
+ * @param message that comprises the body of the formatted output
+ * @param functionName (optional) name of the function; typically used to better
+ * identify anon. functions.
  */
-function _formatMessage(msg, functionName){
+function _formatMessage(message, functionName){
   // Reset to default color at end of formatted message
-  let message = _formatMessagePrefix(functionName) + _formatBody(msg) + _formatMessagePostfix() + config.defaultFGColor;
-  return message;
+  let fmsg =
+      _formatMessagePrefix(functionName) +
+      _formatBody(message) +
+      _formatMessagePostfix() + config.defaultFGColor;
+  return fmsg;
 }
 
-function _updateCallingModuleName(callerModule){
-
-    if( callerModule &&
-        typeof(callerModule) !== 'undefined' &&
-        typeof(callerModule) === 'object' &&
-        typeof(callerModule.filename) !== 'undefined') {
-
-      // EXPLICIT approach (Module object provided)
-      this.moduleName = path.basename(callerModule.filename, '.js');
-
-    } else {
-      // IMPLICIT approach (derive from callee frame)
-      this.moduleName = path.basename(module.parent.filename, '.js');
-    }
-}
-
-function _updateCallingFunctionName(callee, functionLabel){
+/**
+ * Initialize the debug context including:
+ * - Calling module
+ * - Calling function (if anonymous, identify by signature)
+ *
+ * @param callerFunctionLabel (optional) label for the function (or block) to use
+ *  instead of pulling from the call stack.  Typically used to identify anon. functions
+ *  or blocks
+ */
+function _updateContext(callerFunctionLabel){
 
   // if explicit label provided, use it...
-  let fxName = functionLabel;
+  this.functionName = callerFunctionLabel;
 
-  if(typeof(fxName) == 'undefined'){
+  if(typeof(this.functionName) == 'undefined'){
 
-    if( typeof(callee) !== 'undefined' &&
-        typeof(callee.caller) !== 'undefined' ) {
-      fxName = callee.caller.name;
-    } else {
-      fxName = 'unknown';
+    try{
+      let obj = {};
+
+      Error.stackTraceLimit = 2;
+      Error.captureStackTrace(obj, _updateContext);
+
+      let fullStackInfo = obj.stack.split(")\n");
+      let rawFunctionInfo = fullStackInfo[1];
+      let entryInfo = rawFunctionInfo.split("at ")[1];
+      let fm = entryInfo.split(" (");
+      this.functionName = fm[0];
+      this.fullModuleInfo = fm[1];
+      this.moduleInfo =  this.fullModuleInfo.substring( this.fullModuleInfo.lastIndexOf("/") +1);
+
+    } catch(e){
+      console.error("Unable to get stack trace: " + e.message);
     }
   }
-
-  this.functionName = fxName;
 }
 
-/*
- * Initialize the debug context including:
- *
- * - Calling module
- * - Calling module function (if anonymous, identify by signature)
- */
-function _updateContext(callee, callerModule, callerFunctionLabel){
+module.exports = class DEBUG {
 
-  // Update: functionName
-  _updateCallingFunctionName(callee,callerFunctionLabel);
-  _updateCallingModuleName(callerModule);
-}
-
-module.exports = function(requiringModule) {
-
-  // This module is being require'd from a module, record its info. in our context
-  _updateContext(arguments.callee, requiringModule);
-
-  // TODO: NOTE: After we read the module.filename, we MUST force the module loader to remove the
-  // module object from its cache to force it to update "module.parent" on next "require".
-  //delete require.cache[__filename];
+  constructor() {
+    // Empty constructor
+  }
 
   /**
-   * moduleStart
+   * Used to mark the start of a function block (i.e., via console.info())
    *
-   * @param msg optional message to display with module start information
+   * @param message (optional) message displayed with function start marker
+   * @param functionName (optional) name of the function; typically used to better
+   * identify anon. functions.
    */
-  this.moduleStart = function(msg) {
+  functionStart(message, functionName) {
 
-    _updateContext(arguments.callee);
+    _updateContext(functionName);
+
+    let msg = "";
+    if(message !== undefined){
+      msg = message;
+    }
+
+    let formattedMessage = _formatMessage( config.functionStartMarker + msg );
+    console.info(formattedMessage);
+  };
+
+  /**
+   * Used to mark the end of a function block (i.e., console.info())
+   *
+   * @param message (optional) message displayed with function end marker
+   * @param functionName (optional) name of the function; typically used to better
+   * identify anon. functions.
+   */
+   functionEnd(message, functionName) {
+
+    _updateContext(functionName);
+
+    let msg = "";
+    if(message !== undefined){
+      msg = message;
+    }
+
+    let formattedMessage = _formatMessage( config.functionEndMarker + msg );
+    console.info(formattedMessage);
+  };
+
+  /**
+   * Used to output informational message strings (i.e., console.info())
+   *
+   * @param msg message to display to console as trace information
+   * @param functionName (optional) name of the function; typically used to better
+   * identify anon. functions.
+   */
+   trace(msg, functionName) {
+
+    _updateContext(functionName);
 
     let formattedMessage = _formatMessage(msg);
     console.info(formattedMessage);
   };
 
   /**
-   * functionStart
+   * Used to output the type and contents of Javascript types and Objects
+   * This method attempts to display Objects as JSON strings where cyclical references
+   * do not occur; otherwise, it attempts to display a 1st level (shallow) contents
+   * of the Object.
    *
-   * @param message optional message to display with function start marker
-   */
-  this.functionStart = function(message, functionName) {
-
-    _updateContext(arguments.callee, null, functionName);
-
-    let msg = "";
-    if(message !== undefined){
-      msg = message;
-    }
-
-    let formattedMessage = _formatMessage( config.functionStartMarker + msg, this.functionName );
-    console.info(formattedMessage);
-  };
-
-  /**
-   * functionEnd
-   *
-   * @param message optional message to display with function end marker
-   */
-  this.functionEnd = function(message, functionName) {
-
-    _updateContext(arguments.callee, null, functionName);
-
-    let msg = "";
-    if(message !== undefined){
-      msg = message;
-    }
-
-    let formattedMessage = _formatMessage( config.functionEndMarker + msg, this.functionName  );
-    console.info(formattedMessage);
-  };
-
-  /**
-   * functionEndError
-   *
-   * @param optionalMessage optional message to display with function end marker
-   */
-  // this.functionEndError = function(optionalMessage, error, functionName) {
-  // };
-
-  /**
-   * trace
-   *
-   * @param msg message to display to console as trace information
-   */
-  this.trace = function(msg, functionName) {
-
-    _updateContext(arguments.callee, null, functionName);
-
-    let formattedMessage = _formatMessage(msg, this.functionName);
-    console.info(formattedMessage);
-  };
-
-  /**
-   * dumpObject
-   *
-   * @param obj object to dump to console
+   * @param obj Javascript Object (or type) to dump its information to console.info()
    * @param label optional string label to display with object dump
    */
-  this.dumpObject = function(obj, label, functionName){
+   dumpObject(obj, label, functionName){
 
-    _updateContext(arguments.callee, null, functionName);
+    _updateContext(functionName);
 
-    let otype = typeof(obj)
+    let otype = typeof(obj);
 
     if( otype !== "undefined") {
 
       try{
         let jsonFormatted = JSON.stringify(obj,null,4);
-        let formattedMessage = _formatMessage("[" + label + " (" + otype + ")] = "+ jsonFormatted,
-            this.functionName);
+        let formattedMessage = _formatMessage("[" + label + " (" + otype + ")] = "+ jsonFormatted);
         console.info(formattedMessage);
       } catch (e) {
 
@@ -295,5 +272,4 @@ module.exports = function(requiringModule) {
 
   };
 
-  return this;
 };

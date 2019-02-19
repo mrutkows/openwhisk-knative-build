@@ -15,7 +15,8 @@
  * limitations under the License.
  */
 
-var DEBUG = require('./utils/debug')(module);
+var dbg = require('./utils/debug');
+var DEBUG = new dbg();
 
 /**
  * Object which encapsulates a first-class function, the user code for
