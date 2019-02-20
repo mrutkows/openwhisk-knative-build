@@ -1,7 +1,7 @@
 apiVersion: build.knative.dev/v1alpha1
 kind: Build
 metadata:
-  name: nodejs-10-helloworld-with-params
+  name: nodejs-10-helloworld-with-params-from-env
 spec:
   serviceAccountName: openwhisk-runtime-builder
   source:
@@ -12,12 +12,12 @@ spec:
     name: openwhisk-nodejs-runtime
     arguments:
       - name: TARGET_IMAGE_NAME
-        value: "docker.io/${DOCKER_USERNAME}/nodejs-10-helloworld-with-params"
+        value: "docker.io/${DOCKER_USERNAME}/nodejs-10-helloworld-with-params-from-env"
       - name: DOCKERFILE
         value: "./runtimes/javascript/Dockerfile"
       - name: OW_RUNTIME_DEBUG
         value: "true"
       - name: OW_ACTION_NAME
-        value: "nodejs-helloworld-with-params"
+        value: "nodejs-helloworld-with-params-from-env"
       - name: OW_ACTION_CODE
         value: "function main() {return {payload: 'Hello ' + process.env.NAME + ' from ' + process.env.PLACE + '!'};}"
