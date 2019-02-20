@@ -225,7 +225,9 @@ spec:
 kubectl apply -f build.yaml
 ```
 
-This creates a pod with a NodeJS runtime and all the action metadata (action code, main function name, etc) integrated into the container image. If for any reason you see a failure with the pod, we can troubleshoot the deployment with `kubectl get pods`, `kubectl logs` and `kubectl exec` such as:
+This creates a pod with a NodeJS runtime and all the action metadata (action code, main function name, etc) integrated into the container image. If for any reason there is a failure creating the pod, we can troubleshoot the deployment with:
+
+#### `kubectl get pods`
 
 ```
 kubectl get pods <build-pod-name> -o yaml
@@ -237,6 +239,8 @@ Which lists the containers and their status under `initContainerStatuses`:
 - build-step-git-source-0
 - build-step-add-ow-env-to-dockerfile
 - build-step-build-openwhisk-nodejs-runtime
+
+#### `kubectl logs`
 
 Now, the logs of each of these build steps (containers) can be retrieved using:
 
@@ -251,6 +255,8 @@ kubectl logs nodejs-10-helloworld-pod-71d4d2 -c build-step-build-openwhisk-nodej
 INFO[0007] Downloading base image node:10.15.0-stretch
 error building image: getting stage builder for stage 0: Get https://index.docker.io/v2/: net/http: TLS handshake timeout
 ```
+
+#### `kubectl exec`
 
 And, we can get to a shell in any of these containers with:
 
