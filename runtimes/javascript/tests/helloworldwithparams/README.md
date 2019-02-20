@@ -48,5 +48,5 @@ kubectl apply -f service.yaml
 ### Invoke / endpoint on the Service
 
 ```
-curl -H "Host: nodejs-10-helloworld-with-params.default.example.com" -d '{"value": {"name": "Joe", "place": "TX"}}' -H "Content-Type: application/json" http://localhost/
+curl -H "Host: nodejs-helloworld-with-params.default.example.com" -d '{"value": {"name": "Joe", "place": "TX"}}' -H "Content-Type: application/json" http://localhost/
 ```
