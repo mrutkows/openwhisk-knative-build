@@ -17,7 +17,7 @@
 #
 -->
 
-# Hello World Test with Params for OpenWhisk NodeJS Runtime using Knative
+# Hello World with Params Test for OpenWhisk NodeJS Runtime using Knative
 
 # Running the Test
 
