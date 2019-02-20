@@ -17,7 +17,7 @@
 #
 -->
 
-# Hello World Test for OpenWhisk NodeJS Runtime using Knative
+# Hello World with Params from Env. Test for OpenWhisk NodeJS Runtime using Knative
 
 # Running the Test
 
@@ -48,5 +48,5 @@ kubectl apply -f service.yaml
 ### Invoke / endpoint on the Service
 
 ```
-curl -H "Host: nodejs-10-helloworldw-with-params-from-env.default.example.com" -X POST http://localhost/
+curl -H "Host: nodejs-10-helloworld-with-params-from-env.default.example.com" -X POST http://localhost/
 ```
