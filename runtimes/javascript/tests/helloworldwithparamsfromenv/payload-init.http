@@ -1,3 +1,6 @@
+POST http://localhost:8080/ HTTP/1.1
+content-type: application/json
+
 { 
     "value": { 
         "name" : "nodejs-helloworld-with-params-from-env",
@@ -6,3 +9,5 @@
         "code" : "function main() {return {payload: 'Hello ' + process.env.NAME + ' from ' + process.env.PLACE +  '!'};}"
     }
 }
+
+###
