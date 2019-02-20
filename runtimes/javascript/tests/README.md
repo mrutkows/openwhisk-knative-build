@@ -58,16 +58,41 @@
 
 This is the typical process for running each of the tests under this directory.
 
+### Pre-requisite
+
+```
+kubectl get buildtemplate
+NAME                       CREATED AT
+openwhisk-nodejs-runtime   10m
+```
+
 ### Configure and Deploy Build YAML 
 
+```
+export DOCKER_USERNAME="myusername"
+sed 's/${DOCKER_USERNAME}/'"$DOCKER_USERNAME"'/' build.yaml.tmpl > build.yaml
+kubectl apply -f build.yaml
+```
 
 ### Configure and Deploy Service YAML
 
+```
+export DOCKER_USERNAME="myusername"
+sed 's/${DOCKER_USERNAME}/'"$DOCKER_USERNAME"'/' service.yaml.tmpl > service.yaml
+kubectl apply -f service.yaml
+```
 
-### Invoke /init endpoint on the Service
+### Invoke / endpoint on the Service
 
+```
+curl -H "Host: <hostname>" -X POST http://localhost/
+```
 
-### Invoke the /run endpoint on the Service
+OR
+
+```
+curl -H "Host: <hostname>" -d '{"value": {"name": "Joe", "place": "TX"}}' -H "Content-Type: application/json" http://localhost/
+```
 
 
 ## Runtime creation & deletion
