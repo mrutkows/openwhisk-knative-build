@@ -48,5 +48,5 @@ kubectl apply -f service.yaml
 ### Invoke / endpoint on the Service
 
 ```
-curl -H "Host: nodejs-10-helloworld-with-params-from-env.default.example.com" -X POST http://localhost/
+curl -H "Host: nodejs-helloworld-with-params-from-env.default.example.com" -X POST http://localhost/
 ```
