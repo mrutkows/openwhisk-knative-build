@@ -23,6 +23,7 @@
 docker-secret.yaml
 
 # Kubernetes ServiceAccount (customized with username)
+build.yaml
 service.yaml
 
 # NodeJS
