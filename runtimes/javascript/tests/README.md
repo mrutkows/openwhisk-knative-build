@@ -127,7 +127,36 @@ or with request data and its ```Content-Type```:
 ```
 curl -H "Host: <hostname>" -d "@<request-run-data-filename>" -H "Content-Type: <content-type>" -X POST http://localhost/run
 ```
+# Troubleshooting
 
+## Pod will not Terminate
+
+In some cases, you may need to force the pod to be deleted when the normal delete shown below does not work.
+```
+# Normal service delete
+kubectl delete -f service.yaml
+```
+
+you will see something like the following for a long period of time:
+```
+$ kubectl get pods --namespace default
+
+NAME                                                  READY   STATUS      RESTARTS   AGE
+nodejs-helloworld-00001-deployment-78c6bfbf4c-8cgtd   2/3     Terminating  0         81s
+```
+
+In this case, you can force the pod with your service to delete as follows:
+```
+kubectl delete pod nodejs-helloworld-00001-deployment-78c6bfbf4c-8cgtd --grace-period=0 --force
+```
+
+Also, be sure your service is completely deleted from the system:
+```
+kubectl delete -f service.yaml
+```
+
+<!--
 ## Runtime creation & deletion
 
 Prior to starting each test, a fresh Runtime container is required since (by default) each can only be initialized once (i.e., /init entrypoint called once with a single function source code).  Conversely, the runtime once run with a test needs to be deleted for the next test. Each test indicates which Service YAML you need to "apply" or "delete" to assure a fresh runtime.
+-->
