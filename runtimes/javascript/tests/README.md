@@ -82,18 +82,43 @@ sed 's/${DOCKER_USERNAME}/'"$DOCKER_USERNAME"'/' service.yaml.tmpl > service.yam
 kubectl apply -f service.yaml
 ```
 
-### Invoke / endpoint on the Service
+## Running the Test
+
+Depending on the value you set in [buildtemplate.yaml](../buildtemplate.yaml) for the ```OW_RUNTIME_PLATFORM``` parameter, you will need to invoke different endpoints to execute the test.
+
+### Running with OW_RUNTIME_PLATFORM set to "knative"
+
+#### Invoke '/' endpoint on the Service
+
+If your function requires no input data on the request:
 
 ```
 curl -H "Host: <hostname>" -X POST http://localhost/
 ```
 
-OR
+otherwise, you can supply the request data and ```Content-Type``` on the command. For example, you can pass in JSON data to your function:
 
 ```
 curl -H "Host: <hostname>" -d '{"value": {"name": "Joe", "place": "TX"}}' -H "Content-Type: application/json" http://localhost/
 ```
 
+### Running with OW_RUNTIME_PLATFORM set to "openwhisk"
+
+#### Initialize the runtime
+
+Initialize the runtime with the function and other configuration data using the ```/init``` endpoint.
+
+```
+curl -H "Host: <hostname>" -d "@<json-init-data-filename>.json" -H "Content-Type: application/json" http://localhost/init
+```
+
+#### Run the function
+
+Execute the function using the ```/run``` endpoint.
+
+```
+curl -H "Host: <hostname>" -H "Content-Type: <content-type>" -X POST http://localhost/run
+```
 
 ## Runtime creation & deletion
 
