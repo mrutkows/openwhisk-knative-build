@@ -109,15 +109,23 @@ curl -H "Host: <hostname>" -d '{"value": {"name": "Joe", "place": "TX"}}' -H "Co
 Initialize the runtime with the function and other configuration data using the ```/init``` endpoint.
 
 ```
-curl -H "Host: <hostname>" -d "@<json-init-data-filename>.json" -H "Content-Type: application/json" http://localhost/init
+curl -H "Host: <hostname>" -d "@<request-init-data-filename>.json" -H "Content-Type: application/json" http://localhost/init
 ```
 
 #### Run the function
 
 Execute the function using the ```/run``` endpoint.
 
+with no request data:
+
 ```
-curl -H "Host: <hostname>" -H "Content-Type: <content-type>" -X POST http://localhost/run
+curl -H "Host: <hostname>" -X POST http://localhost/run
+```
+
+or with request data and its ```Content-Type```:
+
+```
+curl -H "Host: <hostname>" -d "@<request-run-data-filename>" -H "Content-Type: <content-type>" -X POST http://localhost/run
 ```
 
 ## Runtime creation & deletion
