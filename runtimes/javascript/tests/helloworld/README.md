@@ -45,17 +45,21 @@ sed 's/${DOCKER_USERNAME}/'"$DOCKER_USERNAME"'/' service.yaml.tmpl > service.yam
 kubectl apply -f service.yaml
 ```
 
-## Running with Platform "knative"
+## Running the Test
 
-### Invoke / endpoint on the Service
+Depending on the value you set in [buildtemplate.yaml](https://github.com/mrutkows/openwhisk-knative-build/blob/master/runtimes/javascript/buildtemplate.yaml) for the ```OW_RUNTIME_PLATFORM``` parameter, you will need to invoke different endpoints to execute the test.
+
+### Running with OW_RUNTIME_PLATFORM set to "knative"
+
+#### Invoke / endpoint on the Service
 
 ```
 curl -H "Host: nodejs-helloworld.default.example.com" -X POST http://localhost/
 ```
 
-## Running with Platform "openwhisk"
+### Running with OW_RUNTIME_PLATFORM set to "openwhisk"
 
-### Initialize the runtime
+#### Initialize the runtime
 
 Initialize the runtime with the function and other configuration data using the ```/init``` endpoint.
 
@@ -65,7 +69,7 @@ curl -H "Host: nodejs-helloworld.default.example.com" -d "@init-data-helloworld.
 {"OK":true}
 ```
 
-### Run the function
+#### Run the function
 
 Execute the function using the ```/run``` endpoint.
 
