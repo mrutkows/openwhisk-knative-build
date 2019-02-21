@@ -45,8 +45,32 @@ sed 's/${DOCKER_USERNAME}/'"$DOCKER_USERNAME"'/' service.yaml.tmpl > service.yam
 kubectl apply -f service.yaml
 ```
 
+## Running with Platform "knative"
+
 ### Invoke / endpoint on the Service
 
 ```
 curl -H "Host: nodejs-helloworld.default.example.com" -X POST http://localhost/
+```
+
+## Running with Platform "openwhisk"
+
+### Initialize the runtime
+
+Initialize the runtime with the function and other configuration data using the ```/init``` endpoint.
+
+```
+curl -H "Host: nodejs-helloworld.default.example.com" -d "@init-data-helloworld.json" -H "Content-Type: application/json" http://localhost/init
+
+{"OK":true}
+```
+
+### Run the function
+
+Execute the function using the ```/run``` endpoint.
+
+```
+curl -H "Host: nodejs-helloworld.default.example.com" -H "Content-Type: application/json" -X POST http://localhost/run
+
+{"payload":"Hello"};
 ```
