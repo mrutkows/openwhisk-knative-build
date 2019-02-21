@@ -47,7 +47,7 @@ kubectl apply -f service.yaml
 
 ## Running the Test
 
-Depending on the value you set in [buildtemplate.yaml](https://github.com/mrutkows/openwhisk-knative-build/blob/master/runtimes/javascript/buildtemplate.yaml) for the ```OW_RUNTIME_PLATFORM``` parameter, you will need to invoke different endpoints to execute the test.
+Depending on the value you set in [buildtemplate.yaml](../../buildtemplate.yaml) for the ```OW_RUNTIME_PLATFORM``` parameter, you will need to invoke different endpoints to execute the test.
 
 ### Running with OW_RUNTIME_PLATFORM set to "knative"
 
