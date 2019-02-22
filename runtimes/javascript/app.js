@@ -56,8 +56,13 @@ app.set('port', config.port);
 app.use(bodyParser.json({ limit: "48mb" }));
 
 // default to "openwhisk" behavior if not defined
-console.error("__OW_RUNTIME_PLATFORM is undefined; defaulting to 'openwhisk' ...");
-var targetPlatform = process.env.__OW_RUNTIME_PLATFORM || runtime_platform.openwhisk;
+
+var targetPlatform = process.env.__OW_RUNTIME_PLATFORM;
+
+if( typeof targetPlatform === 'undefined') {
+    console.error("__OW_RUNTIME_PLATFORM is undefined; defaulting to 'openwhisk' ...");
+    targetPlatform = runtime_platform.openwhisk;
+}
 
 // Register different endpoint handlers depending on target PLATFORM and its expected behavior
 if (targetPlatform === runtime_platform.openwhisk ) {
