@@ -15,55 +15,55 @@
  * limitations under the License.
  */
 
+var service = require('../src/service').getService(config);
+
+function preProcessRequest(req){
+
+    // If the function's INIT data is already placed in the process
+    // See if the request has passed in valid "init" data
+    // If so, then use it over any provided in the process (Container's) env. vars.
+    let body = req.body || {};
+    let message = body.value || {};
+    let env = process.env || {};
+
+    try{
+
+        // Set defaults to use INIT data not provided on the request
+        // Look first to the process (i.e., Container's) environment variables.
+        var main = (typeof env.__OW_ACTION_MAIN === 'undefined') ? "main" : env.__OW_ACTION_MAIN;
+        // TODO: Throw error if CODE is NOT defined!
+        var code = (typeof env.__OW_ACTION_CODE === 'undefined') ? "" : env.__OW_ACTION_CODE;
+        var binary = (typeof env.__OW_ACTION_BINARY === 'undefined') ? "false" : env.__OW_ACTION_BINARY;
+
+        if (message) {
+            if (message.main && typeof message.main === 'string') {
+                main = req.body.value.main
+            }
+            if (message.code && typeof message.code === 'string') {
+                code = req.body.value.code
+            }
+            if (message.binary && typeof req.body.value.binary === 'boolean') {
+                // TODO: Throw error if BINARY is not 'true' or 'false'
+                binary = req.body.value.binary
+            }
+        }
+
+        message.main = main;
+        message.code = code;
+        message.binary = binary;
+
+    } catch(e){
+        console.log(e);
+        // TODO
+        throw("Unable to initialize the runtime: " + e.message);
+    }
+}
+
 module.exports = class Platform {
 
-    constructor( platform, service ) {
-
-        this.service = service;
+    constructor( platform) {
         console.info("Platform: " + platform );
 
-    }
-
-    preProcessRequest(req){
-
-        // If the function's INIT data is already placed in the process
-        // See if the request has passed in valid "init" data
-        // If so, then use it over any provided in the process (Container's) env. vars.
-        let body = req.body || {};
-        let message = body.value || {};
-        let env = process.env || {};
-
-        try{
-
-            // Set defaults to use INIT data not provided on the request
-            // Look first to the process (i.e., Container's) environment variables.
-            var main = (typeof env.__OW_ACTION_MAIN === 'undefined') ? "main" : env.__OW_ACTION_MAIN;
-            // TODO: Throw error if CODE is NOT defined!
-            var code = (typeof env.__OW_ACTION_CODE === 'undefined') ? "" : env.__OW_ACTION_CODE;
-            var binary = (typeof env.__OW_ACTION_BINARY === 'undefined') ? "false" : env.__OW_ACTION_BINARY;
-
-            if (message) {
-                if (message.main && typeof message.main === 'string') {
-                    main = req.body.value.main
-                }
-                if (message.code && typeof message.code === 'string') {
-                    code = req.body.value.code
-                }
-                if (message.binary && typeof req.body.value.binary === 'boolean') {
-                    // TODO: Throw error if BINARY is not 'true' or 'false'
-                    binary = req.body.value.binary
-                }
-            }
-
-            message.main = main;
-            message.code = code;
-            message.binary = binary;
-
-        } catch(e){
-            console.log(e);
-            // TODO
-            throw("Unable to initialize the runtime: " + e.message);
-        }
     }
 
     getRunHandler(){
@@ -71,17 +71,17 @@ module.exports = class Platform {
         return(function (req, res) {
             try {
 
-                this.preProcessRequest(req);
+                preProcessRequest(req);
 
-                this.service.initCode(req).then(function () {
-                    this.service.runCode(req).then(function (result) {
+                service.initCode(req).then(function () {
+                    service.runCode(req).then(function (result) {
                         res.status(result.code).json(result.response)
                     });
                 }).catch(function (error) {
                     console.error(error);
                     if (typeof error.code === 'number' && typeof error.response !== "undefined") {
                         if (error.code === 403) {
-                            this.service.runCode(req).then(function (result) {
+                            service.runCode(req).then(function (result) {
                                 res.status(result.code).json(result.response)
                             });
                         } else {
