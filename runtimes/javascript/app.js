@@ -51,20 +51,21 @@ app.set('port', config.port);
 
 /**
  * setup a middleware layer to restrict the request body size
- * this middlware is called every time a request is sent to the server
+ * this middleware is called every time a request is sent to the server
  */
 app.use(bodyParser.json({ limit: "48mb" }));
 
-// default to "openwhisk" behavior if not defined
-
+// identify the target Serverless platform
 var targetPlatform = process.env.__OW_RUNTIME_PLATFORM;
 
-if( typeof targetPlatform === 'undefined') {
+// default to "openwhisk" platform initialization if not defined
+if( typeof targetPlatform === "undefined") {
     console.error("__OW_RUNTIME_PLATFORM is undefined; defaulting to 'openwhisk' ...");
     targetPlatform = runtime_platform.openwhisk;
 }
 
-// Register different endpoint handlers depending on target PLATFORM and its expected behavior
+// Register different endpoint handlers depending on target PLATFORM and its expected behavior.
+// In addition, register request pre-processors and/or response post-processors as needed.
 if (targetPlatform === runtime_platform.openwhisk ) {
 
     app.post('/init', wrapEndpoint(service.initCode));
@@ -76,48 +77,11 @@ if (targetPlatform === runtime_platform.openwhisk ) {
     });
 
 } else if (targetPlatform === runtime_platform.knative) {
-    app.post('/', function (req, res) {
-        try {
-            var main = process.env.__OW_ACTION_MAIN;
-            var code = process.env.__OW_ACTION_CODE;
-            var binary = JSON.parse(process.env.__OW_ACTION_BINARY);
 
-            if (req.body.value) {
-                if (req.body.value.main && typeof req.body.value.main === 'string') {
-                    main = req.body.value.main
-                }
-                if (req.body.value.code && typeof req.body.value.code === 'string') {
-                    code = req.body.value.code
-                }
-                if (req.body.value.binary && typeof req.body.value.binary === "boolean") {
-                    main = req.body.value.binary
-                }
-            }
+    var platformFactory = require('./platform/platform.js');
 
-            req.body.value.main = main;
-            req.body.value.code = code;
-            req.body.value.binary = binary;
-
-            service.initCode(req).then(function () {
-                service.runCode(req).then(function (result) {
-                    res.status(result.code).json(result.response)
-                });
-            }).catch(function (error) {
-                console.error(error)
-                if (typeof error.code === 'number' && typeof error.response !== undefined) {
-                    if (error.code === 403) {
-                        service.runCode(req).then(function (result) {
-                            res.status(result.code).json(result.response)
-                        });
-                    } else {
-                        res.status(error.code).json(error.response)
-                    }
-                }
-            });
-        } catch (e) {
-            res.status(500).json({error: "internal error"})
-        }
-    });
+    platform = new platformFactory("knative");
+    app.post('/', platform.getRunHandler());
 } else {
     console.error("Environment variable '__OW_RUNTIME_PLATFORM' has an unrecognized value ("+targetPlatform+").");
 }

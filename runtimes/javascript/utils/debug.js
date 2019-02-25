@@ -270,6 +270,6 @@ module.exports = class DEBUG {
       console.info(formattedMessage);
     }
 
-  };
+  }
 
 };
