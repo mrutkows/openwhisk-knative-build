@@ -47,6 +47,8 @@ var app = express();
 var service = require('./src/service').getService(config);
 
 app.set('port', config.port);
+
+// TODO: test if we can/should use config via NodeJS Express "set" vs. passed on getService() method.
 app.set('test', config);
 
 /**
@@ -66,7 +68,7 @@ if( typeof targetPlatform === "undefined") {
 
 var platformFactory = require('./platform/platform.js');
 
-var platform = new platformFactory("knative");
+var platform = new platformFactory("knative", service, config);
 
 // Register different endpoint handlers depending on target PLATFORM and its expected behavior.
 // In addition, register request pre-processors and/or response post-processors as needed.
@@ -84,7 +86,7 @@ if (targetPlatform === runtime_platform.openwhisk ) {
 
 } else if (targetPlatform === runtime_platform.knative) {
 
-    app.post('/', platform.getRunHandler());
+    app.post('/', platform.run);
 
 } else {
     console.error("Environment variable '__OW_RUNTIME_PLATFORM' has an unrecognized value ("+targetPlatform+").");

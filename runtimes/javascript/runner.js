@@ -85,7 +85,7 @@ function NodeActionRunner() {
                     return Promise.reject(e);
                 }
             }).catch(function (error) {
-                DEBUG.functionEnd("ERROR: " + e.message, "init");
+                DEBUG.functionEnd("ERROR: " + error.message, "init");
                 return Promise.reject(error);
             });
         } else {

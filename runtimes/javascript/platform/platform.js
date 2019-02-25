@@ -15,9 +15,13 @@
  * limitations under the License.
  */
 
-var service = require('../src/service').getService(config);
+var dbg = require('../utils/debug');
+var DEBUG = new dbg();
+
+//var service = require('../src/service').getService(config);
 
 function preProcessRequest(req){
+    DEBUG.functionStart();
 
     // If the function's INIT data is already placed in the process
     // See if the request has passed in valid "init" data
@@ -33,7 +37,7 @@ function preProcessRequest(req){
         var main = (typeof env.__OW_ACTION_MAIN === 'undefined') ? "main" : env.__OW_ACTION_MAIN;
         // TODO: Throw error if CODE is NOT defined!
         var code = (typeof env.__OW_ACTION_CODE === 'undefined') ? "" : env.__OW_ACTION_CODE;
-        var binary = (typeof env.__OW_ACTION_BINARY === 'undefined') ? "false" : env.__OW_ACTION_BINARY;
+        var binary = (typeof env.__OW_ACTION_BINARY === 'undefined') ? false : env.__OW_ACTION_BINARY.toLowerCase() === "true";
 
         if (message) {
             if (message.main && typeof message.main === 'string') {
@@ -54,45 +58,56 @@ function preProcessRequest(req){
 
     } catch(e){
         console.log(e);
+        DEBUG.functionEnd("ERROR: " + e.message);
         // TODO
         throw("Unable to initialize the runtime: " + e.message);
     }
+
+    DEBUG.functionEnd();
 }
 
-module.exports = class Platform {
+function PlatformFactory(id, svc, cfg) {
 
-    constructor( platform) {
-        console.info("Platform: " + platform );
+    DEBUG.dumpObject(id, "Platform" );
+    DEBUG.dumpObject(svc, "Service" );
+    DEBUG.dumpObject(cfg, "Config" );
 
-    }
+    var platform = id;
+    var service = svc;
+    var config = cfg;
 
-    getRunHandler(){
+    this.run = function(req, res) {
 
-        return(function (req, res) {
-            try {
+        try {
 
-                preProcessRequest(req);
+            preProcessRequest(req);
 
-                service.initCode(req).then(function () {
-                    service.runCode(req).then(function (result) {
-                        res.status(result.code).json(result.response)
-                    });
-                }).catch(function (error) {
-                    console.error(error);
-                    if (typeof error.code === 'number' && typeof error.response !== "undefined") {
-                        if (error.code === 403) {
-                            service.runCode(req).then(function (result) {
-                                res.status(result.code).json(result.response)
-                            });
-                        } else {
-                            res.status(error.code).json(error.response)
-                        }
-                    }
+            service.initCode(req).then(function () {
+                service.runCode(req).then(function (result) {
+                    res.status(result.code).json(result.response)
                 });
-            } catch (e) {
-                res.status(500).json({error: "internal error"})
-            }
-        })
+            }).catch(function (error) {
+                console.error(error);
+                if (typeof error.code === 'number' && typeof error.response !== "undefined") {
+                    if (error.code === 403) {
+                        service.runCode(req).then(function (result) {
+                            res.status(result.code).json(result.response)
+                        });
+                    } else {
+                        res.status(error.code).json(error.response)
+                    }
+                }
+            });
+        } catch (e) {
+            res.status(500).json({error: "internal error"})
+        }
     }
 
 };
+
+
+// PlatformFactory.getService = function(config) {
+//     return new PlatformFactory(config);
+// };
+
+module.exports = PlatformFactory;

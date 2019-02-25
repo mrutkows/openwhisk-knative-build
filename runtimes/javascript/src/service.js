@@ -32,7 +32,7 @@ function NodeActionService(config) {
     var cfg = config;
     var status = Status.ready;
     var ignoreRunStatus = config.allowConcurrent === undefined ? false : config.allowConcurrent.toLowerCase() === "true";
-    var server1 = undefined;
+    var server = undefined;
     var userCodeRunner = undefined;
     DEBUG.trace("INIT: status=" + status);
     DEBUG.trace("INIT: ignoreRunStatus=" + ignoreRunStatus);
@@ -72,14 +72,14 @@ function NodeActionService(config) {
         DEBUG.trace("ignoreRunStatus="+ignoreRunStatus+", cfg="+ cfg);
         var self = this;
         var test = app.get('test');
-        server1 = app.listen(app.get('port'), function() {
-            var host = server1.address().address;
-            var port = server1.address().port;
+        server = app.listen(app.get('port'), function() {
+            var host = server.address().address;
+            var port = server.address().port;
             DEBUG.trace("host: " + host + "; port: " + port);
         });
         //This is required as http server will auto disconnect in 2 minutes, this to not auto disconnect at all
-        server1.timeout = 0;
-        DEBUG.dumpObject(server1, "server");
+        server.timeout = 0;
+        DEBUG.dumpObject(server, "server");
         DEBUG.functionEnd();
     };
 
