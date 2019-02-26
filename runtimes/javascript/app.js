@@ -66,10 +66,6 @@ if( typeof targetPlatform === "undefined") {
     targetPlatform = runtime_platform.openwhisk;
 }
 
-var platformFactory = require('./platform/platform.js');
-
-var platform = new platformFactory("knative", service, config);
-
 // Register different endpoint handlers depending on target PLATFORM and its expected behavior.
 // In addition, register request pre-processors and/or response post-processors as needed.
 if (targetPlatform === runtime_platform.openwhisk ) {
@@ -80,12 +76,13 @@ if (targetPlatform === runtime_platform.openwhisk ) {
     // TODO: this appears to be registered incorrectly "use" only takes 3 parameters (req, res, next)
     // BAD: app.use(function (err, req, res, next) {
     app.use(function (req, res, next) {
-        console.error(err.stack);
         res.status(500).json({error: "Bad request."});
     });
 
 } else if (targetPlatform === runtime_platform.knative) {
 
+    var platformFactory = require('./platform/platform.js');
+    var platform = new platformFactory("knative", service, config);
     app.post('/', platform.run);
 
 } else {
@@ -96,7 +93,7 @@ service.start(app);
 
 /**
  * Wraps an endpoint written to return a Promise into an express endpoint,
- * producing the appropriate HTTP response and closing it for all controlable
+ * producing the appropriate HTTP response and closing it for all controllable
  * failure modes.
  *
  * The expected signature for the promise value (both completed and failed)
