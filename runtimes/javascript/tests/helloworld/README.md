@@ -64,7 +64,7 @@ curl -H "Host: nodejs-helloworld.default.example.com" -X POST http://localhost/
 Initialize the runtime with the function and other configuration data using the ```/init``` endpoint.
 
 ```
-curl -H "Host: nodejs-helloworld.default.example.com" -d "@init-data-helloworld.json" -H "Content-Type: application/json" http://localhost/init
+curl -H "Host: nodejs-helloworld.default.example.com" -d "@data-openwhisk-init.json" -H "Content-Type: application/json" http://localhost/init
 
 {"OK":true}
 ```
@@ -74,7 +74,7 @@ curl -H "Host: nodejs-helloworld.default.example.com" -d "@init-data-helloworld.
 Execute the function using the ```/run``` endpoint.
 
 ```
-curl -H "Host: nodejs-helloworld.default.example.com" -H "Content-Type: application/json" -X POST http://localhost/run
+curl -H "Host: nodejs-helloworld.default.example.com" -d "@data-openwhisk-run.json" -H "Content-Type: application/json" -X POST http://localhost/run
 
 {"payload":"Hello"};
 ```
