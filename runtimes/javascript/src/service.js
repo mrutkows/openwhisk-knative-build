@@ -29,7 +29,6 @@ function NodeActionService(config) {
         stopped: 'stopped'
     };
 
-    var cfg = config;
     var status = Status.ready;
     var ignoreRunStatus = config.allowConcurrent === undefined ? false : config.allowConcurrent.toLowerCase() === "true";
     var server = undefined;
