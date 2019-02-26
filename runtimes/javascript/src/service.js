@@ -69,9 +69,6 @@ function NodeActionService(config) {
      */
     this.start = function start(app) {
         DEBUG.functionStart();
-        DEBUG.trace("ignoreRunStatus="+ignoreRunStatus+", cfg="+ cfg);
-        var self = this;
-        var test = app.get('test');
         server = app.listen(app.get('port'), function() {
             var host = server.address().address;
             var port = server.address().port;

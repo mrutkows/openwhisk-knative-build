@@ -1,6 +1,6 @@
 { 
     "value": { 
-        "name" : "nodejs-helloworld",
+        "__ow_action_name" : "nodejs-helloworld",
         "main" : "main", 
         "binary": false, 
         "code" : "function main() {return {payload: 'Hello World!'};}"
