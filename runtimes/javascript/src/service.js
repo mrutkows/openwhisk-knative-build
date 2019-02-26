@@ -68,7 +68,6 @@ function NodeActionService(config) {
      */
     this.start = function start(app) {
         DEBUG.functionStart();
-        var self = this;
         server = app.listen(app.get('port'), function() {
             var host = server.address().address;
             var port = server.address().port;

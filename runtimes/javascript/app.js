@@ -35,7 +35,6 @@ var runtime_platform = {
 var bodyParser = require('body-parser');
 var express    = require('express');
 
-
 /**
  * instantiate app as an instance of Express
  * i.e. app starts the server
@@ -49,75 +48,43 @@ var service = require('./src/service').getService(config);
 
 app.set('port', config.port);
 
+// TODO: test if we can/should use config via NodeJS Express "set" vs. passed on getService() method.
+app.set('test', config);
+
 /**
  * setup a middleware layer to restrict the request body size
- * this middlware is called every time a request is sent to the server
+ * this middleware is called every time a request is sent to the server
  */
 app.use(bodyParser.json({ limit: "48mb" }));
 
-// default to "openwhisk" behavior if not defined
-
+// identify the target Serverless platform
 var targetPlatform = process.env.__OW_RUNTIME_PLATFORM;
 
-if( typeof targetPlatform === 'undefined') {
+// default to "openwhisk" platform initialization if not defined
+if( typeof targetPlatform === "undefined") {
     console.error("__OW_RUNTIME_PLATFORM is undefined; defaulting to 'openwhisk' ...");
     targetPlatform = runtime_platform.openwhisk;
 }
 
-// Register different endpoint handlers depending on target PLATFORM and its expected behavior
+// Register different endpoint handlers depending on target PLATFORM and its expected behavior.
+// In addition, register request pre-processors and/or response post-processors as needed.
 if (targetPlatform === runtime_platform.openwhisk ) {
 
     app.post('/init', wrapEndpoint(service.initCode));
     app.post('/run', wrapEndpoint(service.runCode));
 
-    app.use(function (err, req, res, next) {
-        console.error(err.stack);
+    // TODO: this appears to be registered incorrectly "use" only takes 3 parameters (req, res, next)
+    // BAD: app.use(function (err, req, res, next) {
+    app.use(function (req, res, next) {
         res.status(500).json({error: "Bad request."});
     });
 
 } else if (targetPlatform === runtime_platform.knative) {
-    app.post('/', function (req, res) {
-        try {
-            var main = process.env.__OW_ACTION_MAIN;
-            var code = process.env.__OW_ACTION_CODE;
-            var binary = JSON.parse(process.env.__OW_ACTION_BINARY);
 
-            if (req.body.value) {
-                if (req.body.value.main && typeof req.body.value.main === 'string') {
-                    main = req.body.value.main
-                }
-                if (req.body.value.code && typeof req.body.value.code === 'string') {
-                    code = req.body.value.code
-                }
-                if (req.body.value.binary && typeof req.body.value.binary === "boolean") {
-                    main = req.body.value.binary
-                }
-            }
+    var platformFactory = require('./platform/platform.js');
+    var platform = new platformFactory("knative", service, config);
+    app.post('/', platform.run);
 
-            req.body.value.main = main;
-            req.body.value.code = code;
-            req.body.value.binary = binary;
-
-            service.initCode(req).then(function () {
-                service.runCode(req).then(function (result) {
-                    res.status(result.code).json(result.response)
-                });
-            }).catch(function (error) {
-                console.error(error)
-                if (typeof error.code === 'number' && typeof error.response !== undefined) {
-                    if (error.code === 403) {
-                        service.runCode(req).then(function (result) {
-                            res.status(result.code).json(result.response)
-                        });
-                    } else {
-                        res.status(error.code).json(error.response)
-                    }
-                }
-            });
-        } catch (e) {
-            res.status(500).json({error: "internal error"})
-        }
-    });
 } else {
     console.error("Environment variable '__OW_RUNTIME_PLATFORM' has an unrecognized value ("+targetPlatform+").");
 }
@@ -126,7 +93,7 @@ service.start(app);
 
 /**
  * Wraps an endpoint written to return a Promise into an express endpoint,
- * producing the appropriate HTTP response and closing it for all controlable
+ * producing the appropriate HTTP response and closing it for all controllable
  * failure modes.
  *
  * The expected signature for the promise value (both completed and failed)

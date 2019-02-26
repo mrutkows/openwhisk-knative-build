@@ -258,9 +258,9 @@ module.exports = class DEBUG {
           console.log("}");
 
         } catch(e2) {
-          console.error("[" + label + " (" + otype + ")] : " + e.message);
+          console.error("[" + label + " (" + otype + ")] : " + e2.message);
           let formattedMessage = _formatMessage(_ + "[" + label + " (" + otype + ")] : " +
-              e.message);
+              e2.message);
           console.error(formattedMessage);
         }
       }
@@ -270,6 +270,6 @@ module.exports = class DEBUG {
       console.info(formattedMessage);
     }
 
-  };
+  }
 
 };
