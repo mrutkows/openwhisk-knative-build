@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-//const FG_RED     = "\x1b[31m";
+const FG_RED     = "\x1b[31m";
 //const FG_GREEN   = "\x1b[32m";
 const FG_YELLOW  = "\x1b[33m";
 //const FG_BLUE    = "\x1b[34m";
@@ -136,29 +136,39 @@ function _formatMessage(message, functionName){
  */
 function _updateContext(callerFunctionLabel){
 
-  // if explicit label provided, use it...
-  this.functionName = callerFunctionLabel;
+  try{
+    let obj = {};
 
-  if(typeof(this.functionName) == 'undefined'){
+    Error.stackTraceLimit = 2;
+    Error.captureStackTrace(obj, _updateContext);
 
-    try{
-      let obj = {};
+    let fullStackInfo = obj.stack.split(")\n");
+    let rawFunctionInfo = fullStackInfo[1];
+    let entryInfo = rawFunctionInfo.split("at ")[1];
 
-      Error.stackTraceLimit = 2;
-      Error.captureStackTrace(obj, _updateContext);
-
-      let fullStackInfo = obj.stack.split(")\n");
-      let rawFunctionInfo = fullStackInfo[1];
-      let entryInfo = rawFunctionInfo.split("at ")[1];
+    // TODO: if there is no '(' separator, we have no function name; do not split
+    // e.g., value would look like: /openwhisk-knative-build/runtimes/javascript/src/service.js:180:19
+    if( entryInfo.indexOf(" (") !== -1) {
       let fm = entryInfo.split(" (");
       this.functionName = fm[0];
       this.fullModuleInfo = fm[1];
+    } else {
+      // assume the entry has the full module name and path (function is a anonymous)
+      this.functionName = "anonymous";
+      this.fullModuleInfo = entryInfo;
+    }
+
+    if( typeof this.fullModuleInfo !== "undefined")
       this.moduleInfo =  this.fullModuleInfo.substring( this.fullModuleInfo.lastIndexOf("/") +1);
 
-    } catch(e){
-      console.error("Unable to get stack trace: " + e.message);
-    }
+    // if explicit label provided, use it over one from stack trace...
+    if(typeof(callerFunctionLabel) !== 'undefined')
+      this.functionName = callerFunctionLabel;
+
+  } catch(e){
+    console.error("Unable to get stack trace: " + e.message);
   }
+
 }
 
 module.exports = class DEBUG {
@@ -270,6 +280,15 @@ module.exports = class DEBUG {
       console.info(formattedMessage);
     }
 
+  }
+
+  throw(label) {
+
+    _updateContext(label);
+
+    // intentionally throw an error and be clear to log this fact
+    let formattedMessage = _formatMessage(FG_RED + "[" + label + "] Intentionally throwing error." + FG_LTGRAY);
+    throw Error(formattedMessage);
   }
 
 };

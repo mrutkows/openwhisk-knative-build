@@ -69,25 +69,26 @@ if( typeof targetPlatform === "undefined") {
 // Register different endpoint handlers depending on target PLATFORM and its expected behavior.
 // In addition, register request pre-processors and/or response post-processors as needed.
 if (targetPlatform === runtime_platform.openwhisk ) {
-
     app.post('/init', wrapEndpoint(service.initCode));
     app.post('/run', wrapEndpoint(service.runCode));
-
-    // TODO: this appears to be registered incorrectly "use" only takes 3 parameters (req, res, next)
-    // BAD: app.use(function (err, req, res, next) {
-    app.use(function (req, res, next) {
-        res.status(500).json({error: "Bad request."});
-    });
-
 } else if (targetPlatform === runtime_platform.knative) {
-
     var platformFactory = require('./platform/platform.js');
     var platform = new platformFactory("knative", service, config);
     app.post('/', platform.run);
-
 } else {
     console.error("Environment variable '__OW_RUNTIME_PLATFORM' has an unrecognized value ("+targetPlatform+").");
 }
+
+// short-circuit any bad requests (invalid endpoints)
+app.use(function (req, res, next) {
+    res.status(500).json({error: "Bad request."});
+});
+
+// register a default error handler...
+app.use(function (err, req, res, next) {
+    console.log(err.stackTrace);
+    res.status(500).json({error: "Bad request."});
+});
 
 service.start(app);
 
@@ -109,11 +110,11 @@ function wrapEndpoint(ep) {
             ep(req).then(function (result) {
                 res.status(result.code).json(result.response);
             }).catch(function (error) {
+                DEBUG.functionEnd("invalid errored promise", JSON.stringify(error));
                 if (typeof error.code === "number" && typeof error.response !== "undefined") {
                     res.status(error.code).json(error.response);
                 } else {
                     console.error("[wrapEndpoint]", "invalid errored promise", JSON.stringify(error));
-                    DEBUG.functionEnd("invalid errored promise", JSON.stringify(error));
                     res.status(500).json({ error: "Internal error." });
                 }
             });
@@ -125,6 +126,6 @@ function wrapEndpoint(ep) {
             DEBUG.functionEnd("ERROR", e.message);
             res.status(500).json({ error: "Internal error (exception)." });
         }
-        DEBUG.functionEnd("", "wrapEndpoint");
     }
+    DEBUG.functionEnd(ep.name);
 }

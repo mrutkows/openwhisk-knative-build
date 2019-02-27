@@ -18,19 +18,15 @@
 var dbg = require('../utils/debug');
 var DEBUG = new dbg();
 
-//var service = require('../src/service').getService(config);
-
 function preProcessRequest(req){
     DEBUG.functionStart();
 
-    // If the function's INIT data is already placed in the process
-    // See if the request has passed in valid "init" data
-    // If so, then use it over any provided in the process (Container's) env. vars.
-    let body = req.body || {};
-    let message = body.value || {};
-    let env = process.env || {};
-
     try{
+        // If the function's INIT data is already placed in the process
+        // See if the request has passed in valid "init" data
+        let body = req.body || {};
+        let message = body.value || {};
+        let env = process.env || {};
 
         // Set defaults to use INIT data not provided on the request
         // Look first to the process (i.e., Container's) environment variables.
@@ -57,7 +53,7 @@ function preProcessRequest(req){
         message.binary = binary;
 
     } catch(e){
-        console.log(e);
+        console.error(e);
         DEBUG.functionEnd("ERROR: " + e.message);
         // TODO
         throw("Unable to initialize the runtime: " + e.message);
@@ -75,12 +71,14 @@ function PlatformFactory(id, svc, cfg) {
     var platform = id;
     var service = svc;
     var config = cfg;
+    var isInitialized = false;
 
     this.run = function(req, res) {
 
         try {
 
             preProcessRequest(req);
+            console.info("isInitialized="+isInitialized);
 
             service.initCode(req).then(function () {
                 service.runCode(req).then(function (result) {
@@ -88,14 +86,12 @@ function PlatformFactory(id, svc, cfg) {
                 });
             }).catch(function (error) {
                 console.error(error);
-                if (typeof error.code === 'number' && typeof error.response !== "undefined") {
-                    if (error.code === 403) {
-                        service.runCode(req).then(function (result) {
-                            res.status(result.code).json(result.response)
-                        });
-                    } else {
-                        res.status(error.code).json(error.response)
-                    }
+
+                if (typeof error.code === "number" && typeof error.response !== "undefined") {
+                    res.status(error.code).json(error.response);
+                } else {
+                    console.error("[wrapEndpoint]", "invalid errored promise", JSON.stringify(error));
+                    res.status(500).json({ error: "Internal error." });
                 }
             });
         } catch (e) {
