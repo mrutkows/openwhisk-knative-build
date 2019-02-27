@@ -104,32 +104,34 @@ service.start(app);
  * @returns an express endpoint handler
  */
 function wrapEndpoint(ep) {
-    DEBUG.functionStart(ep.name);
+    DEBUG.functionStart("wrapping: " + ep.name);
+    DEBUG.functionEnd("returning wrapper: " + ep.name);
     return function (req, res) {
         try {
             ep(req).then(function (result) {
-                DEBUG.dumpObject(result,"result");
                 res.status(result.code).json(result.response);
+                DEBUG.dumpObject(result,"result");
                 DEBUG.dumpObject(res,"response");
-                DEBUG.functionEnd(ep.name);
+                DEBUG.functionEndSuccess("wrapper for: " + ep.name);
             }).catch(function (error) {
-                DEBUG.dumpObject(error,"error");
                 if (typeof error.code === "number" && typeof error.response !== "undefined") {
                     res.status(error.code).json(error.response);
                 } else {
                     console.error("[wrapEndpoint]", "invalid errored promise", JSON.stringify(error));
                     res.status(500).json({ error: "Internal error." });
                 }
+                DEBUG.dumpObject(error,"error");
                 DEBUG.dumpObject(res,"response");
-                DEBUG.functionEnd(ep.name);
+                DEBUG.functionEndError(error, "wrapper for: " + ep.name);
             });
         } catch (e) {
             // This should not happen, as the contract for the endpoints is to
             // never (externally) throw, and wrap failures in the promise instead,
             // but, as they say, better safe than sorry.
             console.error("[wrapEndpoint]", "exception caught", e.message);
-            DEBUG.functionEnd("ERROR", e.message);
             res.status(500).json({ error: "Internal error (exception)." });
+            DEBUG.dumpObject(error,"error");
+            DEBUG.functionEndError(error, ep.name);
         }
     }
 }

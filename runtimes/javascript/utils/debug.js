@@ -16,7 +16,7 @@
  */
 
 const FG_RED     = "\x1b[31m";
-//const FG_GREEN   = "\x1b[32m";
+const FG_GREEN   = "\x1b[32m";
 const FG_YELLOW  = "\x1b[33m";
 //const FG_BLUE    = "\x1b[34m";
 const FG_MAGENTA = "\x1b[35m";
@@ -113,14 +113,15 @@ function _formatBody(message, color){
  * Formats the entirety of the message comprised of the message prefix + body + postfix.
  *
  * @param message that comprises the body of the formatted output
- * @param functionName (optional) name of the function; typically used to better
- * identify anon. functions.
+ * @param label (optional) labels (identifies) code block where message was generated;
+ * typically used to identify anon. functions.
+ * @param color overrides the default message color (this does not affect prefix or postfix)
  */
-function _formatMessage(message, functionName){
+function _formatMessage(message, label, color ){
   // Reset to default color at end of formatted message
   let fmsg =
-      _formatMessagePrefix(functionName) +
-      _formatBody(message) +
+      _formatMessagePrefix(label) +
+      _formatBody(message, color) +
       _formatMessagePostfix() + config.defaultFGColor;
   return fmsg;
 }
@@ -213,7 +214,68 @@ module.exports = class DEBUG {
       msg = message;
     }
 
-    let formattedMessage = _formatMessage( config.functionEndMarker + msg );
+    let formattedMessage = _formatMessage( config.functionEndMarker + msg);
+    console.info(formattedMessage);
+  };
+
+  /**
+   * Used to mark the end of a successful function block (i.e., console.info())
+   *
+   * @param message (optional) message displayed with function end marker
+   * @param functionName (optional) name of the function; typically used to better
+   * identify anon. functions.
+   */
+  functionEndSuccess(message, functionName) {
+
+    _updateContext(functionName);
+
+    let msg = "";
+    if(message !== undefined){
+      msg = message;
+    }
+
+    let formattedMessage = _formatMessage( config.functionEndMarker + msg, FG_GREEN );
+    console.info(formattedMessage);
+  };
+
+
+  /**
+   * Used to mark the end function block that errored
+   *
+   * @param message (optional) message displayed with function end marker
+   * @param functionName (optional) name of the function; typically used to better
+   * identify anon. functions.
+   */
+  functionEndFailure(message, functionName) {
+
+    _updateContext(functionName);
+
+    let msg = "";
+    if(message !== undefined){
+      msg = message;
+    }
+
+    let formattedMessage = _formatMessage( config.functionEndMarker + msg, FG_YELLOW );
+    console.info(formattedMessage);
+  };
+
+  /**
+   * Used to mark the end function block that errored
+   *
+   * @param message (optional) message displayed with function end marker
+   * @param functionName (optional) name of the function; typically used to better
+   * identify anon. functions.
+   */
+  functionEndError(message, functionName) {
+
+    _updateContext(functionName);
+
+    let msg = "";
+    if(message !== undefined){
+      msg = message;
+    }
+
+    let formattedMessage = _formatMessage( config.functionEndMarker + msg, FG_RED );
     console.info(formattedMessage);
   };
 
