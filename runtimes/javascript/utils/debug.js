@@ -166,7 +166,7 @@ function _updateContext(callerFunctionLabel){
       this.functionName = callerFunctionLabel;
 
   } catch(e){
-    console.error("Unable to get stack trace: " + e.message);
+    console.error("Unable to parse stack trace: " + e.message);
   }
 
 }
@@ -224,11 +224,11 @@ module.exports = class DEBUG {
    * @param functionName (optional) name of the function; typically used to better
    * identify anon. functions.
    */
-   trace(msg, functionName) {
+   trace(message, functionName) {
 
     _updateContext(functionName);
 
-    let formattedMessage = _formatMessage(msg);
+    let formattedMessage = _formatMessage(message);
     console.info(formattedMessage);
   };
 
@@ -240,6 +240,8 @@ module.exports = class DEBUG {
    *
    * @param obj Javascript Object (or type) to dump its information to console.info()
    * @param label optional string label to display with object dump
+   * @param functionName (optional) name of the function; typically used to better
+   * identify anon. functions.
    */
    dumpObject(obj, label, functionName){
 
@@ -282,6 +284,11 @@ module.exports = class DEBUG {
 
   }
 
+  /**
+   * Inject an error into code with additional information around it.
+   *
+   * @param label Javascript Object (or type) to dump its information to console.info()
+   */
   throw(label) {
 
     _updateContext(label);

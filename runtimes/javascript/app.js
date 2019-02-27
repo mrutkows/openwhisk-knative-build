@@ -108,15 +108,20 @@ function wrapEndpoint(ep) {
     return function (req, res) {
         try {
             ep(req).then(function (result) {
+                DEBUG.dumpObject(result,"result");
                 res.status(result.code).json(result.response);
+                DEBUG.dumpObject(res,"response");
+                DEBUG.functionEnd(ep.name);
             }).catch(function (error) {
-                DEBUG.functionEnd("invalid errored promise", JSON.stringify(error));
+                DEBUG.dumpObject(error,"error");
                 if (typeof error.code === "number" && typeof error.response !== "undefined") {
                     res.status(error.code).json(error.response);
                 } else {
                     console.error("[wrapEndpoint]", "invalid errored promise", JSON.stringify(error));
                     res.status(500).json({ error: "Internal error." });
                 }
+                DEBUG.dumpObject(res,"response");
+                DEBUG.functionEnd(ep.name);
             });
         } catch (e) {
             // This should not happen, as the contract for the endpoints is to
@@ -127,5 +132,4 @@ function wrapEndpoint(ep) {
             res.status(500).json({ error: "Internal error (exception)." });
         }
     }
-    DEBUG.functionEnd(ep.name);
 }
