@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-//const FG_RED     = "\x1b[31m";
-//const FG_GREEN   = "\x1b[32m";
+const FG_RED     = "\x1b[31m";
+const FG_GREEN   = "\x1b[32m";
 const FG_YELLOW  = "\x1b[33m";
 //const FG_BLUE    = "\x1b[34m";
 const FG_MAGENTA = "\x1b[35m";
@@ -113,14 +113,15 @@ function _formatBody(message, color){
  * Formats the entirety of the message comprised of the message prefix + body + postfix.
  *
  * @param message that comprises the body of the formatted output
- * @param functionName (optional) name of the function; typically used to better
- * identify anon. functions.
+ * @param label (optional) labels (identifies) code block where message was generated;
+ * typically used to identify anon. functions.
+ * @param color overrides the default message color (this does not affect prefix or postfix)
  */
-function _formatMessage(message, functionName){
+function _formatMessage(message, color ){
   // Reset to default color at end of formatted message
   let fmsg =
-      _formatMessagePrefix(functionName) +
-      _formatBody(message) +
+      _formatMessagePrefix() +
+      _formatBody(message, color) +
       _formatMessagePostfix() + config.defaultFGColor;
   return fmsg;
 }
@@ -136,29 +137,44 @@ function _formatMessage(message, functionName){
  */
 function _updateContext(callerFunctionLabel){
 
-  // if explicit label provided, use it...
-  this.functionName = callerFunctionLabel;
+  try{
+    let obj = {};
 
-  if(typeof(this.functionName) == 'undefined'){
+    Error.stackTraceLimit = 2;
+    Error.captureStackTrace(obj, _updateContext);
 
-    try{
-      let obj = {};
+    let fullStackInfo = obj.stack.split(")\n");
+    let rawFunctionInfo = fullStackInfo[1];
+    let entryInfo = rawFunctionInfo.split("at ")[1];
 
-      Error.stackTraceLimit = 2;
-      Error.captureStackTrace(obj, _updateContext);
-
-      let fullStackInfo = obj.stack.split(")\n");
-      let rawFunctionInfo = fullStackInfo[1];
-      let entryInfo = rawFunctionInfo.split("at ")[1];
+    // TODO: if there is no '(' separator, we have no function name; do not split
+    // e.g., value would look like: /openwhisk-knative-build/runtimes/javascript/src/service.js:180:19
+    if( entryInfo.indexOf(" (") !== -1) {
       let fm = entryInfo.split(" (");
       this.functionName = fm[0];
       this.fullModuleInfo = fm[1];
+    } else {
+      // assume the entry has the full module name and path (function is a anonymous)
+      this.functionName = "anonymous";
+      this.fullModuleInfo = entryInfo;
+    }
+
+    if( typeof this.fullModuleInfo !== "undefined")
       this.moduleInfo =  this.fullModuleInfo.substring( this.fullModuleInfo.lastIndexOf("/") +1);
 
-    } catch(e){
-      console.error("Unable to get stack trace: " + e.message);
+    // if explicit label provided, use it over one from stack trace...
+    if(typeof(callerFunctionLabel) !== 'undefined') {
+
+      if( this.functionName === "anonymous")
+        this.functionName = callerFunctionLabel + "." + this.functionName;
+      else
+        this.functionName = callerFunctionLabel;
     }
+
+  } catch(e){
+    console.error("Unable to parse stack trace: " + e.message);
   }
+
 }
 
 module.exports = class DEBUG {
@@ -203,7 +219,68 @@ module.exports = class DEBUG {
       msg = message;
     }
 
-    let formattedMessage = _formatMessage( config.functionEndMarker + msg );
+    let formattedMessage = _formatMessage( config.functionEndMarker + msg);
+    console.info(formattedMessage);
+  };
+
+  /**
+   * Used to mark the end of a successful function block (i.e., console.info())
+   *
+   * @param message (optional) message displayed with function end marker
+   * @param functionName (optional) name of the function; typically used to better
+   * identify anon. functions.
+   */
+  functionEndSuccess(message, functionName) {
+
+    _updateContext(functionName);
+
+    let msg = "";
+    if(message !== undefined){
+      msg = message;
+    }
+
+    let formattedMessage = _formatMessage( config.functionEndMarker + msg, FG_GREEN );
+    console.info(formattedMessage);
+  };
+
+
+  /**
+   * Used to mark the end function block that errored
+   *
+   * @param message (optional) message displayed with function end marker
+   * @param functionName (optional) name of the function; typically used to better
+   * identify anon. functions.
+   */
+  functionEndFailure(message, functionName) {
+
+    _updateContext(functionName);
+
+    let msg = "";
+    if(message !== undefined){
+      msg = message;
+    }
+
+    let formattedMessage = _formatMessage( config.functionEndMarker + msg, FG_YELLOW );
+    console.info(formattedMessage);
+  };
+
+  /**
+   * Used to mark the end function block that errored
+   *
+   * @param message (optional) message displayed with function end marker
+   * @param functionName (optional) name of the function; typically used to better
+   * identify anon. functions.
+   */
+  functionEndError(message, functionName) {
+
+    _updateContext(functionName);
+
+    let msg = "";
+    if(message !== undefined){
+      msg = message;
+    }
+
+    let formattedMessage = _formatMessage( config.functionEndMarker + msg, FG_RED );
     console.info(formattedMessage);
   };
 
@@ -214,11 +291,11 @@ module.exports = class DEBUG {
    * @param functionName (optional) name of the function; typically used to better
    * identify anon. functions.
    */
-   trace(msg, functionName) {
+   trace(message, functionName) {
 
     _updateContext(functionName);
 
-    let formattedMessage = _formatMessage(msg);
+    let formattedMessage = _formatMessage(message);
     console.info(formattedMessage);
   };
 
@@ -230,6 +307,8 @@ module.exports = class DEBUG {
    *
    * @param obj Javascript Object (or type) to dump its information to console.info()
    * @param label optional string label to display with object dump
+   * @param functionName (optional) name of the function; typically used to better
+   * identify anon. functions.
    */
    dumpObject(obj, label, functionName){
 
@@ -270,6 +349,20 @@ module.exports = class DEBUG {
       console.info(formattedMessage);
     }
 
+  }
+
+  /**
+   * Inject an error into code with additional information around it.
+   *
+   * @param label Javascript Object (or type) to dump its information to console.info()
+   */
+  throw(label) {
+
+    _updateContext(label);
+
+    // intentionally throw an error and be clear to log this fact
+    let formattedMessage = _formatMessage(FG_RED + "[" + label + "] Intentionally throwing error." + FG_LTGRAY);
+    throw Error(formattedMessage);
   }
 
 };

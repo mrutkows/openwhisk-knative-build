@@ -49,24 +49,24 @@ function NodeActionRunner() {
     DEBUG.dumpObject(callback,"callback");
 
     this.init = function(message) {
-        DEBUG.functionStart("NodeActionRunner", "init");
+        DEBUG.functionStart("NodeActionRunner");
         function assertMainIsFunction() {
-            DEBUG.dumpObject(thisRunner.userScriptMain,"this.Runner.userScriptMain", "init");
+            DEBUG.dumpObject(thisRunner.userScriptMain,"this.Runner.userScriptMain");
             if (typeof thisRunner.userScriptMain !== 'function') {
-                DEBUG.functionEnd("ERROR: Action entrypoint '\" + message.main + \"' is not a function.", "init");
+                DEBUG.functionEndError("ERROR: Action entrypoint '" + message.main + "' is not a function.");
                 throw "Action entrypoint '" + message.main + "' is not a function.";
             }
             DEBUG.functionEnd();
         }
 
         // Loading the user code.
-        DEBUG.dumpObject(message.binary, "message.binary", "init");
+        DEBUG.dumpObject(message.binary, "message.binary");
         if (message.binary) {
             // The code is a base64-encoded zip file.
             return unzipInTmpDir(message.code).then(function (moduleDir) {
                 if(!fs.existsSync(path.join(moduleDir, 'package.json')) &&
                     !fs.existsSync(path.join(moduleDir, 'index.js'))) {
-                    DEBUG.functionEnd("ERROR: Zipped actions must contain either package.json or index.js at the root.", "init");
+                    DEBUG.functionEndError("Promise.reject(): Zipped actions must contain either package.json or index.js at the root.");
                     return Promise.reject('Zipped actions must contain either package.json or index.js at the root.')
                 }
 
@@ -78,27 +78,27 @@ function NodeActionRunner() {
                     // The value 'true' has no special meaning here;
                     // the successful state is fully reflected in the
                     // successful resolution of the promise.
-                    DEBUG.functionEnd("return true;", "init");
+                    DEBUG.functionEndSuccess("return true;");
                     return true;
                 } catch (e) {
-                    DEBUG.functionEnd("ERROR: " + e.message, "init");
+                    DEBUG.functionEndError("Promise.reject(): " + e.message);
                     return Promise.reject(e);
                 }
             }).catch(function (error) {
-                DEBUG.functionEnd("ERROR: " + error.message, "init");
+                DEBUG.functionEndError("Promise.reject(): " + error.message);
                 return Promise.reject(error);
             });
         } else {
             // The code is a plain old JS file.
             try {
                 thisRunner.userScriptMain = eval('(function(){' + message.code + '\nreturn ' + message.main + '})()');
-                DEBUG.dumpObject(thisRunner.userScriptMain,"thisRunner.userScriptMain", "init");
+                DEBUG.dumpObject(thisRunner.userScriptMain,"thisRunner.userScriptMain");
                 assertMainIsFunction();
                 // See comment above about 'true'; it has no specific meaning.
-                DEBUG.functionEnd("Promise.resolve(true)", "init");
+                DEBUG.functionEndSuccess("Promise.resolve(true)");
                 return Promise.resolve(true);
             } catch (e) {
-                DEBUG.functionEnd("ERROR: " + e.message, "init");
+                DEBUG.functionEndError("Promise.reject(): " + e.message);
                 return Promise.reject(e);
             }
         }
@@ -107,7 +107,7 @@ function NodeActionRunner() {
     // Returns a Promise with the result of the user code invocation.
     // The Promise is rejected iff the user code throws.
     this.run = function(args) {
-        DEBUG.functionStart("NodeActionRunner", "run");
+        DEBUG.functionStart();
         return new Promise(
             function (resolve, reject) {
                 callback.completed = undefined;
@@ -118,7 +118,7 @@ function NodeActionRunner() {
                     var result = thisRunner.userScriptMain(args);
                     DEBUG.dumpObject(result,"Returned: thisRunner.userScriptMain(args): result", "run");
                 } catch (e) {
-                    DEBUG.functionEnd("ERROR: " + e.message, "run");
+                    DEBUG.functionEndError("ERROR: Promise.reject(): " + e.message);
                     reject(e);
                 }
 
@@ -128,7 +128,7 @@ function NodeActionRunner() {
                     if (typeof resolvedResult === "undefined") {
                         resolvedResult = {};
                     }
-                    DEBUG.functionEnd("resolvedResult: " + resolvedResult, "run");
+                    DEBUG.functionEndSuccess("Promise.Resolve(): result=" + resolvedResult, "run");
                     resolve(resolvedResult);
                 }).catch(function (error) {
                     // A rejected Promise from the user code maps into a
@@ -136,10 +136,10 @@ function NodeActionRunner() {
 
                     // Special case if the user just called `reject()`.
                     if (!error) {
-                        DEBUG.functionEnd("ERROR: reject()", "run");
+                        DEBUG.functionEndError("ERROR: reject()", "run");
                         resolve({ error: {}});
                     } else {
-                        DEBUG.functionEnd("ERROR: " + error.message, "run");
+                        DEBUG.functionEndError("ERROR: " + error.message, "run");
                         resolve({ error: serializeError(error) });
                     }
                 });
@@ -161,10 +161,10 @@ function NodeActionRunner() {
                     var zipFile = path.join(tmpDir1, "action.zip");
                     fs.writeFile(zipFile, base64, "base64", function (err) {
                         if (err) {
-                            DEBUG.functionEnd("ERROR: " + err.message);
+                            DEBUG.functionEndError("Promise.reject: " + err.message);
                             reject("There was an error reading the action archive.");
                         }
-                        DEBUG.functionEnd("RESOLVE zipFile=" + zipFile);
+                        DEBUG.functionEndSuccess("Promise.resolve: zipFile=" + zipFile);
                         resolve(zipFile);
                     });
                 }
@@ -172,10 +172,10 @@ function NodeActionRunner() {
         }).then(function (zipFile) {
             return exec(mkTempCmd).then(function (tmpDir2) {
                 return exec("unzip -qq " + zipFile + " -d " + tmpDir2).then(function (res) {
-                    DEBUG.functionEnd("RESOLVE tmpDir2=" + tmpDir2);
+                    DEBUG.functionEndSuccess("Promise.resolve: tmpDir2=" + tmpDir2);
                     return path.resolve(tmpDir2);
                 }).catch(function (error) {
-                    DEBUG.functionEnd("ERROR: " + error.message);
+                    DEBUG.functionEndError("Promise.reject: " + error.message);
                     return Promise.reject("There was an error uncompressing the action archive.");
                 });
             });
@@ -190,10 +190,10 @@ function NodeActionRunner() {
                 child_process.exec(cmd, function (error, stdout, stderr) {
                     DEBUG.dumpObject(cmd,"cmd");
                     if (error) {
-                        DEBUG.functionEnd("ERROR: " + error.message);
+                        DEBUG.functionEndError("Promise.reject: " + error.message);
                         reject(stderr.trim());
                     } else {
-                        DEBUG.functionEnd("RESOLVE");
+                        DEBUG.functionEndSuccess("Promise.resolve");
                         resolve(stdout.trim());
                     }
                 });

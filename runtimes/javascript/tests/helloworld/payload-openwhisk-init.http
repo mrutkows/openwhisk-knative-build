@@ -7,7 +7,13 @@ content-type: application/json
         "main" : "main", 
         "binary": false, 
         "code" : "function main() {return {payload: 'Hello World!'};}"
-    }
+    },
+    "namespace": "default",
+    "action_name": "nodejs-helloworld",
+    "api_host": "",
+    "api_key": "",
+    "activation_id": "",
+    "deadline": "4102498800000"
 }
 
 ###
