@@ -117,10 +117,10 @@ function _formatBody(message, color){
  * typically used to identify anon. functions.
  * @param color overrides the default message color (this does not affect prefix or postfix)
  */
-function _formatMessage(message, label, color ){
+function _formatMessage(message, color ){
   // Reset to default color at end of formatted message
   let fmsg =
-      _formatMessagePrefix(label) +
+      _formatMessagePrefix() +
       _formatBody(message, color) +
       _formatMessagePostfix() + config.defaultFGColor;
   return fmsg;
