@@ -1,7 +1,7 @@
 POST http://localhost:8080/ HTTP/1.1
 content-type: application/json
 
-{ 
+{
     "value": {
         "__ow_action_name" : "nodejs-helloworld-with-params",
         "main" : "main",
@@ -9,7 +9,13 @@ content-type: application/json
         "code" : "function main(params) {return {payload: 'Hello ' + params.name + ' from ' + params.place +  '!'};}",
         "name" : "Joe",
         "place" : "TX"
-    }
+    },
+    "namespace": "default",
+    "action_name": "nodejs-helloworld-with-params",
+    "api_host": "",
+    "api_key": "",
+    "activation_id": "",
+    "deadline": "4102498800000"
 }
 
 ###

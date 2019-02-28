@@ -6,5 +6,11 @@
         "code" : "function main(params) {return {payload: 'Hello ' + params.name + ' from ' + params.place +  '!'};}",
         "name" : "Joe",
         "place" : "TX"
-    }
+    },
+    "namespace": "default",
+    "action_name": "nodejs-helloworld-with-params",
+    "api_host": "",
+    "api_key": "",
+    "activation_id": "",
+    "deadline": "4102498800000"
 }

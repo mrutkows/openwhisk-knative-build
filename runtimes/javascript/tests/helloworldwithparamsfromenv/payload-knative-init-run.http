@@ -9,7 +9,13 @@ content-type: application/json
         "code" : "function main() {return {payload: 'Hello ' + process.env.NAME + ' from ' + process.env.PLACE +  '!'};}",
         "name" : "Jess",
         "place" : "OK"
-    }
+    },
+    "namespace": "default",
+    "action_name": "nodejs-helloworld-with-params-from-env",
+    "api_host": "",
+    "api_key": "",
+    "activation_id": "",
+    "deadline": "4102498800000"
 }
 
 ###
