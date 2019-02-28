@@ -1,14 +1,8 @@
 { 
     "value": { 
-        "__ow_action_name" : "nodejs-helloworld-with-params-from-env",
+        "name" : "nodejs-helloworld-with-params-from-env",
         "main" : "main", 
         "binary": false, 
         "code" : "function main() {return {payload: 'Hello ' + process.env.NAME + ' from ' + process.env.PLACE +  '!'};}"
-    },
-    "namespace": "default",
-    "action_name": "nodejs-helloworld-with-params-from-env",
-    "api_host": "",
-    "api_key": "",
-    "activation_id": "",
-    "deadline": "4102498800000"
+    }
 }
