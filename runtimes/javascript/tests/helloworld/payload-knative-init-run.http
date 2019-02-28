@@ -3,12 +3,20 @@ content-type: application/json
 
 {
   "init": {
-    "name" : "nodejs-helloworld",
-    "main" : "main",
+    "name": "nodejs-helloworld",
+    "main": "main",
     "binary": false,
-    "code" : "function main() {return {payload: 'Hello World!'};}"
+    "code": "function main() {return {payload: 'Hello World!'};}"
   },
   "activation": {
+    "value": {
+      "__ow_action_name": "nodejs-helloworld",
+      "main": "main",
+      "binary": false,
+      "code": "function main() {return {payload: 'Hello World!'};}",
+      "name": "Joe",
+      "place": "TX"
+    },
     "namespace": "default",
     "action_name": "nodejs-helloworld",
     "api_host": "",
@@ -17,8 +25,8 @@ content-type: application/json
     "deadline": "4102498800000"
   },
   "value": {
-    "name" : "Joe",
-    "place" : "TX"
+    "name": "Joe",
+    "place": "TX"
   }
 }
 

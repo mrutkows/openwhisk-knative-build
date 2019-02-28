@@ -118,6 +118,35 @@ function preProcessRequest(req){
     DEBUG.functionEnd();
 }
 
+function postProcessResponse(result, res) {
+    DEBUG.functionStart();
+
+    // statusCode: default is 200 OK if body is not empty otherwise 204 No Content
+    // body: a string which is either a plain text, JSON object, or a base64 encoded string for binary data (default is "")
+    // body is considered empty if it is null, "", or undefined
+    let statusCode = result.code;
+    let headers = {};
+    let body = result.response;
+
+    if (result.response.statusCode !== undefined) {
+        statusCode = result.response.statusCode;
+        delete body['statusCode'];
+    }
+
+    if (result.response.headers !== undefined) {
+        headers = result.response.headers;
+        delete body['headers'];
+    }
+
+    if (result.response.body !== undefined) {
+        body = result.response.body;
+    }
+
+    res.header(headers).status(statusCode).json(body);
+
+    DEBUG.functionEnd();
+}
+
 function PlatformFactory(id, svc, cfg) {
 
     DEBUG.dumpObject(id, "Platform" );
@@ -137,7 +166,7 @@ function PlatformFactory(id, svc, cfg) {
 
             service.initCode(req).then(function () {
                 service.runCode(req).then(function (result) {
-                    res.status(result.code).json(result.response)
+                    postProcessResponse(result, res)
                 });
             }).catch(function (error) {
                 console.error(error);
