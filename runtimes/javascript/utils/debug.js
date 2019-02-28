@@ -163,8 +163,13 @@ function _updateContext(callerFunctionLabel){
       this.moduleInfo =  this.fullModuleInfo.substring( this.fullModuleInfo.lastIndexOf("/") +1);
 
     // if explicit label provided, use it over one from stack trace...
-    if(typeof(callerFunctionLabel) !== 'undefined')
-      this.functionName = callerFunctionLabel;
+    if(typeof(callerFunctionLabel) !== 'undefined') {
+
+      if( this.functionName === "anonymous")
+        this.functionName = callerFunctionLabel + "." + this.functionName;
+      else
+        this.functionName = callerFunctionLabel;
+    }
 
   } catch(e){
     console.error("Unable to parse stack trace: " + e.message);

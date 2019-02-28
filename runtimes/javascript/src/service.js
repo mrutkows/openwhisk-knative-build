@@ -98,14 +98,13 @@ function NodeActionService(config) {
             if (message.main && message.code && typeof message.main === 'string' && typeof message.code === 'string') {
                 return doInit(message).then(function (result) {
                     setStatus(Status.ready);
-                    DEBUG.dumpObject(result, "result");
-                    DEBUG.functionEnd("[200] { OK: true }");
-                    DEBUG.functionEndSuccess(responseMessage(200, { OK: true }));
+                    DEBUG.dumpObject(result, "result","initCode");
+                    DEBUG.functionEndSuccess("[200] { OK: true }", "initCode");
                     return responseMessage(200, { OK: true });
                 }).catch(function (error) {
                     setStatus(Status.stopped);
                     var errStr = "Initialization has failed due to: " + error.stack ? String(error.stack) : error;
-                    DEBUG.functionEndError("[502] " + errStr);
+                    DEBUG.functionEndError("[502] " + errStr, "initCode");
                     return Promise.reject(errorMessage(502, errStr));
                 });
             } else {
@@ -137,14 +136,14 @@ function NodeActionService(config) {
      * req.body = { value: Object, meta { activationId : int } }
      */
     this.runCode = function runCode(req) {
-        DEBUG.functionStart("status=" + status, "runCode");
+        DEBUG.functionStart("status=" + status);
 
         if (status === Status.ready) {
             if (!ignoreRunStatus) {
                 setStatus(Status.running);
             }
 
-            DEBUG.dumpObject(req, "request", "runCode");
+            DEBUG.dumpObject(req, "request");
 
             return doRun(req).then(function (result) {
                 if (!ignoreRunStatus) {
@@ -198,13 +197,13 @@ function NodeActionService(config) {
         DEBUG.dumpObject(req,"request");
         var msg = req && req.body || {};
         DEBUG.dumpObject(msg,"msg");
-        DEBUG.trace(msg,"Setting process environment variables.");
+        DEBUG.trace("Adding process environment variables:");
         Object.keys(msg).forEach(
             function (k) {
                 if(typeof msg[k] === 'string' && k !== 'value'){
-                    process.env['Adding: __OW_' + k.toUpperCase()] = msg[k];
                     var envVariable = '__OW_' + k.toUpperCase();
-                    DEBUG.dumpObject(envVariable,"envVariable");
+                    process.env['__OW_' + k.toUpperCase()] = msg[k];
+                    DEBUG.dumpObject(process.env[envVariable], envVariable);
                 }
             }
         );
@@ -214,12 +213,12 @@ function NodeActionService(config) {
                 console.error('Result must be of type object but has type "' + typeof result + '":', result);
             }
             writeMarkers();
-            DEBUG.functionEndSuccess("userCodeRunner.run(): Success (" + result + ")");
+            DEBUG.functionEndSuccess("userCodeRunner.run(): Success (" + result + ")", "doRun");
             return result;
         }).catch(function (error) {
             console.error(error);
             writeMarkers();
-            DEBUG.functionEndError("userCodeRunner.run(): Error:" + error );
+            DEBUG.functionEndError("userCodeRunner.run(): Error:" + error, "doRun");
             return Promise.reject(error);
         });
     }
