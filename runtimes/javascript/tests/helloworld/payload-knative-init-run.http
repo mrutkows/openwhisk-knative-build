@@ -6,7 +6,7 @@ content-type: application/json
     "name" : "nodejs-helloworld",
     "main" : "main",
     "binary": false,
-    "code" : "function main() {return {payload: 'Hello World!'};}",
+    "code" : "function main() {return {payload: 'Hello World!'};}"
   },
   "activation": {
     "namespace": "default",
