@@ -24,17 +24,18 @@ const FG_CYAN    = "\x1b[36m";
 const FG_LTGRAY  = "\x1b[37m";
 //const FG_WHITE   = "\x1b[97m";
 
-//const FG_INFO    = FG_LTGRAY;;
-//const FG_WARN    = FG_YELLOW;
-//const FG_ERROR   = FG_RED;
+const FG_SUCCESS = FG_GREEN;
+const FG_INFO    = FG_LTGRAY;
+const FG_WARN    = FG_YELLOW;
+const FG_ERROR   = FG_RED;
 
 let config = {
   prefixFGColor: FG_CYAN,
   postfixFGColor: FG_MAGENTA,
-  bodyFGColor: FG_LTGRAY,
-  defaultFGColor: FG_LTGRAY,
+  bodyFGColor: FG_INFO,
+  defaultFGColor: FG_INFO,
   functionStartMarker: ">>> START: ",
-  functionEndMarker: "<<< END: ",
+  functionEndMarker: "<<< END: "
 };
 
 /**
@@ -106,7 +107,7 @@ function _formatBody(message, color){
   if(color !== undefined)
     bodyColor = color;
 
-  return bodyColor + message;
+  return bodyColor + message + config.bodyFGColor;
 }
 
 /**
@@ -122,7 +123,8 @@ function _formatMessage(message, color ){
   let fmsg =
       _formatMessagePrefix() +
       _formatBody(message, color) +
-      _formatMessagePostfix() + config.defaultFGColor;
+      _formatMessagePostfix() +
+      config.defaultFGColor;
   return fmsg;
 }
 
@@ -239,13 +241,14 @@ module.exports = class DEBUG {
       msg = message;
     }
 
-    let formattedMessage = _formatMessage( config.functionEndMarker + msg, FG_GREEN );
+    let formattedMessage = _formatMessage( config.functionEndMarker + msg, FG_SUCCESS );
     console.info(formattedMessage);
   };
 
 
   /**
-   * Used to mark the end function block that errored
+   * Used to mark the end function block that has failed, but did not result in
+   * an error to the user.  In other words, a soft-failure that was recoverable.
    *
    * @param message (optional) message displayed with function end marker
    * @param functionName (optional) name of the function; typically used to better
@@ -260,7 +263,7 @@ module.exports = class DEBUG {
       msg = message;
     }
 
-    let formattedMessage = _formatMessage( config.functionEndMarker + msg, FG_YELLOW );
+    let formattedMessage = _formatMessage( config.functionEndMarker + msg, FG_WARN );
     console.info(formattedMessage);
   };
 
@@ -280,7 +283,7 @@ module.exports = class DEBUG {
       msg = message;
     }
 
-    let formattedMessage = _formatMessage( config.functionEndMarker + msg, FG_RED );
+    let formattedMessage = _formatMessage( config.functionEndMarker + msg, FG_ERROR );
     console.info(formattedMessage);
   };
 

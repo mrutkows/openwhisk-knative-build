@@ -18,16 +18,14 @@
 var dbg = require('../utils/debug');
 var DEBUG = new dbg();
 
-function preProcessRequest(req){
+const OW_ENV_PREFIX = "__OW_";
+
+/**
+ * Pre-process the incoming
+ */
+function preProcessInitData(env, initdata, valuedata) {
     DEBUG.functionStart();
-
-    try{
-        // If the function's INIT data is already placed in the process
-        // See if the request has passed in valid "init" data
-        let body = req.body || {};
-        let message = body.value || {};
-        let env = process.env || {};
-
+    try {
         // Set defaults to use INIT data not provided on the request
         // Look first to the process (i.e., Container's) environment variables.
         var main = (typeof env.__OW_ACTION_MAIN === 'undefined') ? "main" : env.__OW_ACTION_MAIN;
@@ -35,27 +33,85 @@ function preProcessRequest(req){
         var code = (typeof env.__OW_ACTION_CODE === 'undefined') ? "" : env.__OW_ACTION_CODE;
         var binary = (typeof env.__OW_ACTION_BINARY === 'undefined') ? false : env.__OW_ACTION_BINARY.toLowerCase() === "true";
 
-        if (message) {
-            if (message.main && typeof message.main === 'string') {
-                main = req.body.value.main
+        // Look for init data within the request (i.e., "stem cell" runtime, where code is injected by request)
+        if (initdata) {
+            if (initdata.main && typeof initdata.main === 'string') {
+                main = initdata.main
             }
-            if (message.code && typeof message.code === 'string') {
-                code = req.body.value.code
+            if (initdata.code && typeof initdata.code === 'string') {
+                code = initdata.code
             }
-            if (message.binary && typeof req.body.value.binary === 'boolean') {
+            if (initdata.binary && typeof initdata.binary === 'boolean') {
                 // TODO: Throw error if BINARY is not 'true' or 'false'
-                binary = req.body.value.binary
+                binary = initdata.binary
             }
         }
 
-        message.main = main;
-        message.code = code;
-        message.binary = binary;
+        // Move the init data to the request body under the "value" key.
+        // This will allow us to reuse the "openwhisk" /init route handler function
+        valuedata.main = main;
+        valuedata.code = code;
+        valuedata.binary = binary;
+    } catch(e){
+        console.error(e);
+        DEBUG.functionEndError(e.message);
+        throw("Unable to initialize the runtime: " + e.message);
+    }
+    DEBUG.functionEnd();
+}
+
+/**
+ * Pre-process the incoming http request data, moving it to where the
+ * route handlers expect it to be for an openwhisk runtime.
+ */
+function preProcessActivationData(env, activationdata) {
+    DEBUG.functionStart();
+    try {
+        // Note: we move the values here so that the "run()" handler does not have
+        // to move them again.
+        Object.keys(activationdata).forEach(
+            function (k) {
+                if (typeof activationdata[k] === 'string') {
+                    var envVariable = OW_ENV_PREFIX + k.toUpperCase();
+                    process.env[envVariable] = activationdata[k];
+                    DEBUG.dumpObject(process.env[envVariable], envVariable, "preProcessActivationData");
+                }
+            }
+        );
+    } catch(e){
+        console.error(e);
+        DEBUG.functionEndError(e.message);
+        throw("Unable to initialize the runtime: " + e.message);
+    }
+    DEBUG.functionEnd();
+}
+
+/**
+ * Pre-process the incoming http request data, moving it to where the
+ * route handlers expect it to be for an openwhisk runtime.
+ */
+function preProcessRequest(req){
+    DEBUG.functionStart();
+
+    try{
+        // Get or create valid references to the various data we might encounter
+        // in a request such as Init., Activation and function parameter data.
+        let body = req.body || {};
+        let valueData = body.value || {};
+        let initData = body.init || {};
+        let activationData = body.activation || {};
+        let env = process.env || {};
+
+        // process initialization (i.e., "init") data
+        preProcessInitData(env, initData, valueData);
+
+        // process per-activation (i.e, "run") data
+        preProcessActivationData(env, activationData);
 
     } catch(e){
         console.error(e);
-        DEBUG.functionEnd("ERROR: " + e.message);
-        // TODO
+        DEBUG.functionEndError(e.message);
+        // TODO: test this error is handled properly and results in an HTTP error response
         throw("Unable to initialize the runtime: " + e.message);
     }
 
@@ -68,9 +124,8 @@ function PlatformFactory(id, svc, cfg) {
     DEBUG.dumpObject(svc, "Service" );
     DEBUG.dumpObject(cfg, "Config" );
 
-    var platform = id;
     var service = svc;
-    var config = cfg;
+    //var config = cfg;  // TODO: use this to pass future config. information uniformly to any impl.
     var isInitialized = false;
 
     this.run = function(req, res) {
@@ -100,10 +155,5 @@ function PlatformFactory(id, svc, cfg) {
     }
 
 };
-
-
-// PlatformFactory.getService = function(config) {
-//     return new PlatformFactory(config);
-// };
 
 module.exports = PlatformFactory;

@@ -1,19 +1,13 @@
 POST http://localhost:8080/init HTTP/1.1
 content-type: application/json
 
-{ 
-    "value": { 
-        "__ow_action_name" : "nodejs-helloworld-with-params",
-        "main" : "main", 
-        "binary": false, 
-        "code" : "function main(params) {return {payload: 'Hello ' + params.name + ' from ' + params.place +  '!'};}"
-    },
-    "namespace": "default",
-    "action_name": "nodejs-helloworld-with-params",
-    "api_host": "",
-    "api_key": "",
-    "activation_id": "",
-    "deadline": "4102498800000"
+{
+  "value": {
+    "name" : "nodejs-helloworld-with-params",
+    "main" : "main",
+    "binary": false,
+    "code" : "function main(params) {return {payload: 'Hello ' + params.name + ' from ' + params.place +  '!'};}"
+  }
 }
 
 ###

@@ -2,11 +2,11 @@ POST http://localhost:8080/init HTTP/1.1
 content-type: application/json
 
 {
-    "value": {
-        "__ow_action_name" : "nodejs-helloworld-with-params",
-        "main" : "main",
-        "binary": false
-    }
+  "value": {
+    "name" : "nodejs-helloworld",
+    "main" : "main",
+    "binary": false
+  }
 }
 
 ###
