@@ -136,12 +136,21 @@ function postProcessResponse(result, res) {
     if (result.response.headers !== undefined) {
         headers = result.response.headers;
         delete body['headers'];
+<<<<<<< HEAD
     }
 
     if (result.response.body !== undefined) {
         body = result.response.body;
     }
 
+=======
+    }
+
+    if (result.response.body !== undefined) {
+        body = result.response.body;
+    }
+
+>>>>>>> web action
     res.header(headers).status(statusCode).json(body);
 
     DEBUG.functionEnd();
@@ -170,7 +179,6 @@ function PlatformFactory(id, svc, cfg) {
                 });
             }).catch(function (error) {
                 console.error(error);
-
                 if (typeof error.code === "number" && typeof error.response !== "undefined") {
                     res.status(error.code).json(error.response);
                 } else {
