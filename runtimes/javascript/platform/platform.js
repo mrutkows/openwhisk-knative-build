@@ -25,7 +25,8 @@ function preProcessRequest(req){
         // If the function's INIT data is already placed in the process
         // See if the request has passed in valid "init" data
         let body = req.body || {};
-        let message = body.value || {};
+        let valuedata = body.value || {};
+        let initdata = body.init || {};
         let env = process.env || {};
 
         // Set defaults to use INIT data not provided on the request
@@ -35,27 +36,30 @@ function preProcessRequest(req){
         var code = (typeof env.__OW_ACTION_CODE === 'undefined') ? "" : env.__OW_ACTION_CODE;
         var binary = (typeof env.__OW_ACTION_BINARY === 'undefined') ? false : env.__OW_ACTION_BINARY.toLowerCase() === "true";
 
-        if (message) {
-            if (message.main && typeof message.main === 'string') {
-                main = req.body.value.main
+        // Look for init data within the request (i.e., "stem cell" runtime, where code is injected by request)
+        if (initdata) {
+            if (initdata.main && typeof initdata.main === 'string') {
+                main = initdata.main
             }
-            if (message.code && typeof message.code === 'string') {
-                code = req.body.value.code
+            if (initdata.code && typeof initdata.code === 'string') {
+                code = initdata.code
             }
-            if (message.binary && typeof req.body.value.binary === 'boolean') {
+            if (initdata.binary && typeof initdata.binary === 'boolean') {
                 // TODO: Throw error if BINARY is not 'true' or 'false'
-                binary = req.body.value.binary
+                binary = initdata.binary
             }
         }
 
-        message.main = main;
-        message.code = code;
-        message.binary = binary;
+        // Move the init data to the request body under the "value" key.
+        // This will allow us to reuse the "openwhisk" /init route handler function
+        valuedata.main = main;
+        valuedata.code = code;
+        valuedata.binary = binary;
 
     } catch(e){
         console.error(e);
         DEBUG.functionEnd("ERROR: " + e.message);
-        // TODO
+        // TODO: test this error is handled properly and results in an HTTP error response
         throw("Unable to initialize the runtime: " + e.message);
     }
 

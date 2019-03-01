@@ -29,6 +29,7 @@ function NodeActionService(config) {
         stopped: 'stopped'
     };
 
+    // TODO: save the entire configuration for use by any of the route handlers
     var status = Status.ready;
     var ignoreRunStatus = config.allowConcurrent === undefined ? false : config.allowConcurrent.toLowerCase() === "true";
     var server = undefined;
@@ -91,7 +92,6 @@ function NodeActionService(config) {
 
             var body = req.body || {};
             var message = body.value || {};
-
             DEBUG.dumpObject(body,"body");
             DEBUG.dumpObject(message,"message");
 
@@ -137,13 +137,11 @@ function NodeActionService(config) {
      */
     this.runCode = function runCode(req) {
         DEBUG.functionStart("status=" + status);
-
+        DEBUG.dumpObject(req, "request");
         if (status === Status.ready) {
             if (!ignoreRunStatus) {
                 setStatus(Status.running);
             }
-
-            DEBUG.dumpObject(req, "request");
 
             return doRun(req).then(function (result) {
                 if (!ignoreRunStatus) {
@@ -198,6 +196,7 @@ function NodeActionService(config) {
         var msg = req && req.body || {};
         DEBUG.dumpObject(msg,"msg");
         DEBUG.trace("Adding process environment variables:");
+
         Object.keys(msg).forEach(
             function (k) {
                 if(typeof msg[k] === 'string' && k !== 'value'){
