@@ -74,7 +74,7 @@ function preProcessActivationData(env, activationdata) {
                 if (typeof activationdata[k] === 'string') {
                     var envVariable = OW_ENV_PREFIX + k.toUpperCase();
                     process.env[envVariable] = activationdata[k];
-                    DEBUG.dumpObject(process.env[envVariable], envVariable);
+                    DEBUG.dumpObject(process.env[envVariable], envVariable, "preProcessActivationData");
                 }
             }
         );

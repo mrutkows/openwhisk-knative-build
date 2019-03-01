@@ -202,7 +202,7 @@ function NodeActionService(config) {
                 if(typeof msg[k] === 'string' && k !== 'value'){
                     var envVariable = '__OW_' + k.toUpperCase();
                     process.env['__OW_' + k.toUpperCase()] = msg[k];
-                    DEBUG.dumpObject(process.env[envVariable], envVariable);
+                    DEBUG.dumpObject(process.env[envVariable], envVariable, "doRun");
                 }
             }
         );
