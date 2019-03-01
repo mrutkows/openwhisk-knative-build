@@ -101,9 +101,4 @@ function PlatformFactory(id, svc, cfg) {
 
 };
 
-
-// PlatformFactory.getService = function(config) {
-//     return new PlatformFactory(config);
-// };
-
 module.exports = PlatformFactory;

@@ -46,10 +46,9 @@ var app = express();
  */
 var service = require('./src/service').getService(config);
 
+// TODO: do not use express to hold config vars. for us, as we make the entire config. avail. to the service
+// i.e., the route handlers
 app.set('port', config.port);
-
-// TODO: test if we can/should use config via NodeJS Express "set" vs. passed on getService() method.
-app.set('test', config);
 
 /**
  * setup a middleware layer to restrict the request body size
@@ -79,12 +78,13 @@ if (targetPlatform === runtime_platform.openwhisk ) {
     console.error("Environment variable '__OW_RUNTIME_PLATFORM' has an unrecognized value ("+targetPlatform+").");
 }
 
-// short-circuit any bad requests (invalid endpoints)
+// short-circuit any requests to invalid routes (endpoints) that we have no handlers for.
 app.use(function (req, res, next) {
     res.status(500).json({error: "Bad request."});
 });
 
-// register a default error handler...
+// register a default error handler. This effectively only gets called when invalid JSON is received (JSON Parser)
+// and we do not wish the default handler to send back HTML in the body of the response.
 app.use(function (err, req, res, next) {
     console.log(err.stackTrace);
     res.status(500).json({error: "Bad request."});
