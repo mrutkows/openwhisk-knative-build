@@ -196,7 +196,7 @@ function NodeActionService(config) {
         var msg = req && req.body || {};
         DEBUG.dumpObject(msg,"msg");
         DEBUG.trace("Adding process environment variables:");
-
+        // Move per-activation keys to process env. vars with __OW_ (reserved) prefix)
         Object.keys(msg).forEach(
             function (k) {
                 if(typeof msg[k] === 'string' && k !== 'value'){
