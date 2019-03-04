@@ -118,6 +118,46 @@ function preProcessRequest(req){
     DEBUG.functionEnd();
 }
 
+function postProcessResponse(req, result, res) {
+    DEBUG.functionStart();
+
+    // After getting the result back from an action, update the HTTP headers,
+    // status code, and body based on its result if it includes one or more of the
+    // following as top level JSON properties: headers, statusCode, body
+    let statusCode = result.code;
+    let headers = {};
+    let body = result.response;
+
+    // statusCode: default is 200 OK if body is not empty otherwise 204 No Content
+    if (result.response.statusCode !== undefined) {
+        statusCode = result.response.statusCode;
+        delete body['statusCode'];
+    }
+
+    if (result.response.headers !== undefined) {
+        headers = result.response.headers;
+        delete body['headers'];
+    }
+
+    // body: a string which is either a plain text, JSON object, or a base64 encoded string for binary data (default is "")
+    // body is considered empty if it is null, "", or undefined
+    if (result.response.body !== undefined) {
+        body = result.response.body;
+        delete body['main'];
+        delete body['code'];
+        delete body['binary'];
+    }
+
+    // statusCode: set it to 204 No Content if body is empty
+    if (statusCode === 200 && body === "") {
+        statusCode = 204;
+    }
+
+    res.header(headers).status(statusCode).json(body);
+
+    DEBUG.functionEnd();
+}
+
 function PlatformFactory(id, svc, cfg) {
 
     DEBUG.dumpObject(id, "Platform" );
@@ -137,11 +177,10 @@ function PlatformFactory(id, svc, cfg) {
 
             service.initCode(req).then(function () {
                 service.runCode(req).then(function (result) {
-                    res.status(result.code).json(result.response)
+                    postProcessResponse(req, result, res)
                 });
             }).catch(function (error) {
                 console.error(error);
-
                 if (typeof error.code === "number" && typeof error.response !== "undefined") {
                     res.status(error.code).json(error.response);
                 } else {
