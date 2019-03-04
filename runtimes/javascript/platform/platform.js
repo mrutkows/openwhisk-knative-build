@@ -118,7 +118,7 @@ function preProcessRequest(req){
     DEBUG.functionEnd();
 }
 
-function postProcessResponse(req, result, res) {
+function postProcessResponse(result, res) {
     DEBUG.functionStart();
 
     // After getting the result back from an action, update the HTTP headers,
@@ -177,7 +177,7 @@ function PlatformFactory(id, svc, cfg) {
 
             service.initCode(req).then(function () {
                 service.runCode(req).then(function (result) {
-                    postProcessResponse(req, result, res)
+                    postProcessResponse(result, res)
                 });
             }).catch(function (error) {
                 console.error(error);
