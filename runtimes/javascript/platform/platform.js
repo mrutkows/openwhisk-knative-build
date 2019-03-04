@@ -118,7 +118,7 @@ function preProcessRequest(req){
     DEBUG.functionEnd();
 }
 
-function postProcessResponse(result, res) {
+function postProcessResponse(req, result, res) {
     DEBUG.functionStart();
 
     // statusCode: default is 200 OK if body is not empty otherwise 204 No Content
@@ -127,19 +127,22 @@ function postProcessResponse(result, res) {
     let statusCode = result.code;
     let headers = {};
     let body = result.response;
+    let web = req.body.init.web || false;
 
-    if (result.response.statusCode !== undefined) {
-        statusCode = result.response.statusCode;
-        delete body['statusCode'];
-    }
+    if (web === true || web === "raw") {
+        if (result.response.statusCode !== undefined) {
+            statusCode = result.response.statusCode;
+            delete body['statusCode'];
+        }
 
-    if (result.response.headers !== undefined) {
-        headers = result.response.headers;
-        delete body['headers'];
-    }
+        if (result.response.headers !== undefined) {
+            headers = result.response.headers;
+            delete body['headers'];
+        }
 
-    if (result.response.body !== undefined) {
-        body = result.response.body;
+        if (result.response.body !== undefined) {
+            body = result.response.body;
+        }
     }
 
     res.header(headers).status(statusCode).json(body);
@@ -166,7 +169,7 @@ function PlatformFactory(id, svc, cfg) {
 
             service.initCode(req).then(function () {
                 service.runCode(req).then(function (result) {
-                    postProcessResponse(result, res)
+                    postProcessResponse(req, result, res)
                 });
             }).catch(function (error) {
                 console.error(error);

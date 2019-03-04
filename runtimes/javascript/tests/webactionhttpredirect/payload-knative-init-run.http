@@ -2,19 +2,21 @@ POST http://localhost:8080/ HTTP/1.1
 content-type: application/json
 
 {
-  "value": {
-    "__ow_action_name" : "nodejs-web-action-to-redirect",
+  "init": {
+    "name" : "nodejs-web-action-to-redirect",
     "main" : "main",
     "binary": false,
-    "code" : "function main() { return { headers: { location: 'http://openwhisk.org' }, statusCode: 302 }}"
+    "code" : "function main() { return { headers: { location: 'http://openwhisk.org' }, statusCode: 302 }}",
+    "web": true
   },
-  "namespace": "default",
-  "action_name": "nodejs-web-action-to-redirect",
-  "api_host": "",
-  "api_key": "",
-  "activation_id": "",
-  "deadline": "4102498800000",
-  "web-export": true
+  "activation": {
+    "namespace": "default",
+    "action_name": "nodejs-web-action-to-redirect",
+    "api_host": "",
+    "api_key": "",
+    "activation_id": "",
+    "deadline": "4102498800000"
+  }
 }
 
 ###
