@@ -42,8 +42,12 @@
       </td>
       <td>
         <ul>
-          <li><sub>/init data: <a href="helloworld/data-init.json">data-init.json</a></sub></li>
-          <li><sub>/run data: <a href="helloworld/data-run.json">data-run.json</a></sub></li>
+          <li><sub>Knative data: <a href="helloworld/data-init.json">data-init-run.json</a></sub></li>
+          <li><sub>OpenWhisk /init data: <a href="helloworld/data-init.json">data-init.json</a></sub></li>
+          <li><sub>OpenWhisk /run data: <a href="helloworld/data-run.json">data-run.json</a></sub></li>
+          <li><sub>Knative Payload: <a href="helloworld/payload-knative-init-run.http">payload-knative-init-run.http</a></sub></li>
+          <li><sub>OpenWhisk /init Payload: <a href="helloworld/payload-openwhisk-init.http">payload-openwhisk-init.http</a></sub></li>
+          <li><sub>OpenWhisk /run Payload: <a href="helloworld/payload-openwhisk-run.http">payload-openwhisk-run.http</a></sub></li>
         </ul>
       </td>
     </tr>
@@ -61,8 +65,12 @@
       </td>
       <td>
         <ul>
-          <li><sub>/init data: <a href="helloworldwithparams/data-init.json">data-init.json</a></sub></li>
-          <li><sub>/run data: <a href="helloworldwithparams/data-run.json">data-run.json</a></sub></li>
+          <li><sub>Knative data: <a href="helloworldwithparams/data-init.json">data-init-run.json</a></sub></li>
+          <li><sub>OpenWhisk /init data: <a href="helloworldwithparams/data-init.json">data-init.json</a></sub></li>
+          <li><sub>OpenWhisk /run data: <a href="helloworldwithparams/data-run.json">data-run.json</a></sub></li>
+          <li><sub>Knative Payload: <a href="helloworldwithparams/payload-knative-init-run.http">payload-knative-init-run.http</a></sub></li>
+          <li><sub>OpenWhisk /init Payload: <a href="helloworldwithparams/payload-openwhisk-init.http">payload-openwhisk-init.http</a></sub></li>
+          <li><sub>OpenWhisk /run Payload: <a href="helloworldwithparams/payload-openwhisk-run.http">payload-openwhisk-run.http</a></sub></li>          
         </ul>
       </td>
     </tr>
@@ -80,12 +88,15 @@
       </td>
       <td>
         <ul>
-          <li><sub>/init data: <a href="helloworldwithparamsfromenv/data-init.json">data-init.json</a></sub></li>
-          <li><sub>/run data: <a href="helloworldwithparamsfromenv/data-run.json">data-run.json</a></sub></li>
+          <li><sub>Knative data: <a href="helloworldwithparamsfromenv/data-init.json">data-init-run.json</a></sub></li>
+          <li><sub>OpenWhisk /init data: <a href="helloworldwithparamsfromenv/data-init.json">data-init.json</a></sub></li>
+          <li><sub>OpenWhisk /run data: <a href="helloworldwithparamsfromenv/data-run.json">data-run.json</a></sub></li>
+          <li><sub>Knative Payload: <a href="helloworldwithparamsfromenv/payload-knative-init-run.http">payload-knative-init-run.http</a></sub></li>
+          <li><sub>OpenWhisk /init Payload: <a href="helloworldwithparamsfromenv/payload-openwhisk-init.http">payload-openwhisk-init.http</a></sub></li>
+          <li><sub>OpenWhisk /run Payload: <a href="helloworldwithparamsfromenv/payload-openwhisk-run.http">payload-openwhisk-run.http</a></sub></li>
         </ul>
       </td>  
     </tr>
-    <! =================================================== -->
     <!-- webactionhelloworld -->
     <tr align="left" valign="top">
       <td>
