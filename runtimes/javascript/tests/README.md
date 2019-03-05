@@ -26,7 +26,7 @@
     <tr valign="top" align="left">
       <th width="33%">Name / Description</th>
       <th width="33%">Knative Resource Templates</th>
-      <th width="33%">Runtime Payload Data (e.g., Curl, VSCode, etc.)</th>
+      <th width="33%">Runtime Payload Data<br></br>(e.g., Curl, VSCode, etc.)</th>
     </tr>
     <!-- HelloWorld -->
     <tr align="left" valign="top">
@@ -75,7 +75,7 @@
       <td>
         <ul>
           <li><sub>Knative Build: <a href="helloworldwithparamsfromenv/build.yaml.tmpl">build.yaml.tmpl</a></sub></li>
-          <li><sub>Knative Service: <a href="helloworldwithparamsfromenv/build.yaml.tmpl">build.yaml.tmpl</a></sub>/li>
+          <li><sub>Knative Service: <a href="helloworldwithparamsfromenv/build.yaml.tmpl">build.yaml.tmpl</a></sub></li>
         </ul>
       </td>
       <td>
