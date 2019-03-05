@@ -24,32 +24,160 @@
 <table cellpadding="8">
   <tbody>
     <tr valign="top" align="left">
-      <th width="180">Name</th>
-      <th width="180">Knative Build</th>
-      <th width="180">Knative Service</th>
-      <th width="300">init data</th>
-      <th width="300">Description</th>
+      <th width="33%">Name / Description</th>
+      <th width="33%">Knative Resource Templates</th>
+      <th width="33%">Runtime Payload Data<br><sub>(e.g., Curl, VSCode, etc.)</sub></th>
     </tr>
+    <!-- HelloWorld -->
     <tr align="left" valign="top">
-      <td><sub><a href="helloworld">helloworld</a></sub></td>
-      <td><sub><a href="helloworld/build.yaml.tmpl">build.yaml.tmpl</a></sub></td>
-      <td><sub><a href="helloworld/service.yaml.tmpl">service-helloworld.yaml</a></sub></td>
-      <td><sub><a href="helloworld/init-data-helloworld.json">init-data-helloworld.json</a></sub></td>
-      <td><sub>A simple "Hello world" function with no parameters.</sub></td>
+      <td>
+        <a href="helloworld">helloworld</a>
+        <p><sub>A simple "Hello world" function with no parameters.</sub></p>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Build: <a href="helloworld/build.yaml.tmpl">build.yaml.tmpl</a></sub></li>
+          <li><sub>Service: <a href="helloworld/build.yaml.tmpl">build.yaml.tmpl</a></sub></li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Knative data: <a href="helloworld/data-init.json">data-init-run.json</a></sub></li>
+          <li><sub>OpenWhisk /init data: <a href="helloworld/data-init.json">data-init.json</a></sub></li>
+          <li><sub>OpenWhisk /run data: <a href="helloworld/data-run.json">data-run.json</a></sub></li>
+          <li><sub>Knative Payload: <a href="helloworld/payload-knative-init-run.http">payload-knative-init-run.http</a></sub></li>
+          <li><sub>OpenWhisk /init Payload: <a href="helloworld/payload-openwhisk-init.http">payload-openwhisk-init.http</a></sub></li>
+          <li><sub>OpenWhisk /run Payload: <a href="helloworld/payload-openwhisk-run.http">payload-openwhisk-run.http</a></sub></li>
+        </ul>
+      </td>
     </tr>
+    <!-- HelloWorld with Params -->
     <tr align="left" valign="top">
-      <td><sub><a href="helloworldwithparams">helloworldwithparams</a></sub></td>
-      <td><sub><a href="helloworldwithparams/build.yaml.tmpl">build.yaml.tmpl</a></sub></td>
-      <td><sub><a href="helloworldwithparams/service.yaml.tmpl">service-helloworld.yaml</a></sub></td>
-      <td><sub><a href="helloworldwithparams/init-data-helloworld.json">init-data-helloworld.json</a></sub></td>
-      <td><sub>A simple "Hello world" function with NAME and PLACE parameters passed via params JSON object.</sub></td>
+      <td>
+        <a href="helloworldwithparams">helloworldwithparams</a>
+        <p><sub>A simple "Hello world" function with NAME and PLACE parameters passed via params JSON object.</sub></p>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Build: <a href="helloworldwithparams/build.yaml.tmpl">build.yaml.tmpl</a></sub></li>
+          <li><sub>Service: <a href="helloworldwithparams/service.yaml.tmpl">service.yaml.tmpl</a></sub></li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Knative data: <a href="helloworldwithparams/data-init.json">data-init-run.json</a></sub></li>
+          <li><sub>OpenWhisk /init data: <a href="helloworldwithparams/data-init.json">data-init.json</a></sub></li>
+          <li><sub>OpenWhisk /run data: <a href="helloworldwithparams/data-run.json">data-run.json</a></sub></li>
+          <li><sub>Knative Payload: <a href="helloworldwithparams/payload-knative-init-run.http">payload-knative-init-run.http</a></sub></li>
+          <li><sub>OpenWhisk /init Payload: <a href="helloworldwithparams/payload-openwhisk-init.http">payload-openwhisk-init.http</a></sub></li>
+          <li><sub>OpenWhisk /run Payload: <a href="helloworldwithparams/payload-openwhisk-run.http">payload-openwhisk-run.http</a></sub></li>          
+        </ul>
+      </td>
     </tr>
+    <!-- HelloWorld with Params from Environment -->
     <tr align="left" valign="top">
-      <td><sub><a href="helloworldwithparamsfromenv">helloworldwithparamsfromenv</a></sub></td>
-      <td><sub><a href="helloworldwithparamsfromenv/build.yaml.tmpl">build.yaml.tmpl</a></sub></td>
-      <td><sub><a href="helloworldwithparamsfromenv/service.yaml.tmpl">service-helloworld.yaml</a></sub></td>
-      <td><sub><a href="helloworldwithparamsfromenv/init-data-helloworld.json">init-data-helloworld.json</a></sub></td>
-      <td><sub>A simple "Hello world" function with NAME and PLACE parameters avail. from NodeJS as process environment variables.  </sub></td>
+      <td>
+        <a href="helloworldwithparamsfromenv">helloworldwithparamsfromenv</a>
+        <p><sub>A simple "Hello world" function with NAME and PLACE parameters avail. from NodeJS as process environment variables.</sub></p>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Build: <a href="helloworldwithparamsfromenv/build.yaml.tmpl">build.yaml.tmpl</a></sub></li>
+          <li><sub>Service: <a href="helloworldwithparamsfromenv/service.yaml.tmpl">service.yaml.tmpl</a></sub></li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Knative data: <a href="helloworldwithparamsfromenv/data-init.json">data-init-run.json</a></sub></li>
+          <li><sub>OpenWhisk /init data: <a href="helloworldwithparamsfromenv/data-init.json">data-init.json</a></sub></li>
+          <li><sub>OpenWhisk /run data: <a href="helloworldwithparamsfromenv/data-run.json">data-run.json</a></sub></li>
+          <li><sub>Knative Payload: <a href="helloworldwithparamsfromenv/payload-knative-init-run.http">payload-knative-init-run.http</a></sub></li>
+          <li><sub>OpenWhisk /init Payload: <a href="helloworldwithparamsfromenv/payload-openwhisk-init.http">payload-openwhisk-init.http</a></sub></li>
+          <li><sub>OpenWhisk /run Payload: <a href="helloworldwithparamsfromenv/payload-openwhisk-run.http">payload-openwhisk-run.http</a></sub></li>
+        </ul>
+      </td>  
+    </tr>
+    <!-- webactionhelloworld -->
+    <tr align="left" valign="top">
+      <td>
+        <a href="webactionhelloworld">webactionhelloworld</a>
+        <p><sub>A Web Action takes the request query parameters and makes them available as arguments to 
+        your ```main``` function. In this case, the value for the ```name``` query parameter is used in a 
+        Hello World function.</sub></p>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Build: <a href="webactionhelloworld/build.yaml.tmpl">TBD</a></sub></li>
+          <li><sub>Service: <a href="webactionhelloworld/service.yaml.tmpl">TBD</a></sub></li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Knative Payload: <a href="webactionhelloworld/payload-knative-init-run.http">payload-knative-init-run.http</a></sub></li>
+          <li><sub>OpenWhisk /init Payload: <a href="webactionhelloworld/payload-openwhisk-init.http">payload-openwhisk-init.http</a></sub></li>
+          <li><sub>OpenWhisk /run Payload: <a href="webactionhelloworld/payload-openwhisk-run.http">payload-openwhisk-run.http</a></sub></li>
+        </ul>
+      </td>  
+    </tr>
+    <!-- webactionhttpredirect -->
+    <tr align="left" valign="top">
+      <td>
+        <a href="webactionhttpredirect">webactionhttpredirect</a>
+        <p><sub>A Web Action that shows how to perform an HTTP redirect.</sub></p>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Build: <a href="webactionhttpredirect/build.yaml.tmpl">TBD</a></sub></li>
+          <li><sub>Service: <a href="webactionhttpredirect/service.yaml.tmpl">TBD</a></sub></li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Knative Payload: <a href="webactionhttpredirect/payload-knative-init-run.http">payload-knative-init-run.http</a></sub></li>
+          <li><sub>OpenWhisk /init Payload: <a href="webactionhttpredirect/payload-openwhisk-init.http">payload-openwhisk-init.http</a></sub></li>
+          <li><sub>OpenWhisk /run Payload: <a href="webactionhttpredirect/payload-openwhisk-run.http">payload-openwhisk-run.http</a></sub></li>
+        </ul>
+      </td>  
+    </tr>
+    <!-- webactionjsonparams -->
+    <tr align="left" valign="top">
+      <td>
+        <a href="webactionjsonparams">webactionjsonparams</a>
+        <p><sub>A Web Action that shows how to set an HTTP response ```Content-Type``` and status code for a JSON payload.</sub></p>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Build: <a href="webactionjsonparams/build.yaml.tmpl">TBD</a></sub></li>
+          <li><sub>Service: <a href="webactionjsonparams/service.yaml.tmpl">TBD</a></sub></li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Knative Payload: <a href="webactionjsonparams/payload-knative-init-run.http">payload-knative-init-run.http</a></sub></li>
+          <li><sub>OpenWhisk /init Payload: <a href="webactionjsonparams/payload-openwhisk-init.http">payload-openwhisk-init.http</a></sub></li>
+          <li><sub>OpenWhisk /run Payload: <a href="webactionjsonparams/payload-openwhisk-run.http">payload-openwhisk-run.http</a></sub></li>
+        </ul>
+      </td>  
+    </tr>
+    <!-- webactionsettingcookie -->
+    <tr align="left" valign="top">
+      <td>
+        <a href="webactionsettingcookie">webactionsettingcookie</a>
+        <p><sub>A Web Action that shows how to set the HTTP response ```Set-Cookie``` field using an HTML payload.</sub></p>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Build: <a href="webactionsettingcookie/build.yaml.tmpl">TBD</a></sub></li>
+          <li><sub>Service: <a href="webactionsettingcookie/service.yaml.tmpl">TBD</a></sub></li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Knative Payload: <a href="webactionsettingcookie/payload-knative-init-run.http">payload-knative-init-run.http</a></sub></li>
+          <li><sub>OpenWhisk /init Payload: <a href="webactionsettingcookie/payload-openwhisk-init.http">payload-openwhisk-init.http</a></sub></li>
+          <li><sub>OpenWhisk /run Payload: <a href="webactionsettingcookie/payload-openwhisk-run.http">payload-openwhisk-run.http</a></sub></li>
+        </ul>
+      </td>  
     </tr>
   </tbody>
 </table>   
@@ -82,9 +210,15 @@ sed 's/${DOCKER_USERNAME}/'"$DOCKER_USERNAME"'/' service.yaml.tmpl > service.yam
 kubectl apply -f service.yaml
 ```
 
-## Running the Test
+## Running the Test on different platforms
 
 Depending on the value you set in [buildtemplate.yaml](../buildtemplate.yaml) for the ```OW_RUNTIME_PLATFORM``` parameter, you will need to invoke different endpoints to execute the test.
+
+Currently, the following platform (values) are supported:
+- openwhisk
+- knative
+
+---
 
 ### Running with OW_RUNTIME_PLATFORM set to "knative"
 
@@ -96,11 +230,12 @@ If your function requires no input data on the request:
 curl -H "Host: <hostname>" -X POST http://localhost/
 ```
 
-otherwise, you can supply the request data and ```Content-Type``` on the command. For example, you can pass in JSON data to your function:
+otherwise, you can supply the request data and ```Content-Type``` on the command and pass the JSON data to your function via data file:
 
 ```
-curl -H "Host: <hostname>" -d '{"value": {"name": "Joe", "place": "TX"}}' -H "Content-Type: application/json" http://localhost/
+curl -H "Host: <hostname>" -d "@data-init-run.json" -H "Content-Type: application/json" http://localhost/
 ```
+---
 
 ### Running with OW_RUNTIME_PLATFORM set to "openwhisk"
 
@@ -109,7 +244,7 @@ curl -H "Host: <hostname>" -d '{"value": {"name": "Joe", "place": "TX"}}' -H "Co
 Initialize the runtime with the function and other configuration data using the ```/init``` endpoint.
 
 ```
-curl -H "Host: <hostname>" -d "@<request-init-data-filename>.json" -H "Content-Type: application/json" http://localhost/init
+curl -H "Host: <hostname>" -d "@data-init.json" -H "Content-Type: application/json" http://localhost/init
 ```
 
 #### Run the function
@@ -125,8 +260,9 @@ curl -H "Host: <hostname>" -X POST http://localhost/run
 or with request data and its ```Content-Type```:
 
 ```
-curl -H "Host: <hostname>" -d "@<request-run-data-filename>" -H "Content-Type: <content-type>" -X POST http://localhost/run
+curl -H "Host: <hostname>" -d "@data-run.json" -H "Content-Type: <content-type>" -X POST http://localhost/run
 ```
+
 # Troubleshooting
 
 ## Pod will not Terminate

@@ -19,33 +19,7 @@
 
 # Hello World with Params from Env. Test for OpenWhisk NodeJS Runtime using Knative
 
-# Running the Test
-
-### Pre-requisite
-
-```
-kubectl get buildtemplate
-NAME                       CREATED AT
-openwhisk-nodejs-runtime   10m
-```
-
-### Configure and Deploy Build YAML 
-
-```
-export DOCKER_USERNAME="myusername"
-sed 's/${DOCKER_USERNAME}/'"$DOCKER_USERNAME"'/' build.yaml.tmpl > build.yaml
-kubectl apply -f build.yaml
-```
-
-### Configure and Deploy Service YAML
-
-```
-export DOCKER_USERNAME="myusername"
-sed 's/${DOCKER_USERNAME}/'"$DOCKER_USERNAME"'/' service.yaml.tmpl > service.yaml
-kubectl apply -f service.yaml
-```
-
-## Running the Test
+## Running the test using the "Curl" command
 
 Depending on the value you set in [buildtemplate.yaml](../../buildtemplate.yaml) for the ```OW_RUNTIME_PLATFORM``` parameter, you will need to invoke different endpoints to execute the test.
 
