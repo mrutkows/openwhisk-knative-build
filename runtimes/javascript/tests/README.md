@@ -105,8 +105,8 @@
       </td>
       <td>
         <ul>
-          <li><sub>Build: <a href="webactionhelloworld/build.yaml.tmpl">build.yaml.tmpl</a></sub></li>
-          <li><sub>Service: <a href="webactionhelloworld/service.yaml.tmpl">service.yaml.tmpl</a></sub></li>
+          <li><sub>Build: <a href="webactionhelloworld/build.yaml.tmpl">TBD</a></sub></li>
+          <li><sub>Service: <a href="webactionhelloworld/service.yaml.tmpl">TBD</a></sub></li>
         </ul>
       </td>
       <td>
@@ -125,8 +125,8 @@
       </td>
       <td>
         <ul>
-          <li><sub>Build: <a href="webactionhttpredirect/build.yaml.tmpl">build.yaml.tmpl</a></sub></li>
-          <li><sub>Service: <a href="webactionhttpredirect/service.yaml.tmpl">service.yaml.tmpl</a></sub></li>
+          <li><sub>Build: <a href="webactionhttpredirect/build.yaml.tmpl">TBD</a></sub></li>
+          <li><sub>Service: <a href="webactionhttpredirect/service.yaml.tmpl">TBD</a></sub></li>
         </ul>
       </td>
       <td>
@@ -145,8 +145,8 @@
       </td>
       <td>
         <ul>
-          <li><sub>Build: <a href="webactionjsonparams/build.yaml.tmpl">build.yaml.tmpl</a></sub></li>
-          <li><sub>Service: <a href="webactionjsonparams/service.yaml.tmpl">service.yaml.tmpl</a></sub></li>
+          <li><sub>Build: <a href="webactionjsonparams/build.yaml.tmpl">TBD</a></sub></li>
+          <li><sub>Service: <a href="webactionjsonparams/service.yaml.tmpl">TBD</a></sub></li>
         </ul>
       </td>
       <td>
