@@ -210,9 +210,15 @@ sed 's/${DOCKER_USERNAME}/'"$DOCKER_USERNAME"'/' service.yaml.tmpl > service.yam
 kubectl apply -f service.yaml
 ```
 
-## Running the Test
+## Running the Test on different platforms
 
 Depending on the value you set in [buildtemplate.yaml](../buildtemplate.yaml) for the ```OW_RUNTIME_PLATFORM``` parameter, you will need to invoke different endpoints to execute the test.
+
+Currently, the following platform (values) are supported:
+- openwhisk
+- knative
+
+---
 
 ### Running with OW_RUNTIME_PLATFORM set to "knative"
 
@@ -229,6 +235,7 @@ otherwise, you can supply the request data and ```Content-Type``` on the command
 ```
 curl -H "Host: <hostname>" -d "@data-init-run.json" -H "Content-Type: application/json" http://localhost/
 ```
+---
 
 ### Running with OW_RUNTIME_PLATFORM set to "openwhisk"
 
