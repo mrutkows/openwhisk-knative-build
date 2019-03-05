@@ -179,6 +179,26 @@
         </ul>
       </td>  
     </tr>
+    <!-- webactionpng -->
+    <tr align="left" valign="top">
+      <td>
+        <a href="webactionpng">webactionpng</a>
+        <p><sub>A Web Action that shows how to set the HTTP response ```Set-Cookie``` field using an HTML payload.</sub></p>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Build: <a href="webactionpng/build.yaml.tmpl">TBD</a></sub></li>
+          <li><sub>Service: <a href="webactionpng/service.yaml.tmpl">TBD</a></sub></li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Knative Payload: <a href="webactionpng/payload-knative-init-run.http">payload-knative-init-run.http</a></sub></li>
+          <li><sub>OpenWhisk /init Payload: <a href="webactionpng/payload-openwhisk-init.http">payload-openwhisk-init.http</a></sub></li>
+          <li><sub>OpenWhisk /run Payload: <a href="webactionpng/payload-openwhisk-run.http">payload-openwhisk-run.http</a></sub></li>
+        </ul>
+      </td>  
+    </tr>
   </tbody>
 </table>   
 
