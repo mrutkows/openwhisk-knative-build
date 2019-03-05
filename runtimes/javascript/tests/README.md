@@ -211,10 +211,10 @@ If your function requires no input data on the request:
 curl -H "Host: <hostname>" -X POST http://localhost/
 ```
 
-otherwise, you can supply the request data and ```Content-Type``` on the command. For example, you can pass in JSON data to your function:
+otherwise, you can supply the request data and ```Content-Type``` on the command and pass the JSON data to your function via data file:
 
 ```
-curl -H "Host: <hostname>" -d '{"value": {"name": "Joe", "place": "TX"}}' -H "Content-Type: application/json" http://localhost/
+curl -H "Host: <hostname>" -d "@data-init-run.json" -H "Content-Type: application/json" http://localhost/
 ```
 
 ### Running with OW_RUNTIME_PLATFORM set to "openwhisk"
@@ -224,7 +224,7 @@ curl -H "Host: <hostname>" -d '{"value": {"name": "Joe", "place": "TX"}}' -H "Co
 Initialize the runtime with the function and other configuration data using the ```/init``` endpoint.
 
 ```
-curl -H "Host: <hostname>" -d "@<request-init-data-filename>.json" -H "Content-Type: application/json" http://localhost/init
+curl -H "Host: <hostname>" -d "@data-init.json" -H "Content-Type: application/json" http://localhost/init
 ```
 
 #### Run the function
@@ -240,7 +240,7 @@ curl -H "Host: <hostname>" -X POST http://localhost/run
 or with request data and its ```Content-Type```:
 
 ```
-curl -H "Host: <hostname>" -d "@<request-run-data-filename>" -H "Content-Type: <content-type>" -X POST http://localhost/run
+curl -H "Host: <hostname>" -d "@data-run.json" -H "Content-Type: <content-type>" -X POST http://localhost/run
 ```
 # Troubleshooting
 
