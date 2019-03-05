@@ -85,6 +85,87 @@
         </ul>
       </td>  
     </tr>
+    <! =================================================== -->
+    <!-- webactionhelloworld -->
+    <tr align="left" valign="top">
+      <td>
+        <a href="webactionhelloworld">webactionhelloworld</a>
+        <p><sub></sub></p>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Build: <a href="webactionhelloworld/build.yaml.tmpl">build.yaml.tmpl</a></sub></li>
+          <li><sub>Service: <a href="webactionhelloworld/service.yaml.tmpl">service.yaml.tmpl</a></sub></li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Knative Payload: <a href="webactionhelloworld/payload-knative-init-run.http">payload-knative-init-run.http</a></sub></li>
+          <li><sub>OpenWhisk /init Payload: <a href="webactionhelloworld/payload-openwhisk-init.http">payload-openwhisk-init.http</a></sub></li>
+          <li><sub>OpenWhisk /run Payload: <a href="webactionhelloworld/payload-openwhisk-run.http">payload-openwhisk-run.http</a></sub></li>
+        </ul>
+      </td>  
+    </tr>
+    <!-- webactionhttpredirect -->
+    <tr align="left" valign="top">
+      <td>
+        <a href="webactionhttpredirect">webactionhttpredirect</a>
+        <p><sub></sub></p>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Build: <a href="webactionhttpredirect/build.yaml.tmpl">build.yaml.tmpl</a></sub></li>
+          <li><sub>Service: <a href="webactionhttpredirect/service.yaml.tmpl">service.yaml.tmpl</a></sub></li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Knative Payload: <a href="webactionhttpredirect/payload-knative-init-run.http">payload-knative-init-run.http</a></sub></li>
+          <li><sub>OpenWhisk /init Payload: <a href="webactionhttpredirect/payload-openwhisk-init.http">payload-openwhisk-init.http</a></sub></li>
+          <li><sub>OpenWhisk /run Payload: <a href="webactionhttpredirect/payload-openwhisk-run.http">payload-openwhisk-run.http</a></sub></li>
+        </ul>
+      </td>  
+    </tr>
+    <!-- webactionjsonparams -->
+    <tr align="left" valign="top">
+      <td>
+        <a href="webactionjsonparams">webactionjsonparams</a>
+        <p><sub></sub></p>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Build: <a href="webactionjsonparams/build.yaml.tmpl">build.yaml.tmpl</a></sub></li>
+          <li><sub>Service: <a href="webactionjsonparams/service.yaml.tmpl">service.yaml.tmpl</a></sub></li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Knative Payload: <a href="webactionjsonparams/payload-knative-init-run.http">payload-knative-init-run.http</a></sub></li>
+          <li><sub>OpenWhisk /init Payload: <a href="webactionjsonparams/payload-openwhisk-init.http">payload-openwhisk-init.http</a></sub></li>
+          <li><sub>OpenWhisk /run Payload: <a href="webactionjsonparams/payload-openwhisk-run.http">payload-openwhisk-run.http</a></sub></li>
+        </ul>
+      </td>  
+    </tr>
+    <!-- webactionsettingcookie -->
+    <tr align="left" valign="top">
+      <td>
+        <a href="webactionsettingcookie">webactionsettingcookie</a>
+        <p><sub></sub></p>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Build: <a href="webactionsettingcookie/build.yaml.tmpl">TBD</a></sub></li>
+          <li><sub>Service: <a href="webactionsettingcookie/service.yaml.tmpl">TBD</a></sub></li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Knative Payload: <a href="webactionsettingcookie/payload-knative-init-run.http">payload-knative-init-run.http</a></sub></li>
+          <li><sub>OpenWhisk /init Payload: <a href="webactionsettingcookie/payload-openwhisk-init.http">payload-openwhisk-init.http</a></sub></li>
+          <li><sub>OpenWhisk /run Payload: <a href="webactionsettingcookie/payload-openwhisk-run.http">payload-openwhisk-run.http</a></sub></li>
+        </ul>
+      </td>  
+    </tr>
   </tbody>
 </table>   
 
