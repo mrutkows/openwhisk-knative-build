@@ -24,32 +24,66 @@
 <table cellpadding="8">
   <tbody>
     <tr valign="top" align="left">
-      <th width="180">Name</th>
-      <th width="180">Knative Build</th>
-      <th width="180">Knative Service</th>
-      <th width="300">init data</th>
-      <th width="300">Description</th>
+      <th width="33%">Name / Description</th>
+      <th width="33%">Knative Resource Templates</th>
+      <th width="33%">Runtime Payload Data (e.g., Curl, VSCode, etc.)</th>
     </tr>
+    <!-- HelloWorld -->
     <tr align="left" valign="top">
-      <td><sub><a href="helloworld">helloworld</a></sub></td>
-      <td><sub><a href="helloworld/build.yaml.tmpl">build.yaml.tmpl</a></sub></td>
-      <td><sub><a href="helloworld/service.yaml.tmpl">service-helloworld.yaml</a></sub></td>
-      <td><sub><a href="helloworld/init-data-helloworld.json">init-data-helloworld.json</a></sub></td>
-      <td><sub>A simple "Hello world" function with no parameters.</sub></td>
+      <td>
+        <a href="helloworld">helloworld</a>
+        <p><sub>A simple "Hello world" function with no parameters.</sub></p>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Build: <a href="helloworld/build.yaml.tmpl">build.yaml.tmpl</a></sub></li>
+          <li><sub>Service: <a href="helloworld/build.yaml.tmpl">build.yaml.tmpl</a></sub></li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li><sub>/init data: <a href="helloworld/data-init.json">data-init.json</a></sub></li>
+          <li><sub>/run data: <a href="helloworld/data-run.json">data-run.json</a></sub></li>
+        </ul>
+      </td>
     </tr>
+    <!-- HelloWorld with Params -->
     <tr align="left" valign="top">
-      <td><sub><a href="helloworldwithparams">helloworldwithparams</a></sub></td>
-      <td><sub><a href="helloworldwithparams/build.yaml.tmpl">build.yaml.tmpl</a></sub></td>
-      <td><sub><a href="helloworldwithparams/service.yaml.tmpl">service-helloworld.yaml</a></sub></td>
-      <td><sub><a href="helloworldwithparams/init-data-helloworld.json">init-data-helloworld.json</a></sub></td>
-      <td><sub>A simple "Hello world" function with NAME and PLACE parameters passed via params JSON object.</sub></td>
+      <td>
+        <a href="helloworldwithparams">helloworldwithparams</a>
+        <p><sub>A simple "Hello world" function with NAME and PLACE parameters passed via params JSON object.</sub></p>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Knative Build: <a href="helloworldwithparams/build.yaml.tmpl">build.yaml.tmpl</a></sub></li>
+          <li><sub>Knative Service: <a href="helloworldwithparams/build.yaml.tmpl">build.yaml.tmpl</a></sub></li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li><sub>/init data: <a href="helloworldwithparams/data-init.json">data-init.json</a></sub></li>
+          <li><sub>/run data: <a href="helloworldwithparams/data-run.json">data-run.json</a></sub></li>
+        </ul>
+      </td>
     </tr>
+    <!-- HelloWorld with Params from Environment -->
     <tr align="left" valign="top">
-      <td><sub><a href="helloworldwithparamsfromenv">helloworldwithparamsfromenv</a></sub></td>
-      <td><sub><a href="helloworldwithparamsfromenv/build.yaml.tmpl">build.yaml.tmpl</a></sub></td>
-      <td><sub><a href="helloworldwithparamsfromenv/service.yaml.tmpl">service-helloworld.yaml</a></sub></td>
-      <td><sub><a href="helloworldwithparamsfromenv/init-data-helloworld.json">init-data-helloworld.json</a></sub></td>
-      <td><sub>A simple "Hello world" function with NAME and PLACE parameters avail. from NodeJS as process environment variables.  </sub></td>
+      <td>
+        <a href="helloworldwithparamsfromenv">helloworldwithparamsfromenv</a>
+        <p><sub>A simple "Hello world" function with NAME and PLACE parameters avail. from NodeJS as process environment variables.</sub></p>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Knative Build: <a href="helloworldwithparamsfromenv/build.yaml.tmpl">build.yaml.tmpl</a></sub></li>
+          <li><sub>Knative Service: <a href="helloworldwithparamsfromenv/build.yaml.tmpl">build.yaml.tmpl</a></sub>/li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li><sub>/init data: <a href="helloworldwithparamsfromenv/data-init.json">data-init.json</a></sub></li>
+          <li><sub>/run data: <a href="helloworldwithparamsfromenv/data-run.json">data-run.json</a></sub></li>
+        </ul>
+      </td>  
     </tr>
   </tbody>
 </table>   
