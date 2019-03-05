@@ -134,6 +134,8 @@ function postProcessResponse(result, res) {
         delete body['statusCode'];
     }
 
+    // the default content-type for an HTTP response is application/json
+    // this default are overwritten with the action specified headers
     if (result.response.headers !== undefined) {
         headers = result.response.headers;
         delete body['headers'];
@@ -192,7 +194,6 @@ function PlatformFactory(id, svc, cfg) {
             res.status(500).json({error: "internal error"})
         }
     }
-
 };
 
 module.exports = PlatformFactory;
