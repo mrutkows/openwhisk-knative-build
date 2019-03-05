@@ -101,7 +101,9 @@
     <tr align="left" valign="top">
       <td>
         <a href="webactionhelloworld">webactionhelloworld</a>
-        <p><sub></sub></p>
+        <p><sub>A Web Action takes the request query parameters and makes them available as arguments to 
+        your ```main``` function. In this case, the value for the ```name``` query parameter is used in a 
+        Hello World function.</sub></p>
       </td>
       <td>
         <ul>
@@ -121,7 +123,7 @@
     <tr align="left" valign="top">
       <td>
         <a href="webactionhttpredirect">webactionhttpredirect</a>
-        <p><sub></sub></p>
+        <p><sub>A Web Action that shows how to perform an HTTP redirect.</sub></p>
       </td>
       <td>
         <ul>
@@ -141,7 +143,7 @@
     <tr align="left" valign="top">
       <td>
         <a href="webactionjsonparams">webactionjsonparams</a>
-        <p><sub></sub></p>
+        <p><sub>A Web Action that shows how to set an HTTP response ```Content-Type``` and status code for a JSON payload.</sub></p>
       </td>
       <td>
         <ul>
@@ -161,7 +163,7 @@
     <tr align="left" valign="top">
       <td>
         <a href="webactionsettingcookie">webactionsettingcookie</a>
-        <p><sub></sub></p>
+        <p><sub>A Web Action that shows how to set the HTTP response ```Set-Cookie``` field using an HTML payload.</sub></p>
       </td>
       <td>
         <ul>
@@ -253,6 +255,7 @@ or with request data and its ```Content-Type```:
 ```
 curl -H "Host: <hostname>" -d "@data-run.json" -H "Content-Type: <content-type>" -X POST http://localhost/run
 ```
+
 # Troubleshooting
 
 ## Pod will not Terminate
