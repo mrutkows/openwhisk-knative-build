@@ -1,8 +1,0 @@
-{
-    "value": {
-        "name" : "helloNodeJS",
-        "main" : "main",
-        "binary": false,
-        "code": "function main(params) {\n    console.log(\"params\")\n    return { msg: \"hi\" };\n}\n"
-    }
-}

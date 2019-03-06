@@ -55,7 +55,7 @@
     <tr align="left" valign="top">
       <td>
         <a href="helloworldwithparams">helloworldwithparams</a>
-        <p><sub>A simple "Hello world" function with NAME and PLACE parameters passed via params JSON object.</sub></p>
+        <p><sub>A simple "Hello world" function with <em>NAME</em> and <em>PLACE</em> parameters passed via <em>main</em> function args.</sub></p>
       </td>
       <td>
         <ul>
@@ -78,7 +78,7 @@
     <tr align="left" valign="top">
       <td>
         <a href="helloworldwithparamsfromenv">helloworldwithparamsfromenv</a>
-        <p><sub>A simple "Hello world" function with NAME and PLACE parameters avail. from NodeJS as process environment variables.</sub></p>
+        <p><sub>A simple "Hello world" function with <em>NAME</em> and <em>PLACE</em> parameters avail. from NodeJS as process environment variables.</sub></p>
       </td>
       <td>
         <ul>
@@ -101,8 +101,8 @@
     <tr align="left" valign="top">
       <td>
         <a href="webactionhelloworld">webactionhelloworld</a>
-        <p><sub>A Web Action takes the request query parameters and makes them available as arguments to 
-        your ```main``` function. In this case, the value for the ```name``` query parameter is used in a 
+        <p><sub>A Web Action that takes the HTTP request's query parameters and makes them available as arguments to 
+        the <em>main</em> function. In this case, the value for the <em>name</em> query parameter is used in a 
         Hello World function.</sub></p>
       </td>
       <td>
@@ -143,7 +143,7 @@
     <tr align="left" valign="top">
       <td>
         <a href="webactionjsonparams">webactionjsonparams</a>
-        <p><sub>A Web Action that shows how to set an HTTP response ```Content-Type``` and status code for a JSON payload.</sub></p>
+        <p><sub>A Web Action that shows how to set an HTTP response <em>Content-Type</em> and status code for a JSON payload.</sub></p>
       </td>
       <td>
         <ul>
@@ -163,7 +163,7 @@
     <tr align="left" valign="top">
       <td>
         <a href="webactionsettingcookie">webactionsettingcookie</a>
-        <p><sub>A Web Action that shows how to set the HTTP response ```Set-Cookie``` field using an HTML payload.</sub></p>
+        <p><sub>A Web Action that shows how to set the HTTP response <em>Set-Cookie</em> field using an HTML payload.</sub></p>
       </td>
       <td>
         <ul>
@@ -183,7 +183,7 @@
     <tr align="left" valign="top">
       <td>
         <a href="webactionpng">webactionpng</a>
-        <p><sub>A Web Action that shows how to set the HTTP response ```Set-Cookie``` field using an HTML payload.</sub></p>
+        <p><sub>A Web Action that shows how to set the HTTP response <em>Content-Type</em> to <em>image/png</em> with a base64 encoded payload.</sub></p>
       </td>
       <td>
         <ul>
