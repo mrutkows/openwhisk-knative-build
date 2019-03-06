@@ -240,9 +240,25 @@ Currently, the following platform (values) are supported:
 
 ---
 
-### Running with OW_RUNTIME_PLATFORM set to "knative"
+## Running with OW_RUNTIME_PLATFORM set to "knative"
 
-#### Invoke '/' endpoint on the Service
+Under the Knative platform, the developer has 2 choices:
+1. Use the Knative "build" step to "bake the function" into the runtime resulting into a dedicated runtime 
+container for your running a specific function 
+2. Use Knative build to create a "stem cell" runtime that allows some control plane to inject the function 
+dynaically.
+
+The test case cases un this directory presume option 2 ("stem cells") where both the both runtime 
+initialization, as well as function execution (Activation) happen sequentially.  However, as OW runtimes
+do not allow "re-initialization" at this time, once you send the "init data" once to the runtime you 
+cannot send it again or it will result in an error.
+
+Below are some options for invoking the endpoint manually using common developer tooling 
+in conjunction with prepared data:
+
+#### Using the 'curl' command
+
+Simply send the *"init-run"* data to the base '/' endpoint/route on the runtime (service).
 
 If your function requires no input data on the request:
 
@@ -255,9 +271,60 @@ otherwise, you can supply the request data and ```Content-Type``` on the command
 ```
 curl -H "Host: <hostname>" -d "@data-init-run.json" -H "Content-Type: application/json" http://localhost/
 ```
+
+#### Using Http Clients
+
+If using an IDE such as VSCode or IntelliJ you can simply "run" the HTTP payload files named  
+*'payload-knative-init-run.http'* which both initializes the runtime with the function and 
+configuration and executes the function with the provided *"values"* data.
+
+For example, the HelloWorld with parameters payload looks like this:
+
+```
+POST http://localhost:8080/ HTTP/1.1
+content-type: application/json
+
+{
+  "init": {
+    "name": "nodejs-helloworld",
+    "main": "main",
+    "binary": false,
+    "code": "function main() {return {payload: 'Hello World!'};}"
+  },
+  "activation": {
+    "namespace": "default",
+    "action_name": "nodejs-helloworld",
+    "api_host": "",
+    "api_key": "",
+    "activation_id": "",
+    "deadline": "4102498800000"
+  },
+  "value": {
+    "name": "Joe",
+    "place": "TX"
+  }
+}
+```
+
+please note that the *"activation"* data is also provided, but defaulted in most cases as these would
+be provided by a control-plane which would manage pools of the runtimes and track Activations. 
+
 ---
 
-### Running with OW_RUNTIME_PLATFORM set to "openwhisk"
+## Running with OW_RUNTIME_PLATFORM set to "openwhisk"
+
+The standard OW methods used to run functions is done through calls to 2 separte endpoints. 
+In short, The control plane would:
+
+1. first, invoke the */init* endpoint with strictly the OW "init. data" (JSON format) including the funtional
+code itself.
+2. then, invoke (i.e., Activate) the function with caller provided parameters via OW "value data" (JSON data) along with 
+per-activation information (which we simulate with defaults in these testcases).
+
+Below are some options for invoking these endpoints manually using common developer tooling 
+in conjunction with prepared data:
+
+### Using the 'curl' command
 
 #### Initialize the runtime
 
