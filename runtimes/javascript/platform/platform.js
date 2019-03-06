@@ -87,6 +87,48 @@ function preProcessActivationData(env, activationdata) {
 }
 
 /**
+ * helper function to set env variables for HTTP Context
+ */
+function httpContextEnv (key, value) {
+    if (typeof value === 'string') {
+        process.env[key] = value
+        DEBUG.dumpObject(process.env[key], key, "HTTPContext");
+    }
+}
+
+/**
+ * Pre-process HTTP request details, send them as parameters to the action input argument
+ * __ow_method, __ow_headers, __ow_path, __ow_user, __ow_body, and __ow_query
+ */
+function preProcessHTTPContext(req) {
+    DEBUG.functionStart()
+
+    try {
+        httpContextEnv(OW_ENV_PREFIX + "METHOD", req.method)
+        httpContextEnv(OW_ENV_PREFIX + "HEADERS", JSON.stringify(req.headers))
+        httpContextEnv(OW_ENV_PREFIX + "PATH", "");
+
+        var namespace = "";
+        if (process.env[OW_ENV_PREFIX + "NAMESPACE"] !== undefined) {
+            namespace = process.env[OW_ENV_PREFIX + "NAMESPACE"];
+        }
+        httpContextEnv(OW_ENV_PREFIX + "USER", namespace);
+
+        var bodyStr = JSON.stringify(req.body)
+        var bodyBase64 = Buffer.from(bodyStr).toString("base64")
+        httpContextEnv(OW_ENV_PREFIX + "BODY", bodyBase64)
+
+        httpContextEnv(OW_ENV_PREFIX + "QUERY", JSON.stringify(req.query));
+    } catch (e) {
+        console.error(e);
+        DEBUG.functionEndError(e.message);
+        throw ("Unable to initialize the runtime: " + e.message)
+    }
+    DEBUG.functionEnd()
+}
+
+
+/**
  * Pre-process the incoming http request data, moving it to where the
  * route handlers expect it to be for an openwhisk runtime.
  */
@@ -107,6 +149,9 @@ function preProcessRequest(req){
 
         // process per-activation (i.e, "run") data
         preProcessActivationData(env, activationData);
+
+        // set HTTP context
+        preProcessHTTPContext(req)
 
     } catch(e){
         console.error(e);
