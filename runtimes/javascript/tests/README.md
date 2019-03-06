@@ -243,8 +243,8 @@ Currently, the following platform (values) are supported:
 ## Running with OW_RUNTIME_PLATFORM set to "knative"
 
 Under the Knative platform, the developer has 2 choices:
-1. Use the Knative "build" step to "bake the function" into the runtime resulting into a dedicated runtime 
-container for your running a specific function 
+1. Use the Knative "build" step to "bake the function" into the runtime resulting in a dedicated runtime 
+(service) container for your running a specific function.
 2. Use Knative build to create a "stem cell" runtime that allows some control plane to inject the function 
 dynaically.
 
