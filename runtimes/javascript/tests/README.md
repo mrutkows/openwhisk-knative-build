@@ -107,8 +107,8 @@
       </td>
       <td>
         <ul>
-          <li><sub>Build: <a href="webactionhelloworld/build.yaml.tmpl">TBD</a></sub></li>
-          <li><sub>Service: <a href="webactionhelloworld/service.yaml.tmpl">TBD</a></sub></li>
+          <li><sub>Build: <a href="webactionhelloworld/build.yaml.tmpl">build.yaml.tmpl</a></sub></li>
+          <li><sub>Service: <a href="webactionhelloworld/service.yaml.tmpl">service.yaml.tmpl</a></sub></li>
         </ul>
       </td>
       <td>
