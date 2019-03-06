@@ -254,12 +254,12 @@ initialization, as well as function execution (Activation) happen sequentially.
 However, as OW runtimes do not allow "re-initialization" at this time, once you send the "init data" once to the runtime you 
 cannot send it again or it will result in an error.
 
-Below are some options for invoking the endpoint manually using common developer tooling 
+Below are some options for invoking the endpoint (route) manually using common developer tooling 
 in conjunction with prepared data:
 
 #### Using the 'curl' command
 
-Simply send the *"init-run"* data to the base '/' endpoint/route on the runtime (service).
+Simply send the *"init-run"* data to the base *'/'* route on the runtime (service) endpoint.
 
 If your function requires no input data on the request:
 
@@ -317,12 +317,13 @@ be provided by a control-plane which would manage pools of the runtimes and trac
 The standard OW methods used to run functions is done through calls to 2 separte endpoints. 
 In short, The control plane would:
 
-1. first, invoke the */init* endpoint with strictly the OW "init. data" (JSON format) including the funtional
+1. first, invoke the */init* route with strictly the OW "init. data" (JSON format) including the funtional
 code itself.
-2. then, invoke (i.e., Activate) the function with caller provided parameters via OW "value data" (JSON data) along with 
-per-activation information (which we simulate with defaults in these testcases).
+2. then, invoke */run* route which executes the function (i.e., Activates the function) with caller-provided 
+parameters via OW "value data" (JSON format) along with per-activation information which would normally be 
+provided and tracked by the control plane (default/dummy key-values provided for tests).
 
-Below are some options for invoking these endpoints manually using common developer tooling 
+Below are some options for invoking these routes manually using common developer tooling 
 in conjunction with prepared data:
 
 ### Using the 'curl' command
@@ -379,8 +380,3 @@ Also, be sure your service is completely deleted from the system:
 kubectl delete -f service.yaml
 ```
 
-<!--
-## Runtime creation & deletion
-
-Prior to starting each test, a fresh Runtime container is required since (by default) each can only be initialized once (i.e., /init entrypoint called once with a single function source code).  Conversely, the runtime once run with a test needs to be deleted for the next test. Each test indicates which Service YAML you need to "apply" or "delete" to assure a fresh runtime.
--->
