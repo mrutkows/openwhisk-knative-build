@@ -50,5 +50,5 @@ Execute the function using the ```/run``` endpoint.
 ```
 curl -H "Host: nodejs-helloworld.default.example.com" -d "@data-run.json" -H "Content-Type: application/json" -X POST http://localhost/run
 
-{"payload":"Hello"};
+{"payload":"Hello"}
 ```
