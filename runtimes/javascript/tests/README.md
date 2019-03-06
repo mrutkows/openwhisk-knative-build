@@ -246,11 +246,12 @@ Under the Knative platform, the developer has 2 choices:
 1. Use the Knative "build" step to "bake the function" into the runtime resulting in a dedicated runtime 
 (service) container for your running a specific function.
 2. Use Knative build to create a "stem cell" runtime that allows some control plane to inject the function 
-dynaically.
+dynamically.
 
-The test case cases un this directory presume option 2 ("stem cells") where both the both runtime 
-initialization, as well as function execution (Activation) happen sequentially.  However, as OW runtimes
-do not allow "re-initialization" at this time, once you send the "init data" once to the runtime you 
+The test case cases under this directory presume option 2 ("stem cells") where both the both runtime 
+initialization, as well as function execution (Activation) happen sequentially.  
+
+However, as OW runtimes do not allow "re-initialization" at this time, once you send the "init data" once to the runtime you 
 cannot send it again or it will result in an error.
 
 Below are some options for invoking the endpoint manually using common developer tooling 
