@@ -55,7 +55,7 @@
     <tr align="left" valign="top">
       <td>
         <a href="helloworldwithparams">helloworldwithparams</a>
-        <p><sub>A simple "Hello world" function with NAME and PLACE parameters passed via params JSON object.</sub></p>
+        <p><sub>A simple "Hello world" function with <em>NAME</em> and <em>PLACE</em> parameters passed via <em>main</em> function args.</sub></p>
       </td>
       <td>
         <ul>
@@ -78,7 +78,7 @@
     <tr align="left" valign="top">
       <td>
         <a href="helloworldwithparamsfromenv">helloworldwithparamsfromenv</a>
-        <p><sub>A simple "Hello world" function with NAME and PLACE parameters avail. from NodeJS as process environment variables.</sub></p>
+        <p><sub>A simple "Hello world" function with <em>NAME</em> and <em>PLACE</em> parameters avail. from NodeJS as process environment variables.</sub></p>
       </td>
       <td>
         <ul>
@@ -101,8 +101,8 @@
     <tr align="left" valign="top">
       <td>
         <a href="webactionhelloworld">webactionhelloworld</a>
-        <p><sub>A Web Action takes the request query parameters and makes them available as arguments to 
-        your ```main``` function. In this case, the value for the ```name``` query parameter is used in a 
+        <p><sub>A Web Action that takes the HTTP request's query parameters and makes them available as arguments to 
+        the <em>main</em> function. In this case, the value for the <em>name</em> query parameter is used in a 
         Hello World function.</sub></p>
       </td>
       <td>
@@ -143,7 +143,7 @@
     <tr align="left" valign="top">
       <td>
         <a href="webactionjsonparams">webactionjsonparams</a>
-        <p><sub>A Web Action that shows how to set an HTTP response ```Content-Type``` and status code for a JSON payload.</sub></p>
+        <p><sub>A Web Action that shows how to set an HTTP response <em>Content-Type</em> and status code for a JSON payload.</sub></p>
       </td>
       <td>
         <ul>
@@ -163,7 +163,7 @@
     <tr align="left" valign="top">
       <td>
         <a href="webactionsettingcookie">webactionsettingcookie</a>
-        <p><sub>A Web Action that shows how to set the HTTP response ```Set-Cookie``` field using an HTML payload.</sub></p>
+        <p><sub>A Web Action that shows how to set the HTTP response <em>Set-Cookie</em> field using an HTML payload.</sub></p>
       </td>
       <td>
         <ul>
@@ -176,6 +176,26 @@
           <li><sub>Knative Payload: <a href="webactionsettingcookie/payload-knative-init-run.http">payload-knative-init-run.http</a></sub></li>
           <li><sub>OpenWhisk /init Payload: <a href="webactionsettingcookie/payload-openwhisk-init.http">payload-openwhisk-init.http</a></sub></li>
           <li><sub>OpenWhisk /run Payload: <a href="webactionsettingcookie/payload-openwhisk-run.http">payload-openwhisk-run.http</a></sub></li>
+        </ul>
+      </td>  
+    </tr>
+    <!-- webactionpng -->
+    <tr align="left" valign="top">
+      <td>
+        <a href="webactionpng">webactionpng</a>
+        <p><sub>A Web Action that shows how to set the HTTP response <em>Content-Type</em> to <em>image/png</em> with a base64 encoded payload.</sub></p>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Build: <a href="webactionpng/build.yaml.tmpl">TBD</a></sub></li>
+          <li><sub>Service: <a href="webactionpng/service.yaml.tmpl">TBD</a></sub></li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li><sub>Knative Payload: <a href="webactionpng/payload-knative-init-run.http">payload-knative-init-run.http</a></sub></li>
+          <li><sub>OpenWhisk /init Payload: <a href="webactionpng/payload-openwhisk-init.http">payload-openwhisk-init.http</a></sub></li>
+          <li><sub>OpenWhisk /run Payload: <a href="webactionpng/payload-openwhisk-run.http">payload-openwhisk-run.http</a></sub></li>
         </ul>
       </td>  
     </tr>
@@ -220,9 +240,26 @@ Currently, the following platform (values) are supported:
 
 ---
 
-### Running with OW_RUNTIME_PLATFORM set to "knative"
+## Running with OW_RUNTIME_PLATFORM set to "knative"
 
-#### Invoke '/' endpoint on the Service
+Under the Knative platform, the developer has 2 choices:
+1. Use the Knative "build" step to "bake the function" into the runtime resulting in a dedicated runtime 
+(service) container for your running a specific function.
+2. Use Knative build to create a "stem cell" runtime that allows some control plane to inject the function 
+dynamically.
+
+The test case cases under this directory presume option 2 ("stem cells") where both the both runtime 
+initialization, as well as function execution (Activation) happen sequentially.  
+
+However, as OW runtimes do not allow "re-initialization" at this time, once you send the "init data" once to the runtime you 
+cannot send it again or it will result in an error.
+
+Below are some options for invoking the endpoint (route) manually using common developer tooling 
+in conjunction with prepared data:
+
+#### Using the 'curl' command
+
+Simply send the *"init-run"* data to the base *'/'* route on the runtime (service) endpoint.
 
 If your function requires no input data on the request:
 
@@ -235,9 +272,61 @@ otherwise, you can supply the request data and ```Content-Type``` on the command
 ```
 curl -H "Host: <hostname>" -d "@data-init-run.json" -H "Content-Type: application/json" http://localhost/
 ```
+
+#### Using Http Clients
+
+If using an IDE such as VSCode or IntelliJ you can simply "run" the HTTP payload files named  
+*'payload-knative-init-run.http'* which both initializes the runtime with the function and 
+configuration and executes the function with the provided *"values"* data.
+
+For example, the HelloWorld with parameters payload looks like this:
+
+```
+POST http://localhost:8080/ HTTP/1.1
+content-type: application/json
+
+{
+  "init": {
+    "name": "nodejs-helloworld",
+    "main": "main",
+    "binary": false,
+    "code": "function main() {return {payload: 'Hello World!'};}"
+  },
+  "activation": {
+    "namespace": "default",
+    "action_name": "nodejs-helloworld",
+    "api_host": "",
+    "api_key": "",
+    "activation_id": "",
+    "deadline": "4102498800000"
+  },
+  "value": {
+    "name": "Joe",
+    "place": "TX"
+  }
+}
+```
+
+please note that the *"activation"* data is also provided, but defaulted in most cases as these would
+be provided by a control-plane which would manage pools of the runtimes and track Activations. 
+
 ---
 
-### Running with OW_RUNTIME_PLATFORM set to "openwhisk"
+## Running with OW_RUNTIME_PLATFORM set to "openwhisk"
+
+The standard OW methods used to run functions is done through calls to 2 separte endpoints. 
+In short, The control plane would:
+
+1. first, invoke the */init* route with strictly the OW "init. data" (JSON format) including the funtional
+code itself.
+2. then, invoke */run* route which executes the function (i.e., Activates the function) with caller-provided 
+parameters via OW "value data" (JSON format) along with per-activation information which would normally be 
+provided and tracked by the control plane (default/dummy key-values provided for tests).
+
+Below are some options for invoking these routes manually using common developer tooling 
+in conjunction with prepared data:
+
+### Using the 'curl' command
 
 #### Initialize the runtime
 
@@ -291,8 +380,3 @@ Also, be sure your service is completely deleted from the system:
 kubectl delete -f service.yaml
 ```
 
-<!--
-## Runtime creation & deletion
-
-Prior to starting each test, a fresh Runtime container is required since (by default) each can only be initialized once (i.e., /init entrypoint called once with a single function source code).  Conversely, the runtime once run with a test needs to be deleted for the next test. Each test indicates which Service YAML you need to "apply" or "delete" to assure a fresh runtime.
--->
