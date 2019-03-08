@@ -113,6 +113,7 @@
       </td>
       <td>
         <ul>
+          <li><sub>Knative data: <a href="webactionhelloworld/data-init.json">data-init-run.json</a></sub></li>          
           <li><sub>Knative Payload: <a href="webactionhelloworld/payload-knative-init-run.http">payload-knative-init-run.http</a></sub></li>
           <li><sub>OpenWhisk /init Payload: <a href="webactionhelloworld/payload-openwhisk-init.http">payload-openwhisk-init.http</a></sub></li>
           <li><sub>OpenWhisk /run Payload: <a href="webactionhelloworld/payload-openwhisk-run.http">payload-openwhisk-run.http</a></sub></li>
@@ -133,6 +134,7 @@
       </td>
       <td>
         <ul>
+          <li><sub>Knative data: <a href="webactionhttpredirect/data-init.json">data-init-run.json</a></sub></li>          
           <li><sub>Knative Payload: <a href="webactionhttpredirect/payload-knative-init-run.http">payload-knative-init-run.http</a></sub></li>
           <li><sub>OpenWhisk /init Payload: <a href="webactionhttpredirect/payload-openwhisk-init.http">payload-openwhisk-init.http</a></sub></li>
           <li><sub>OpenWhisk /run Payload: <a href="webactionhttpredirect/payload-openwhisk-run.http">payload-openwhisk-run.http</a></sub></li>
@@ -153,6 +155,7 @@
       </td>
       <td>
         <ul>
+          <li><sub>Knative data: <a href="webactionjsonparams/data-init.json">data-init-run.json</a></sub></li>          
           <li><sub>Knative Payload: <a href="webactionjsonparams/payload-knative-init-run.http">payload-knative-init-run.http</a></sub></li>
           <li><sub>OpenWhisk /init Payload: <a href="webactionjsonparams/payload-openwhisk-init.http">payload-openwhisk-init.http</a></sub></li>
           <li><sub>OpenWhisk /run Payload: <a href="webactionjsonparams/payload-openwhisk-run.http">payload-openwhisk-run.http</a></sub></li>
@@ -173,6 +176,7 @@
       </td>
       <td>
         <ul>
+          <li><sub>Knative data: <a href="webactionsettingcookie/data-init.json">data-init-run.json</a></sub></li>          
           <li><sub>Knative Payload: <a href="webactionsettingcookie/payload-knative-init-run.http">payload-knative-init-run.http</a></sub></li>
           <li><sub>OpenWhisk /init Payload: <a href="webactionsettingcookie/payload-openwhisk-init.http">payload-openwhisk-init.http</a></sub></li>
           <li><sub>OpenWhisk /run Payload: <a href="webactionsettingcookie/payload-openwhisk-run.http">payload-openwhisk-run.http</a></sub></li>
@@ -193,6 +197,7 @@
       </td>
       <td>
         <ul>
+          <li><sub>Knative data: <a href="webactionpng/data-init.json">data-init-run.json</a></sub></li>          
           <li><sub>Knative Payload: <a href="webactionpng/payload-knative-init-run.http">payload-knative-init-run.http</a></sub></li>
           <li><sub>OpenWhisk /init Payload: <a href="webactionpng/payload-openwhisk-init.http">payload-openwhisk-init.http</a></sub></li>
           <li><sub>OpenWhisk /run Payload: <a href="webactionpng/payload-openwhisk-run.http">payload-openwhisk-run.http</a></sub></li>
