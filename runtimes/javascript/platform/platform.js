@@ -156,6 +156,10 @@ function preProcessRequest(req){
         // set HTTP context
         preProcessHTTPContext(req)
 
+        if (req.body === undefined || req.body !== body) {
+            req.body = body;
+        }
+
     } catch(e){
         console.error(e);
         DEBUG.functionEndError(e.message);
