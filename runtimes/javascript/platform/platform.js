@@ -29,9 +29,12 @@ function preProcessInitData(env, initdata, valuedata) {
         // Set defaults to use INIT data not provided on the request
         // Look first to the process (i.e., Container's) environment variables.
         var main = (typeof env.__OW_ACTION_MAIN === 'undefined') ? "main" : env.__OW_ACTION_MAIN;
+        DEBUG.trace(main, "preProcessInitData")
         // TODO: Throw error if CODE is NOT defined!
         var code = (typeof env.__OW_ACTION_CODE === 'undefined') ? "" : env.__OW_ACTION_CODE;
+        DEBUG.trace(code, "preProcessInitData")
         var binary = (typeof env.__OW_ACTION_BINARY === 'undefined') ? false : env.__OW_ACTION_BINARY.toLowerCase() === "true";
+        DEBUG.trace(binary, "preProcessInitData")
 
         // Look for init data within the request (i.e., "stem cell" runtime, where code is injected by request)
         if (initdata) {
@@ -152,6 +155,10 @@ function preProcessRequest(req){
 
         // set HTTP context
         preProcessHTTPContext(req)
+
+        if (req.body === undefined || req.body !== body) {
+            req.body = body;
+        }
 
     } catch(e){
         console.error(e);
