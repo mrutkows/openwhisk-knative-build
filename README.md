@@ -264,3 +264,18 @@ statefulset "prometheus-system" created
 ```
 </details>
 </p>
+
+#### PROBLEM: Knative build fails initializing at `Init:1/4`
+
+Check the GitHub version is set to right branch.
+
+```
+  source:
+    git:
+      url: <repo>
+      revision: <branch>
+```
+```
+
+
+
