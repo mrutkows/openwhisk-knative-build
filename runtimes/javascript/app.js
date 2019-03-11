@@ -21,6 +21,7 @@ var DEBUG = new dbg();
 DEBUG.trace("Hello World from NodeJS runtime");
 DEBUG.dumpObject(process.env, "process.env");
 
+// __OW_ALLOW_CONCURRENT: see docs/concurrency.md
 var config = {
         'port': 8080,
         'apiHost': process.env.__OW_API_HOST,
@@ -47,8 +48,7 @@ var app = express();
 var service = require('./src/service').getService(config);
 
 // TODO: do not use express to hold config vars. for us, as we make the entire config. avail. to the service
-// i.e., the route handlers
-app.set('port', config.port);
+// app.set('port', config.port);
 
 /**
  * setup a middleware layer to restrict the request body size

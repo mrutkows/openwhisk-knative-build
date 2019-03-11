@@ -20,7 +20,7 @@ var DEBUG = new dbg();
 
 var NodeActionRunner = require('../runner');
 
-function NodeActionService(config) {
+function NodeActionService(cfg) {
 
     var Status = {
         ready: 'ready',
@@ -28,6 +28,8 @@ function NodeActionService(config) {
         running: 'running',
         stopped: 'stopped'
     };
+
+    var config = cfg;
 
     // TODO: save the entire configuration for use by any of the route handlers
     var status = Status.ready;
@@ -68,12 +70,19 @@ function NodeActionService(config) {
      */
     this.start = function start(app) {
         DEBUG.functionStart();
-        server = app.listen(app.get('port'), function() {
+        // server = app.listen(app.get('port'), function() {
+        //     var host = server.address().address;
+        //     var port = server.address().port;
+        //     DEBUG.trace("listening: host: [" + host + "], port: [" + port + "]", "Express (callback)");
+        // });
+
+        server = app.listen(config.port, function() {
             var host = server.address().address;
             var port = server.address().port;
             DEBUG.trace("listening: host: [" + host + "], port: [" + port + "]", "Express (callback)");
         });
-        //This is required as http server will auto disconnect in 2 minutes, this to not auto disconnect at all
+
+        // This is required as http server will auto disconnect in 2 minutes, this to not auto disconnect at all
         server.timeout = 0;
         DEBUG.dumpObject(server, "server");
         DEBUG.functionEnd();

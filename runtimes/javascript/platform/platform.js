@@ -153,12 +153,11 @@ function preProcessRequest(req){
         // process per-activation (i.e, "run") data
         preProcessActivationData(env, activationData);
 
-        // set HTTP context
-        preProcessHTTPContext(req)
-
-        if (req.body === undefined || req.body !== body) {
-            req.body = body;
-        }
+        // Fix up pointers in case we had to allocate new maps
+        req.body = body;
+        req.body.value = valueData;
+        req.body.init = initData;
+        req.body.activation =activationData;
 
     } catch(e){
         console.error(e);
