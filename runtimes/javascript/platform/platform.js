@@ -23,21 +23,28 @@ const OW_ENV_PREFIX = "__OW_";
 /**
  * Pre-process the incoming
  */
-function preProcessInitData(env, initdata, valuedata) {
+function preProcessInitData(env, initdata, valuedata, activationdata) {
     DEBUG.functionStart();
     try {
         // Set defaults to use INIT data not provided on the request
         // Look first to the process (i.e., Container's) environment variables.
         var main = (typeof env.__OW_ACTION_MAIN === 'undefined') ? "main" : env.__OW_ACTION_MAIN;
-        DEBUG.trace(main, "preProcessInitData")
         // TODO: Throw error if CODE is NOT defined!
         var code = (typeof env.__OW_ACTION_CODE === 'undefined') ? "" : env.__OW_ACTION_CODE;
-        DEBUG.trace(code, "preProcessInitData")
         var binary = (typeof env.__OW_ACTION_BINARY === 'undefined') ? false : env.__OW_ACTION_BINARY.toLowerCase() === "true";
-        DEBUG.trace(binary, "preProcessInitData")
+        // TODO: deault to empty?
+        var actionName = (typeof env.__OW_ACTION_NAME === 'undefined') ? "" : env.__OW_ACTION_NAME;
+        DEBUG.dumpObject(actionName, "Action name");
+        DEBUG.dumpObject(main, "Action main");
+        DEBUG.dumpObject(code, "Action code");
+        DEBUG.dumpObject(binary, "Action binary");
 
         // Look for init data within the request (i.e., "stem cell" runtime, where code is injected by request)
-        if (initdata) {
+        if (typeof(initdata) !== "undefined") {
+            if (initdata.name && typeof initdata.name === 'string') {
+                // TODO: Throw error if BINARY is not 'true' or 'false'
+                actionName = initdata.name;
+            }
             if (initdata.main && typeof initdata.main === 'string') {
                 main = initdata.main
             }
@@ -55,6 +62,22 @@ function preProcessInitData(env, initdata, valuedata) {
         valuedata.main = main;
         valuedata.code = code;
         valuedata.binary = binary;
+
+        // Action name is a special case, as we have a key collision on "name" between init. data and request
+        // param. data (as they both appear within "body.value") so we must save it to its final location
+        // as the default Action name as part of the activation data
+        // NOTE: if action name is not present in the action data, we will set it regardless even if an empty string
+        if( typeof(activationdata) !== "undefined" ) {
+            if ( typeof(activationdata.action_name) === "undefined" ||
+                (typeof(activationdata.action_name) === "string" && activationdata.action_name.length == 0 )){
+                activationdata.action_name = actionName;
+            }
+        }
+
+        DEBUG.dumpObject(valuedata.main, "valuedata.main");
+        DEBUG.dumpObject(valuedata.code , "valuedata.code");
+        DEBUG.dumpObject(valuedata.binary, "valuedata.binary");
+
     } catch(e){
         console.error(e);
         DEBUG.functionEndError(e.message);
@@ -148,16 +171,16 @@ function preProcessRequest(req){
         let env = process.env || {};
 
         // process initialization (i.e., "init") data
-        preProcessInitData(env, initData, valueData);
-
-        // process per-activation (i.e, "run") data
-        preProcessActivationData(env, activationData);
+        preProcessInitData(env, initData, valueData, activationData);
 
         // Fix up pointers in case we had to allocate new maps
         req.body = body;
         req.body.value = valueData;
         req.body.init = initData;
-        req.body.activation =activationData;
+        req.body.activation = activationData;
+
+        // process per-activation (i.e, "run") data
+        preProcessActivationData(env, activationData);
 
     } catch(e){
         console.error(e);
