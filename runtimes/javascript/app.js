@@ -25,7 +25,8 @@ DEBUG.dumpObject(process.env, "process.env");
 var config = {
         'port': 8080,
         'apiHost': process.env.__OW_API_HOST,
-        'allowConcurrent': process.env.__OW_ALLOW_CONCURRENT
+        'allowConcurrent': process.env.__OW_ALLOW_CONCURRENT,
+        'requestBodyLimit': "48mb"
 };
 
 var runtime_platform = {
@@ -54,7 +55,7 @@ var service = require('./src/service').getService(config);
  * setup a middleware layer to restrict the request body size
  * this middleware is called every time a request is sent to the server
  */
-app.use(bodyParser.json({ limit: "48mb" }));
+app.use(bodyParser.json({ limit: config.requestBodyLimit }));
 
 // identify the target Serverless platform
 var targetPlatform = process.env.__OW_RUNTIME_PLATFORM;
