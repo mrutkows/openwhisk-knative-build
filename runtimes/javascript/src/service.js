@@ -70,12 +70,6 @@ function NodeActionService(cfg) {
      */
     this.start = function start(app) {
         DEBUG.functionStart();
-        // server = app.listen(app.get('port'), function() {
-        //     var host = server.address().address;
-        //     var port = server.address().port;
-        //     DEBUG.trace("listening: host: [" + host + "], port: [" + port + "]", "Express (callback)");
-        // });
-
         server = app.listen(config.port, function() {
             var host = server.address().address;
             var port = server.address().port;
