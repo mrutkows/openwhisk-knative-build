@@ -268,6 +268,6 @@ function PlatformFactory(id, svc, cfg) {
             res.status(500).json({error: "internal error"})
         }
     }
-};
+}
 
 module.exports = PlatformFactory;
