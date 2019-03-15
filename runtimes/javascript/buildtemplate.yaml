@@ -1,3 +1,5 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more contributor
+# license agreements; and to You under the Apache License, Version 2.0.
 apiVersion: build.knative.dev/v1alpha1
 kind: BuildTemplate
 metadata:
@@ -27,6 +29,9 @@ spec:
   - name: OW_ACTION_BINARY
     description: flag to indicate zip function, for zip actions, "__OW_ACTION_CODE" must be base64 encoded string
     default: "false"
+  - name: OW_HTTP_METHODS
+    description: list of HTTP methods, any combination of [GET, POST, PUT, and DELETE], default is [POST]
+    default: "[POST]"
   steps:
   - name: add-ow-env-to-dockerfile
     image: "gcr.io/kaniko-project/executor:debug"
