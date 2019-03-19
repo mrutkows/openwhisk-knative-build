@@ -40,9 +40,11 @@ function preProcessInitData(env, initdata, valuedata, activationdata) {
         DEBUG.dumpObject(binary, "Action binary");
 
         // Look for init data within the request (i.e., "stem cell" runtime, where code is injected by request)
+        // TODO: do not allow request init. data to override that which was in process environment
+        // TODO: throw an error if init data is present when already found in process environment
         if (typeof(initdata) !== "undefined") {
             if (initdata.name && typeof initdata.name === 'string') {
-                // TODO: Throw error if BINARY is not 'true' or 'false'
+                // TODO: Throw error if BINARY is not 'true' or 'false' (invalid init. data)
                 actionName = initdata.name;
             }
             if (initdata.main && typeof initdata.main === 'string') {
@@ -73,11 +75,9 @@ function preProcessInitData(env, initdata, valuedata, activationdata) {
                 activationdata.action_name = actionName;
             }
         }
-
         DEBUG.dumpObject(valuedata.main, "valuedata.main");
         DEBUG.dumpObject(valuedata.code , "valuedata.code");
         DEBUG.dumpObject(valuedata.binary, "valuedata.binary");
-
     } catch(e){
         console.error(e);
         DEBUG.functionEndError(e.message);
@@ -117,7 +117,7 @@ function preProcessActivationData(env, activationdata) {
  */
 function httpContextEnv (key, value) {
     if (typeof value === 'string') {
-        process.env[key] = value
+        process.env[key] = value;
         DEBUG.dumpObject(process.env[key], key, "HTTPContext");
     }
 }
@@ -127,11 +127,11 @@ function httpContextEnv (key, value) {
  * __ow_method, __ow_headers, __ow_path, __ow_user, __ow_body, and __ow_query
  */
 function preProcessHTTPContext(req) {
-    DEBUG.functionStart()
+    DEBUG.functionStart();
 
     try {
-        httpContextEnv(OW_ENV_PREFIX + "METHOD", req.method)
-        httpContextEnv(OW_ENV_PREFIX + "HEADERS", JSON.stringify(req.headers))
+        httpContextEnv(OW_ENV_PREFIX + "METHOD", req.method);
+        httpContextEnv(OW_ENV_PREFIX + "HEADERS", JSON.stringify(req.headers));
         httpContextEnv(OW_ENV_PREFIX + "PATH", "");
 
         var namespace = "";
@@ -140,9 +140,9 @@ function preProcessHTTPContext(req) {
         }
         httpContextEnv(OW_ENV_PREFIX + "USER", namespace);
 
-        var bodyStr = JSON.stringify(req.body)
-        var bodyBase64 = Buffer.from(bodyStr).toString("base64")
-        httpContextEnv(OW_ENV_PREFIX + "BODY", bodyBase64)
+        var bodyStr = JSON.stringify(req.body);
+        var bodyBase64 = Buffer.from(bodyStr).toString("base64");
+        httpContextEnv(OW_ENV_PREFIX + "BODY", bodyBase64);
 
         httpContextEnv(OW_ENV_PREFIX + "QUERY", JSON.stringify(req.query));
     } catch (e) {
