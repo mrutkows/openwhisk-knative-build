@@ -1,3 +1,5 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more contributor
+# license agreements; and to You under the Apache License, Version 2.0.
 apiVersion: build.knative.dev/v1alpha1
 kind: BuildTemplate
 metadata:
@@ -19,13 +21,21 @@ spec:
     default: "knative"
   - name: OW_ACTION_NAME
     description: name of the action
+    default: ""
   - name: OW_ACTION_CODE
     description: JavaScript source code to be evaluated
+    default: ""
   - name: OW_ACTION_MAIN
     description: name of the function in the "__OW_ACTION_CODE" to call as the action handler
     default: "main"
   - name: OW_ACTION_BINARY
     description: flag to indicate zip function, for zip actions, "__OW_ACTION_CODE" must be base64 encoded string
+    default: "false"
+  - name: OW_HTTP_METHODS
+    description: list of HTTP methods, any combination of [GET, POST, PUT, and DELETE], default is [POST]
+    default: "[POST]"
+  - name: OW_ACTION_RAW
+    description: flag to indicate raw HTTP handling, interpret and process an incoming HTTP body directly
     default: "false"
   steps:
   - name: add-ow-env-to-dockerfile
@@ -42,6 +52,8 @@ spec:
         ENV __OW_ACTION_CODE "${OW_ACTION_CODE}"
         ENV __OW_ACTION_MAIN "${OW_ACTION_MAIN}"
         ENV __OW_ACTION_BINARY "${OW_ACTION_BINARY}"
+        ENV __OW_HTTP_METHODS "${OW_HTTP_METHODS}"
+        ENV __OW_ACTION_RAW "${OW_ACTION_RAW}"
       EOF
   - name: build-openwhisk-nodejs-runtime
     image: "gcr.io/kaniko-project/executor:latest"
