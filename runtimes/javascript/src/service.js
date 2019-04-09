@@ -64,6 +64,15 @@ function NodeActionService(cfg) {
     }
 
     /**
+     * Indicates if we have been initialized which is determined by if we have
+     * created a NodeActionRunner.
+     * @returns {boolean}
+     */
+    this.initialized = function isInitialized(){
+        return (typeof userCodeRunner !== "undefined");
+    };
+
+    /**
      * Starts the server.
      *
      * @param app express app
@@ -90,7 +99,7 @@ function NodeActionService(cfg) {
         DEBUG.functionStart("status=" + status);
 
         if (status === Status.ready && userCodeRunner === undefined) {
-            
+
             setStatus(Status.starting);
 
             var body = req.body || {};

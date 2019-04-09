@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -14,17 +15,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+USAGE="cleanjs.sh <SOURCE_DIR>"
 
-FROM node:10.15.0-stretch
-RUN apt-get update && apt-get install -y \
-    imagemagick \
-    unzip \
-    && rm -rf /var/lib/apt/lists/*
-WORKDIR /nodejsAction
-COPY . .
-# COPY the package.json to root container, so we can install npm packages a level up from user's packages, so user's packages take precedence
-COPY ./knative-build/runtimes/javascript/package.json /
-RUN cd / && npm install --no-package-lock \
-    && npm cache clean --force
-EXPOSE 8080
-CMD node --expose-gc ./knative-build/runtimes/javascript/app.js
+if [ $1 ]
+then
+    : # $1 was given
+    SOURCE=$1
+
+    echo "SOURCE=[$SOURCE]"
+    TARGET=$SOURCE"/.cleanjs"
+    echo "TARGET=[$TARGET]"
+
+    # create target directory
+    mkdir -p $TARGET
+
+    # copy all javascript files while preserving the original path
+    find $SOURCE -name "*.js" | cpio -p -dumv $TARGET/
+
+    # remove the package itself
+    find $TARGET -type f -exec sed -i '' -e '\|utils/debug|d' '{}' \;
+
+    # remove all lines that dereference the package (i.e., named DEBUG by convention)
+    find $TARGET -type f -exec sed -i '' -e '/DEBUG/d' '{}' \;
+
+else
+    echo $USAGE
+    exit 1
+fi
